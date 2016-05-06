@@ -1,0 +1,13 @@
+[package]
+name        = "ion_core"
+version     = "0.1.0"
+authors     = ["Kyle Finlay <kyle.finlay01@gmail.com>"]
+description = "The core of ionProject"
+license     = "Apache-2.0"
+
+[lib]
+path       = "src/lib.rs"
+crate-type = ["rlib"]
+
+[dependencies]
+ion_utils = {git = "https://github.com/ionProject/ion_utils"}
