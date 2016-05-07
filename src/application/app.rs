@@ -24,9 +24,9 @@
 /// It is in charge of initialization, updating, and shutdown of all modules,
 /// as well as the handing of any inter-module communication.
 #[derive (Clone)]
-pub struct App{
+pub struct App <'a> {
 
     // Public
     /// The name of the application
-    pub name : String
+    pub name : &'a str
 }
