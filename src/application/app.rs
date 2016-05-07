@@ -15,14 +15,18 @@
 /*================================================================================================*/
 
 /*================================================================================================*/
-//! This crate is the core of ionProject.
-//!
-//! It provides an easy to use framework for creating 2D / 3D games and multimedia applications.
+/*------STRUCTS-----------------------------------------------------------------------------------*/
 /*================================================================================================*/
 
-// Crate attributes
-#![deny (missing_copy_implementations)]
-#![deny (missing_docs)]
+/// The app
+///
+/// This is the main control center of ionCore.
+/// It is in charge of initialization, updating, and shutdown of all modules,
+/// as well as the handing of any inter-module communication.
+#[derive (Clone)]
+pub struct App{
 
-// Modules
-pub mod application;
+    // Public
+    /// The name of the application
+    pub name : String
+}

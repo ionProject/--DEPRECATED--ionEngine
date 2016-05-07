@@ -13,16 +13,3 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 /*================================================================================================*/
-
-/*================================================================================================*/
-//! This crate is the core of ionProject.
-//!
-//! It provides an easy to use framework for creating 2D / 3D games and multimedia applications.
-/*================================================================================================*/
-
-// Crate attributes
-#![deny (missing_copy_implementations)]
-#![deny (missing_docs)]
-
-// Modules
-pub mod application;

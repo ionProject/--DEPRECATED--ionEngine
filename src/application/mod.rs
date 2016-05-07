@@ -15,14 +15,23 @@
 /*================================================================================================*/
 
 /*================================================================================================*/
-//! This crate is the core of ionProject.
+//! The application module
 //!
-//! It provides an easy to use framework for creating 2D / 3D games and multimedia applications.
+//! This module is the control center of ionCore.
+//! It handles the initialization, updating, and destruction of all other modules,
+//! as well as any inter-module communication.
 /*================================================================================================*/
 
-// Crate attributes
-#![deny (missing_copy_implementations)]
-#![deny (missing_docs)]
+// Static variables
+/// The major version of the application
+pub static APP_VERSION_MAJOR : &'static str = env! ("CARGO_PKG_VERSION_MAJOR");
+/// The minor version of the application
+pub static APP_VERSION_MINOR : &'static str = env! ("CARGO_PKG_VERSION_MINOR");
+/// The patch version of the application
+pub static APP_VERSION_PATCH : &'static str = env! ("CARGO_PKG_VERSION_PATCH");
 
 // Modules
-pub mod application;
+mod app;
+mod app_builder;
+
+pub use self::app::App;
