@@ -15,7 +15,42 @@
 /*================================================================================================*/
 
 /*================================================================================================*/
-/*------STRUCTS-----------------------------------------------------------------------------------*/
+/*------APPVERSION STRUCT-------------------------------------------------------------------------*/
+/*================================================================================================*/
+
+/// The app version
+///
+/// This is a simple struct that stores the application version.
+/// It is either set automatically (using cargo environment variables), via an app config file,
+/// or manually using the AppBuilder.
+///
+/// Once set, it cannot be changed.
+#[derive (Copy, Clone)]
+pub struct AppVersion {
+
+    // Public
+    /// The major version of the application
+    pub major : i32,
+    /// The minor version of the application
+    pub minor : i32,
+    /// The patch version of the application
+    pub patch : i32
+}
+
+/*================================================================================================*/
+/*------APPVERSION PUBLIC METHODS-----------------------------------------------------------------*/
+/*================================================================================================*/
+
+impl AppVersion {
+
+    /// Formats the version as a string
+    pub fn to_string (&self) -> String {
+        format! ("{}.{}.{}", self.major, self.minor, self.patch)
+    }
+}
+
+/*================================================================================================*/
+/*------APP STRUCT--------------------------------------------------------------------------------*/
 /*================================================================================================*/
 
 /// The app
@@ -26,7 +61,24 @@
 #[derive (Clone)]
 pub struct App <'a> {
 
-    // Public
-    /// The name of the application
-    pub name : &'a str
+    // Private
+    _name    : &'a str,
+    _version : AppVersion
+}
+
+/*================================================================================================*/
+/*------APPVERSION PUBLIC METHODS-----------------------------------------------------------------*/
+/*================================================================================================*/
+
+impl <'a> App <'a> {
+
+    /// Returns the name of the application
+    pub fn get_name (&self) -> String {
+        self._name.to_owned ()
+    }
+
+    /// Returns the version of the application
+    pub fn get_version (&self) -> AppVersion {
+        self._version
+    }
 }
