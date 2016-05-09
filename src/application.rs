@@ -15,6 +15,14 @@
 /*================================================================================================*/
 
 /*================================================================================================*/
+//! The application module
+//!
+//! This module is the control center of ionCore.
+//! It handles the initialization, updating, and destruction of all other modules,
+//! as well as any inter-module communication.
+/*================================================================================================*/
+
+/*================================================================================================*/
 /*------APPVERSION STRUCT-------------------------------------------------------------------------*/
 /*================================================================================================*/
 
@@ -59,10 +67,10 @@ impl AppVersion {
 /// It is in charge of initialization, updating, and shutdown of all modules,
 /// as well as the handing of any inter-module communication.
 #[derive (Clone)]
-pub struct App <'a> {
+pub struct App {
 
     // Private
-    _name    : &'a str,
+    _name    : String,
     _version : AppVersion
 }
 
@@ -70,15 +78,96 @@ pub struct App <'a> {
 /*------APPVERSION PUBLIC METHODS-----------------------------------------------------------------*/
 /*================================================================================================*/
 
-impl <'a> App <'a> {
+impl App {
 
     /// Returns the name of the application
     pub fn get_name (&self) -> String {
-        self._name.to_owned ()
+        self._name.clone ()
     }
 
     /// Returns the version of the application
     pub fn get_version (&self) -> AppVersion {
         self._version
+    }
+}
+
+/*================================================================================================*/
+/*------APPBUILDER STRUCT-------------------------------------------------------------------------*/
+/*================================================================================================*/
+
+/// The app builder
+///
+/// The app builder provides an easy and straightforward way of creating and
+/// configuring a new app instance.
+#[derive (Clone)]
+pub struct AppBuilder {
+
+    // Private
+    _name: String,
+    _version: AppVersion
+}
+
+/*================================================================================================*/
+/*------APPBUILDER PUBLIC METHODS-----------------------------------------------------------------*/
+/*================================================================================================*/
+
+impl AppBuilder {
+
+    /// Builds the application
+    pub fn build (&self) -> App {
+
+        App {_name: self._name.clone (),
+             _version: self._version}
+    }
+
+    /// Sets the application name
+    pub fn name (&mut self, name: String) -> &mut AppBuilder {
+
+        self._name = name;
+        self
+    }
+
+    /// Sets the version
+    pub fn version (&mut self, major: i32, minor: i32, patch: i32) -> &mut AppBuilder {
+
+        self._version.major = major;
+        self._version.minor = minor;
+        self._version.patch = patch;
+
+        self
+    }
+
+    /// Sets the major version
+    pub fn version_major (&mut self, major: i32) -> &mut AppBuilder {
+
+        self._version.major = major;
+        self
+    }
+
+    /// Sets the minor version
+    pub fn version_minor (&mut self, minor: i32) -> &mut AppBuilder {
+
+        self._version.minor = minor;
+        self
+    }
+
+    /// Sets the patch version
+    pub fn version_patch (&mut self, patch: i32) -> &mut AppBuilder {
+
+        self._version.patch = patch;
+        self
+    }
+
+/*================================================================================================*/
+/*------APPBUILDER PUBLIC STATIC METHODS----------------------------------------------------------*/
+/*================================================================================================*/
+
+    /// Creates a new instance of the app builder
+    pub fn new () -> AppBuilder {
+
+        AppBuilder {_name: "Ion App".to_owned (),
+                    _version: AppVersion {major: i32::from_str_radix (env! ("CARGO_PKG_VERSION_MAJOR"), 10).unwrap (),
+                                          minor: i32::from_str_radix (env! ("CARGO_PKG_VERSION_MINOR"), 10).unwrap (),
+                                          patch: i32::from_str_radix (env! ("CARGO_PKG_VERSION_PATCH"), 10).unwrap ()}}
     }
 }
