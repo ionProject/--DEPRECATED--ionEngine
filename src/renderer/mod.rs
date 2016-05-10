@@ -15,15 +15,13 @@
 /*================================================================================================*/
 
 /*================================================================================================*/
-//! This crate is the core of ionProject.
+//! The renderer module
 //!
-//! It provides an easy to use framework for creating 2D / 3D games and multimedia applications.
+//! This module contains all components required for rendering, including the window backend,
+//! renderer, rendering backend, etc.
 /*================================================================================================*/
 
-// Crate attributes
-#![deny (missing_copy_implementations)]
-#![deny (missing_docs)]
-
 // Modules
-pub mod application;
-pub mod renderer;
+mod window_backend;
+
+pub use self::window_backend::WindowBackend;
