@@ -11,3 +11,4 @@ crate-type = ["rlib"]
 
 [dependencies]
 ion_utils = {git = "https://github.com/ionProject/ion_utils"}
+log       = "*"

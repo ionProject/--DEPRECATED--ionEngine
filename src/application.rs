@@ -22,6 +22,8 @@
 //! as well as any inter-module communication.
 /*================================================================================================*/
 
+use ion_utils::logger::Logger;
+
 /*================================================================================================*/
 /*------APPVERSION STRUCT-------------------------------------------------------------------------*/
 /*================================================================================================*/
@@ -115,6 +117,10 @@ impl AppBuilder {
 
     /// Builds the application
     pub fn build (&self) -> App {
+
+        // Initalize the logger
+        Logger::init ("ionCore.log", false).unwrap ();
+        info! ("Initializing ionCore");
 
         App {_name: self._name.clone (),
              _version: self._version}
