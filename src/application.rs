@@ -116,14 +116,14 @@ pub struct AppBuilder {
 impl AppBuilder {
 
     /// Builds the application
-    pub fn build (&self) -> App {
+    pub fn build (&self) -> Result <App, &str> {
 
         // Initalize the logger
         Logger::init ("ionCore.log", false).unwrap ();
         info! ("Initializing ionCore");
 
-        App {_name: self._name.clone (),
-             _version: self._version}
+        Ok (App {_name: self._name.clone (),
+                 _version: self._version})
     }
 
     /// Sets the application name
