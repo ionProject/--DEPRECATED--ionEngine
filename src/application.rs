@@ -22,8 +22,6 @@
 //! as well as any inter-module communication.
 /*================================================================================================*/
 
-use ion_utils::logger::Logger;
-
 /*================================================================================================*/
 /*------APPVERSION STRUCT-------------------------------------------------------------------------*/
 /*================================================================================================*/
@@ -118,10 +116,6 @@ impl AppBuilder {
     /// Builds the application
     pub fn build (&self) -> Result <App, &str> {
 
-        // Initalize the logger
-        Logger::init ("ionCore.log", false).unwrap ();
-        info! ("Initializing ionCore");
-
         Ok (App {_name: self._name.clone (),
                  _version: self._version})
     }
@@ -172,8 +166,6 @@ impl AppBuilder {
     pub fn new () -> AppBuilder {
 
         AppBuilder {_name: "Ion App".to_owned (),
-                    _version: AppVersion {major: i32::from_str_radix (env! ("CARGO_PKG_VERSION_MAJOR"), 10).unwrap (),
-                                          minor: i32::from_str_radix (env! ("CARGO_PKG_VERSION_MINOR"), 10).unwrap (),
-                                          patch: i32::from_str_radix (env! ("CARGO_PKG_VERSION_PATCH"), 10).unwrap ()}}
+                    _version: AppVersion {major: 0, minor: 1, patch: 0}}
     }
 }
