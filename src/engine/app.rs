@@ -15,14 +15,6 @@
 /*================================================================================================*/
 
 /*================================================================================================*/
-//! The application module
-//!
-//! This module is the control center of ionCore.
-//! It handles the initialization, updating, and destruction of all other modules,
-//! as well as any inter-module communication.
-/*================================================================================================*/
-
-/*================================================================================================*/
 /*------APPVERSION STRUCT-------------------------------------------------------------------------*/
 /*================================================================================================*/
 
@@ -104,6 +96,7 @@ pub struct AppBuilder {
 
     // Private
     _name: String,
+    _developer: String,
     _version: AppVersion
 }
 
@@ -124,6 +117,13 @@ impl AppBuilder {
     pub fn name (&mut self, name: String) -> &mut AppBuilder {
 
         self._name = name;
+        self
+    }
+
+    /// Sets the application developer
+    pub fn developer (&mut self, developer: String) -> &mut AppBuilder {
+
+        self._developer = developer;
         self
     }
 
@@ -166,6 +166,7 @@ impl AppBuilder {
     pub fn new () -> AppBuilder {
 
         AppBuilder {_name: "Ion App".to_owned (),
+                    _developer: "None".to_owned (),
                     _version: AppVersion {major: 0, minor: 1, patch: 0}}
     }
 }

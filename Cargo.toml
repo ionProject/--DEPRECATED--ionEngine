@@ -7,7 +7,7 @@ license     = "Apache-2.0"
 
 [lib]
 path       = "src/lib.rs"
-crate-type = ["rlib"]
+crate-type = ["dylib"]
 
 [dependencies]
 ion_utils = {git = "https://github.com/ionProject/ion_utils"}

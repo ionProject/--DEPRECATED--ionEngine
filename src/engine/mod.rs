@@ -15,17 +15,15 @@
 /*================================================================================================*/
 
 /*================================================================================================*/
-//! This crate is the core of ionProject.
+//! The engine module
 //!
-//! It provides an easy to use framework for creating 2D / 3D games and multimedia applications.
+//! This module contains all functionality relatin to the core engine.
+//! This includes things such as the application and plugin manager.
 /*================================================================================================*/
 
-// Crate attributes
-#![deny (missing_copy_implementations)]
-#![deny (missing_docs)]
-
-extern crate ion_utils;
-
 // Modules
-pub mod engine;
-pub mod renderer;
+mod app;
+
+pub use self::app::App;
+pub use self::app::AppBuilder;
+pub use self::app::AppVersion;
