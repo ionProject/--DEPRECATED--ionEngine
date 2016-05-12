@@ -23,7 +23,7 @@
 
 // Modules
 mod app;
+mod plugin;
 
-pub use self::app::App;
-pub use self::app::AppBuilder;
-pub use self::app::AppVersion;
+pub use self::app::{App, AppBuilder, AppVersion};
+pub use self::plugin::{PluginType, PluginManager};

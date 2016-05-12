@@ -10,5 +10,7 @@ path       = "src/lib.rs"
 crate-type = ["dylib"]
 
 [dependencies]
-ion_utils = {git = "https://github.com/ionProject/ion_utils"}
-log       = "*"
+glob       = "*"
+ion_utils  = {git = "https://github.com/ionProject/ion_utils"}
+libloading = {git = "https://github.com/nagisa/rust_libloading"}
+log        = "*"
