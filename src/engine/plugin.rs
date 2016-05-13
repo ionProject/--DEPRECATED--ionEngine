@@ -84,18 +84,11 @@ impl PluginManager {
     /// Returns a new plugin manager
     pub fn new (plugin_dir: &str) -> PluginManager {
 
-        // Set the plugin extension
-        let mut plug_ext = "";
-
-        // Platform windows
-        if cfg! (windows) {
-            plug_ext = ".dll";
-        }
-
-        // Platform linux
-        else if cfg! (linux) {
-            plug_ext = ".so";
-        }
+        // Set the platform extension
+        let plug_ext = if cfg! (target_os = "windows") {".dll"}
+                       else if cfg! (target_os = "linux") {".so"}
+                       else if cfg! (target_os = "macos") {".dylib"}
+                       else {panic! ("Platform unsupported")};
 
         PluginManager {plugin_list: Vec::new (),
                        plugin_dir: plugin_dir.to_owned (),
