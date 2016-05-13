@@ -27,13 +27,34 @@ use std::vec::Vec;
 /*================================================================================================*/
 
 /// The Plugin Type enum.
-#[derive (Copy, Clone, PartialEq)]
+#[derive (Copy, Clone, PartialEq, Debug)]
 pub enum PluginType {
 
     /// Used by audio backends.
     AudioBackend,
     /// Used by rendering backends.
     RenderBackend
+}
+
+/*================================================================================================*/
+/*------PLUGIN STRUCT-----------------------------------------------------------------------------*/
+/*================================================================================================*/
+
+/// Stores the details of a plugin.
+#[derive (Clone)]
+pub struct Plugin {
+
+    // Public
+    /// The name of the plugin.
+    pub name: String,
+    /// The author of the plugin.
+    pub author: String,
+    /// A brief description of the plugin.
+    pub description: String,
+    /// The path to the plugin
+    pub path: String,
+    /// The type of plugin
+    pub plugin_type: PluginType,
 }
 
 /*================================================================================================*/
@@ -44,9 +65,14 @@ pub enum PluginType {
 /// Manages the finding and loading of plugins.
 pub struct PluginManager {
 
+    // Public
+    /// The list of plugins
+    pub plugin_list: Vec<Plugin>,
+    /// The plugin directory
+    pub plugin_dir: String,
+
     // Private
-    _plugin_list: Vec<String>,
-    _plugin_dir: String
+    _plugin_ext: String
 }
 
 /*================================================================================================*/
@@ -55,34 +81,66 @@ pub struct PluginManager {
 
 impl PluginManager {
 
-    /// Returns all plugins of a given type
-    pub fn get_plugins_of_type (&self, plugin_type: PluginType) -> Vec<String> {
+    /// Returns a new plugin manager
+    pub fn new (plugin_dir: &str) -> PluginManager {
 
-        let mut p_vec = Vec::<String>::new ();
+        // Set the plugin extension
+        let mut plug_ext = "";
+
+        // Platform windows
+        if cfg! (windows) {
+            plug_ext = ".dll";
+        }
+
+        // Platform linux
+        else if cfg! (linux) {
+            plug_ext = ".so";
+        }
+
+        PluginManager {plugin_list: Vec::new (),
+                       plugin_dir: plugin_dir.to_owned (),
+                       _plugin_ext: plug_ext.to_owned ()}
+    }
+
+    /// Queries the plugin directory, and stores a list of plugins
+    pub fn query_plugins (&mut self) -> &Vec<Plugin> {
+
+        // Clear the old plugin list
+        self.plugin_list.clear ();
 
         // Recurse through all items in the plugin directory
-        for path in glob (&self._plugin_dir).unwrap ().filter_map (Result::ok) {
+        for path in glob (&format! ("{}/*{}", &self.plugin_dir, &self._plugin_ext)).unwrap ().filter_map (Result::ok) {
 
-            // Load the library, the 'get_type' function, and the 'get_name' function
+            // Load the library, and get function symbols
             let lib = Library::new (&path).unwrap ();
 
-            let get_type: Symbol<unsafe extern fn () -> PluginType> = unsafe {
-                lib.get (b"get_type\0").unwrap ()
+            let get_name: Symbol <unsafe extern fn () -> String> = unsafe {
+                lib.get (b"get_name\0").unwrap ()
             };
 
-            let get_name: Symbol<unsafe extern fn () -> String> = unsafe {
-                lib.get (b"get_name\0").unwrap ()
+            let get_author: Symbol <unsafe extern fn () -> String> = unsafe {
+                lib.get (b"get_author\0").unwrap ()
+            };
+
+            let get_description: Symbol <unsafe extern fn () -> String> = unsafe {
+                lib.get (b"get_description\0").unwrap ()
+            };
+
+            let get_type: Symbol <unsafe extern fn () -> PluginType> = unsafe {
+                lib.get (b"get_type\0").unwrap ()
             };
 
             unsafe {
 
-                // If the lib type equals the requested type, add it to the list
-                if get_type () == plugin_type {
-                    p_vec.push (get_name ());
-                }
+                // Add the plugin to the list
+                self.plugin_list.push (Plugin {name: get_name (),
+                                               author: get_author (),
+                                               description: get_description (),
+                                               path: path.to_str ().unwrap ().to_owned (),
+                                               plugin_type: get_type ()});
             }
         }
 
-        p_vec
+        &self.plugin_list
     }
 }

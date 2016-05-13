@@ -26,4 +26,4 @@ mod app;
 mod plugin;
 
 pub use self::app::{App, AppBuilder, AppVersion};
-pub use self::plugin::{PluginType, PluginManager};
+pub use self::plugin::{Plugin, PluginType, PluginManager};
