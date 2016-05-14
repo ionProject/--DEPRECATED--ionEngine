@@ -14,40 +14,7 @@
 // limitations under the License.
 /*================================================================================================*/
 
-/*================================================================================================*/
-/*------APPVERSION STRUCT-------------------------------------------------------------------------*/
-/*================================================================================================*/
-
-/// The app version
-///
-/// This is a simple struct that stores the application version.
-/// It is either set automatically (using cargo environment variables), via an app config file,
-/// or manually using the AppBuilder.
-///
-/// Once set, it cannot be changed.
-#[derive (Copy, Clone)]
-pub struct AppVersion {
-
-    // Public
-    /// The major version of the application
-    pub major : i32,
-    /// The minor version of the application
-    pub minor : i32,
-    /// The patch version of the application
-    pub patch : i32
-}
-
-/*================================================================================================*/
-/*------APPVERSION PUBLIC METHODS-----------------------------------------------------------------*/
-/*================================================================================================*/
-
-impl AppVersion {
-
-    /// Formats the version as a string
-    pub fn to_string (&self) -> String {
-        format! ("{}.{}.{}", self.major, self.minor, self.patch)
-    }
-}
+use ion_utils::Version;
 
 /*================================================================================================*/
 /*------APP STRUCT--------------------------------------------------------------------------------*/
@@ -63,7 +30,7 @@ pub struct App {
 
     // Private
     _name    : String,
-    _version : AppVersion
+    _version : Version
 }
 
 /*================================================================================================*/
@@ -78,7 +45,7 @@ impl App {
     }
 
     /// Returns the version of the application
-    pub fn get_version (&self) -> AppVersion {
+    pub fn get_version (&self) -> Version {
         self._version
     }
 }
@@ -97,7 +64,7 @@ pub struct AppBuilder {
     // Private
     _name: String,
     _developer: String,
-    _version: AppVersion
+    _version: Version
 }
 
 /*================================================================================================*/
@@ -167,6 +134,6 @@ impl AppBuilder {
 
         AppBuilder {_name: "Ion App".to_owned (),
                     _developer: "None".to_owned (),
-                    _version: AppVersion {major: 0, minor: 1, patch: 0}}
+                    _version: Version {major: 0, minor: 1, patch: 0}}
     }
 }
