@@ -29,8 +29,9 @@ use ion_utils::Version;
 pub struct App {
 
     // Private
-    _name    : String,
-    _version : Version
+    _name: String,
+    _developer: String,
+    _version: Version
 }
 
 /*================================================================================================*/
@@ -39,14 +40,28 @@ pub struct App {
 
 impl App {
 
-    /// Returns the name of the application
-    pub fn get_name (&self) -> String {
-        self._name.clone ()
+    /// Returns the name of the application.
+    ///
+    /// # Return value
+    /// An immutable reference to the app name.
+    pub fn get_name (&self) -> &String {
+        &self._name
     }
 
-    /// Returns the version of the application
-    pub fn get_version (&self) -> Version {
-        self._version
+    /// Returns the application developer
+    ///
+    /// # Return value
+    /// An immutable reference to the app developer
+    pub fn get_developer (&self) -> &String {
+        &self._developer
+    }
+
+    /// Returns the version of the application.
+    ///
+    /// # Return value
+    /// An immutable reference to the app version.
+    pub fn get_version (&self) -> &Version {
+        &self._version
     }
 }
 
@@ -74,27 +89,51 @@ pub struct AppBuilder {
 impl AppBuilder {
 
     /// Builds the application
-    pub fn build (&self) -> Result <App, &str> {
+    ///
+    /// # Return value
+    /// A result containing the new app instance
+    pub fn build (&self) -> Result <App, ()> {
 
         Ok (App {_name: self._name.clone (),
+                 _developer: self._developer.clone (),
                  _version: self._version})
     }
 
-    /// Sets the application name
+    /// Sets the application name.
+    ///
+    /// # Arguments
+    /// * `name` - The desired name of the application.
+    ///
+    /// # Return value
+    /// A mutable reference to the current AppBuilder instance.
     pub fn name (&mut self, name: String) -> &mut AppBuilder {
 
         self._name = name;
         self
     }
 
-    /// Sets the application developer
+    /// Sets the application developer.
+    ///
+    /// # Arguments
+    /// * `developer` - The name of the developer.
+    ///
+    /// # Return value
+    /// A mutable reference to the current AppBuilder instance.
     pub fn developer (&mut self, developer: String) -> &mut AppBuilder {
 
         self._developer = developer;
         self
     }
 
-    /// Sets the version
+    /// Sets the version of the app.
+    ///
+    /// # Arguments
+    /// * 'major' - The major version of the app.
+    /// * `minor` - The minor version of the app.
+    /// * `patch` - The patch version of the app.
+    ///
+    /// # Return value
+    /// A mutable reference to the current AppBuilder instance.
     pub fn version (&mut self, major: i32, minor: i32, patch: i32) -> &mut AppBuilder {
 
         self._version.major = major;
@@ -104,21 +143,39 @@ impl AppBuilder {
         self
     }
 
-    /// Sets the major version
+    /// Sets the major version of the app.
+    ///
+    /// # Arguments
+    /// * `major` - The major version of the app.
+    ///
+    /// # Return value
+    /// A mutable reference to the current AppBuilder instance.
     pub fn version_major (&mut self, major: i32) -> &mut AppBuilder {
 
         self._version.major = major;
         self
     }
 
-    /// Sets the minor version
+    /// Sets the minor version of the app.
+    ///
+    /// # Arguments
+    /// * `minor` - The minor version of the app.
+    ///
+    /// # Return value
+    /// A mutable reference to the current AppBuilder instance.
     pub fn version_minor (&mut self, minor: i32) -> &mut AppBuilder {
 
         self._version.minor = minor;
         self
     }
 
-    /// Sets the patch version
+    /// Sets the patch version of the app.
+    ///
+    /// # Arguments
+    /// * `patch` - The patch version of the app.
+    ///
+    /// # Return value
+    /// A mutable reference to the current AppBuilder instance.
     pub fn version_patch (&mut self, patch: i32) -> &mut AppBuilder {
 
         self._version.patch = patch;
@@ -130,6 +187,9 @@ impl AppBuilder {
 /*================================================================================================*/
 
     /// Creates a new instance of the app builder
+    ///
+    /// # Return value
+    /// A new instance of the AppBuilder with default values set.
     pub fn new () -> AppBuilder {
 
         AppBuilder {_name: "Ion App".to_owned (),

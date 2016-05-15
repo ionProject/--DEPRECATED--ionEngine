@@ -81,7 +81,13 @@ pub struct PluginManager {
 
 impl PluginManager {
 
-    /// Returns a new plugin manager
+    /// Returns a new plugin manager.
+    ///
+    /// # Arguments
+    /// * `plugin_dir` - The location of the plugin directory.
+    ///
+    /// # Return value
+    /// A new instance of the plugin manager.
     pub fn new (plugin_dir: &str) -> PluginManager {
 
         // Set the platform extension
@@ -95,7 +101,10 @@ impl PluginManager {
                        _plugin_ext: plug_ext.to_owned ()}
     }
 
-    /// Queries the plugin directory, and stores a list of plugins
+    /// Queries the plugin directory, and stores a list of plugins.
+    ///
+    /// # Return value
+    /// An immutable reference to the list of plugins.
     pub fn query_plugins (&mut self) -> &Vec<Plugin> {
 
         // Clear the old plugin list
