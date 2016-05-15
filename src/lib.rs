@@ -26,6 +26,9 @@
 
 extern crate ion_utils;
 
+#[macro_use]
+extern crate log;
+
 // Modules
 pub mod engine;
 pub mod renderer;

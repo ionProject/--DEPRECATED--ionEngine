@@ -61,8 +61,8 @@ pub struct Plugin {
 /*------PLUGINMANAGER STRUCT----------------------------------------------------------------------*/
 /*================================================================================================*/
 
-#[derive (Clone)]
 /// Manages the finding and loading of plugins.
+#[derive (Clone)]
 pub struct PluginManager {
 
     // Public
@@ -88,7 +88,7 @@ impl PluginManager {
     ///
     /// # Return value
     /// A new instance of the plugin manager.
-    pub fn new (plugin_dir: &str) -> PluginManager {
+    pub fn new () -> PluginManager {
 
         // Set the platform extension
         let plug_ext = if cfg! (target_os = "windows") {".dll"}
@@ -97,7 +97,7 @@ impl PluginManager {
                        else {panic! ("Platform unsupported")};
 
         PluginManager {plugin_list: Vec::new (),
-                       plugin_dir: plugin_dir.to_owned (),
+                       plugin_dir: String::new (),
                        _plugin_ext: plug_ext.to_owned ()}
     }
 
@@ -109,6 +109,8 @@ impl PluginManager {
 
         // Clear the old plugin list
         self.plugin_list.clear ();
+
+        info! ("Searching for plugins...");
 
         // Recurse through all items in the plugin directory
         for path in glob (&format! ("{}/*{}", &self.plugin_dir, &self._plugin_ext)).unwrap ().filter_map (Result::ok) {
@@ -140,9 +142,12 @@ impl PluginManager {
                                                description: get_description (),
                                                path: path.to_str ().unwrap ().to_owned (),
                                                plugin_type: get_type ()});
+
+                info! ("Found: {:?}", &path);
             }
         }
 
+        info! ("Plugin searching complete.");
         &self.plugin_list
     }
 }

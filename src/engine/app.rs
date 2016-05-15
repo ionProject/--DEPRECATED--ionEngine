@@ -15,6 +15,7 @@
 /*================================================================================================*/
 
 use ion_utils::Version;
+use ::engine::PluginManager;
 
 /*================================================================================================*/
 /*------APP STRUCT--------------------------------------------------------------------------------*/
@@ -27,6 +28,9 @@ use ion_utils::Version;
 /// as well as the handing of any inter-module communication.
 #[derive (Clone)]
 pub struct App {
+
+    // Public
+    plugin_manager: PluginManager,
 
     // Private
     _name: String,
@@ -94,7 +98,8 @@ impl AppBuilder {
     /// A result containing the new app instance
     pub fn build (&self) -> Result <App, ()> {
 
-        Ok (App {_name: self._name.clone (),
+        Ok (App {plugin_manager: PluginManager::new (),
+                 _name: self._name.clone (),
                  _developer: self._developer.clone (),
                  _version: self._version})
     }
