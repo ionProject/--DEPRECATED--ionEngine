@@ -15,19 +15,39 @@
 /*================================================================================================*/
 
 /*================================================================================================*/
-//! This crate is the core of ionProject.
+//! The math module.
 //!
-//! It provides an easy to use framework for creating 2D / 3D games and multimedia applications.
+//! It contains various bits of mathematical functionality, including:
+//! Vectors,
+//! Matrices,
+//! Quaternions,
+//! Colours,
+//! Bounding volumes,
+//! Random numbers,
+//! Utilities, etc.
 /*================================================================================================*/
 
-// Crate attributes
-#![deny (missing_copy_implementations)]
-#![deny (missing_docs)]
-
-#[macro_use]
-extern crate log;
+// Static variables
+/// PI multipied by two
+pub static TWO_PI  : f32 = 6.283185;
+/// The value of PI
+pub static PI      : f32 = 3.141592;
+/// Half of PI
+pub static HALF_PI : f32 = 1.570796;
 
 // Modules
-pub mod engine;
-pub mod renderer;
-pub mod util;
+mod colour;
+mod mat3;
+mod mat4;
+mod util;
+mod vec2;
+mod vec3;
+mod vec4;
+
+pub use self::colour::Colour;
+pub use self::util::Util;
+pub use self::mat3::Mat3;
+pub use self::mat4::Mat4;
+pub use self::vec2::Vec2;
+pub use self::vec3::Vec3;
+pub use self::vec4::Vec4;

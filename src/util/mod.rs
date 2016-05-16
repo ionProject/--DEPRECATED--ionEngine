@@ -15,19 +15,14 @@
 /*================================================================================================*/
 
 /*================================================================================================*/
-//! This crate is the core of ionProject.
+//! This is the utility module for ionCore.
 //!
-//! It provides an easy to use framework for creating 2D / 3D games and multimedia applications.
+//! It is designed to contain any and all utility functionality that may be required.
 /*================================================================================================*/
 
-// Crate attributes
-#![deny (missing_copy_implementations)]
-#![deny (missing_docs)]
-
-#[macro_use]
-extern crate log;
-
 // Modules
-pub mod engine;
-pub mod renderer;
-pub mod util;
+pub mod math;
+pub mod logger;
+mod version;
+
+pub use self::version::Version;

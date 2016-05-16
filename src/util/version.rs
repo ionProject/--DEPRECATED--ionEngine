@@ -15,19 +15,30 @@
 /*================================================================================================*/
 
 /*================================================================================================*/
-//! This crate is the core of ionProject.
-//!
-//! It provides an easy to use framework for creating 2D / 3D games and multimedia applications.
+/*------VERSION STRUCT----------------------------------------------------------------------------*/
 /*================================================================================================*/
 
-// Crate attributes
-#![deny (missing_copy_implementations)]
-#![deny (missing_docs)]
+/// A super simple struct that represents a version (major, minor, patch).
+#[derive (Copy, Clone, PartialEq, PartialOrd)]
+pub struct Version {
 
-#[macro_use]
-extern crate log;
+    // Public
+    /// The major version
+    pub major: i32,
+    /// The minor version
+    pub minor: i32,
+    /// The patch version
+    pub patch: i32
+}
 
-// Modules
-pub mod engine;
-pub mod renderer;
-pub mod util;
+/*================================================================================================*/
+/*------VERSION PUBLIC METHODS-----------------------------------------------------------------*/
+/*================================================================================================*/
+
+impl Version {
+
+    /// Formats the version as a string
+    pub fn to_string (&self) -> String {
+        format! ("{}.{}.{}", self.major, self.minor, self.patch)
+    }
+}

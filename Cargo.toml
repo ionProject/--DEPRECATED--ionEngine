@@ -11,6 +11,5 @@ crate-type = ["dylib"]
 
 [dependencies]
 glob       = "*"
-ion_utils  = {git = "https://github.com/ionProject/ion_utils"}
 libloading = {git = "https://github.com/nagisa/rust_libloading"}
 log        = "*"
