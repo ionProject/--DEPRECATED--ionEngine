@@ -10,6 +10,7 @@ path       = "src/lib.rs"
 crate-type = ["dylib"]
 
 [dependencies]
-glob       = "*"
-libloading = {git = "https://github.com/nagisa/rust_libloading"}
-log        = "*"
+glob       = "0.2.x"
+libloading = "0.2.x"
+log        = "0.3.x"
+toml       = "0.1.x"
