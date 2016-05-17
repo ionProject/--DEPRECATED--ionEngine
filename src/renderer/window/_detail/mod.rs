@@ -15,11 +15,12 @@
 /*================================================================================================*/
 
 /*================================================================================================*/
-//! The renderer module
+//! The _detail module
 //!
-//! This module contains all components required for rendering, including the window backend,
-//! renderer, rendering backend, etc.
+//! This is a special module that contains elements that is intented for use by the engine only.
+//! While it's contents can be used directly, it is not recommended.
 /*================================================================================================*/
 
-// Modules
-pub mod window;
+mod window_backend_null;
+
+pub use self::window_backend_null::WindowBackendNull;

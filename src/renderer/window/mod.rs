@@ -15,11 +15,15 @@
 /*================================================================================================*/
 
 /*================================================================================================*/
-//! The renderer module
+//! The window module
 //!
-//! This module contains all components required for rendering, including the window backend,
-//! renderer, rendering backend, etc.
+//! This module is part of the renderer, and manages the window.
 /*================================================================================================*/
 
 // Modules
-pub mod window;
+pub mod _detail;
+mod window_backend;
+mod window_manager;
+
+pub use self::window_backend::WindowBackend;
+pub use self::window_manager::WindowManager;

@@ -52,11 +52,11 @@ pub trait WindowBackend {
     ///
     /// # Arguments
     /// * `title` - A string literal which is used to set the window title
-    fn set_title (&mut self, title: &str);
+    fn set_title (&mut self, title: String);
 
     /// Gets the title of the window.
     ///
     /// # Return value
     /// The return value is a &str containing the current title of the window.
-    fn get_title (&self) -> &str;
+    fn get_title (&self) -> String;
 }

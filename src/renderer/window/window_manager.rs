@@ -14,12 +14,16 @@
 // limitations under the License.
 /*================================================================================================*/
 
+use ::renderer::window::WindowBackend;
+use std::boxed::Box;
+
 /*================================================================================================*/
-//! The renderer module
-//!
-//! This module contains all components required for rendering, including the window backend,
-//! renderer, rendering backend, etc.
+/*------WINDOWMANAGER STRUCT----------------------------------------------------------------------*/
 /*================================================================================================*/
 
-// Modules
-pub mod window;
+/// Manages window creation, update, and release.
+pub struct WindowManager {
+
+    // Private
+    _window_backend: Box<WindowBackend>
+}
