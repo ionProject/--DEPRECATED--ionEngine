@@ -14,7 +14,7 @@
 // limitations under the License.
 /*================================================================================================*/
 
-use ::util::Version;
+use ::util::{Logger, Version};
 use ::engine::PluginManager;
 
 /*================================================================================================*/
@@ -96,6 +96,9 @@ impl AppBuilder {
     /// # Return value
     /// A result containing the new app instance
     pub fn build (&self) -> Result <App, ()> {
+
+        Logger::init ("./ionCore.log", true).unwrap ();
+        info! ("Initializing ionCore | Version: {}", env! ("CARGO_PKG_VERSION"));
 
         Ok (App {plugin_manager: PluginManager::new (),
                  _name: self._name.clone (),

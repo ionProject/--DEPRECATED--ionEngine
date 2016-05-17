@@ -22,7 +22,8 @@
 
 // Modules
 pub mod math;
-pub mod logger;
+mod logger;
 mod version;
 
+pub use self::logger::Logger;
 pub use self::version::Version;
