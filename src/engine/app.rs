@@ -47,7 +47,7 @@ impl App {
     ///
     /// # Return value
     /// An immutable reference to the app name.
-    pub fn get_name (&self) -> &String {
+    pub fn get_name (&self) -> &str {
         &self._name
     }
 
@@ -55,7 +55,7 @@ impl App {
     ///
     /// # Return value
     /// An immutable reference to the app developer
-    pub fn get_developer (&self) -> &String {
+    pub fn get_developer (&self) -> &str {
         &self._developer
     }
 
@@ -113,9 +113,9 @@ impl AppBuilder {
     ///
     /// # Return value
     /// A mutable reference to the current AppBuilder instance.
-    pub fn name (&mut self, name: String) -> &mut AppBuilder {
+    pub fn name (&mut self, name: &str) -> &mut AppBuilder {
 
-        self._name = name;
+        self._name = name.to_string ();
         self
     }
 
@@ -126,9 +126,9 @@ impl AppBuilder {
     ///
     /// # Return value
     /// A mutable reference to the current AppBuilder instance.
-    pub fn developer (&mut self, developer: String) -> &mut AppBuilder {
+    pub fn developer (&mut self, developer: &str) -> &mut AppBuilder {
 
-        self._developer = developer;
+        self._developer = developer.to_string ();
         self
     }
 
@@ -199,8 +199,8 @@ impl AppBuilder {
     /// A new instance of the AppBuilder with default values set.
     pub fn new () -> AppBuilder {
 
-        AppBuilder {_name: "Ion App".to_owned (),
-                    _developer: "None".to_owned (),
+        AppBuilder {_name: "Ion App".to_string (),
+                    _developer: "None".to_string (),
                     _version: Version {major: 0, minor: 1, patch: 0}}
     }
 }
