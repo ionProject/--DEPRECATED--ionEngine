@@ -127,15 +127,15 @@ impl Vec2 {
     /// Linearly interpolates between two vectors.
     pub fn lerp (start: &Vec2, end: &Vec2, percentage: f32) -> Vec2 {
 
-        Vec2 {x : Util::lerp (start.x, end.x, percentage),
-              y : Util::lerp (start.y, end.y, percentage)}
+        Vec2 {x: Util::lerp (start.x, end.x, percentage),
+              y: Util::lerp (start.y, end.y, percentage)}
     }
 
     /// Linearly interpolates between two vectors without clamping
     pub fn lerp_unclamped (start: &Vec2, end: &Vec2, percentage: f32) -> Vec2 {
 
-        Vec2 {x : Util::lerp_unclamped (start.x, end.x, percentage),
-              y : Util::lerp_unclamped (start.y, end.y, percentage)}
+        Vec2 {x: Util::lerp_unclamped (start.x, end.x, percentage),
+              y: Util::lerp_unclamped (start.y, end.y, percentage)}
     }
 
     /// Get a normalized vector.
