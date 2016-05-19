@@ -68,8 +68,6 @@ pub struct PluginManager {
     // Public
     /// The list of plugins
     pub plugin_list: Vec<Plugin>,
-    /// The plugin directory
-    pub plugin_dir: String,
 
     // Private
     _plugin_ext: String
@@ -97,15 +95,17 @@ impl PluginManager {
                        else {panic! ("Platform unsupported")};
 
         PluginManager {plugin_list: Vec::new (),
-                       plugin_dir: String::new (),
                        _plugin_ext: plug_ext.to_owned ()}
     }
 
     /// Queries the plugin directory, and stores a list of plugins.
     ///
+    /// # Arguments
+    /// * `plugin_dir` - The directory which contains the plugins.
+    ///
     /// # Return value
     /// An immutable reference to the list of plugins.
-    pub fn query_plugins (&mut self) -> &Vec<Plugin> {
+    pub fn query_plugins (&mut self, plugin_dir: &str) -> &Vec<Plugin> {
 
         // Clear the old plugin list
         self.plugin_list.clear ();
@@ -113,24 +113,24 @@ impl PluginManager {
         info! ("Searching for plugins...");
 
         // Recurse through all items in the plugin directory
-        for path in glob (&format! ("{}/*{}", &self.plugin_dir, &self._plugin_ext)).unwrap ().filter_map (Result::ok) {
+        for path in glob (&format! ("{}/*{}", plugin_dir, &self._plugin_ext)).unwrap ().filter_map (Result::ok) {
 
             // Load the library, and get function symbols
             let lib = Library::new (&path).unwrap ();
 
-            let get_name: Symbol <unsafe extern fn () -> String> = unsafe {
+            let get_name: Symbol<unsafe extern fn () -> String> = unsafe {
                 lib.get (b"get_name\0").unwrap ()
             };
 
-            let get_author: Symbol <unsafe extern fn () -> String> = unsafe {
+            let get_author: Symbol<unsafe extern fn () -> String> = unsafe {
                 lib.get (b"get_author\0").unwrap ()
             };
 
-            let get_description: Symbol <unsafe extern fn () -> String> = unsafe {
+            let get_description: Symbol<unsafe extern fn () -> String> = unsafe {
                 lib.get (b"get_description\0").unwrap ()
             };
 
-            let get_type: Symbol <unsafe extern fn () -> PluginType> = unsafe {
+            let get_type: Symbol<unsafe extern fn () -> PluginType> = unsafe {
                 lib.get (b"get_type\0").unwrap ()
             };
 
@@ -147,7 +147,14 @@ impl PluginManager {
             }
         }
 
-        info! ("Plugin searching complete.");
+        if self.plugin_list.is_empty () {
+            info! ("No plugins found.");
+        }
+
+        else {
+            info! ("Plugin searching complete.");
+        }
+
         &self.plugin_list
     }
 

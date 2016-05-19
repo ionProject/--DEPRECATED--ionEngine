@@ -29,7 +29,8 @@ use ::engine::PluginManager;
 pub struct App {
 
     // Public
-    plugin_manager: PluginManager,
+    /// Manages all plugins
+    pub plugin_manager: PluginManager,
 
     // Private
     _name: String,
