@@ -150,4 +150,28 @@ impl PluginManager {
         info! ("Plugin searching complete.");
         &self.plugin_list
     }
+
+    /// Returns an instance of a plugin
+    ///
+    /// # Arguments
+    /// * `name` - The name of the plugin.
+    ///
+    /// # Return value
+    /// A result contaning a reference the plugin.
+    pub fn get_plugin (&self, name: &str) -> Result <&Plugin, ()> {
+
+        let mut index = 0;
+
+        // Loop through all plugins
+        for p in &self.plugin_list {
+
+            if p.name == name {
+                return Ok (&self.plugin_list [index]);
+            }
+
+            index += 1;
+        }
+
+        Err (())
+    }
 }
