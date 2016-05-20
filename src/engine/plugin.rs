@@ -37,6 +37,26 @@ pub enum PluginType {
 }
 
 /*================================================================================================*/
+/*------PLUGINSTATE ENUM--------------------------------------------------------------------------*/
+/*================================================================================================*/
+
+/// Stores the current state of the plugin.
+#[derive (Copy, Clone, PartialEq)]
+pub enum PluginState {
+
+    /// The plugin is unloaded.
+    /// This is the default state.
+    Unloaded,
+    /// The plugin has been marked for loading.
+    MarkedForLoad,
+    /// The plugin is loaded.
+    Loaded,
+    /// The plugin is disabled, and cannot be used.
+    /// This state is normally used when an error has occured.
+    Disabled
+}
+
+/*================================================================================================*/
 /*------PLUGIN STRUCT-----------------------------------------------------------------------------*/
 /*================================================================================================*/
 
@@ -51,10 +71,12 @@ pub struct Plugin {
     pub author: String,
     /// A brief description of the plugin.
     pub description: String,
-    /// The path to the plugin
+    /// The path to the plugin.
     pub path: String,
-    /// The type of plugin
+    /// The type of plugin.
     pub plugin_type: PluginType,
+    /// The current state of the plugin.
+    pub plugin_state: PluginState
 }
 
 /*================================================================================================*/
@@ -141,7 +163,8 @@ impl PluginManager {
                                                author: get_author (),
                                                description: get_description (),
                                                path: path.to_str ().unwrap ().to_owned (),
-                                               plugin_type: get_type ()});
+                                               plugin_type: get_type (),
+                                               plugin_state: PluginState::Unloaded});
 
                 info! ("Found: {:?}", &path);
             }
@@ -165,7 +188,7 @@ impl PluginManager {
     ///
     /// # Return value
     /// A result contaning a reference the plugin.
-    pub fn get_plugin (&self, name: &str) -> Result <&Plugin, ()> {
+    pub fn get_plugin (&self, name: &str) -> Result<&Plugin, ()> {
 
         let mut index = 0;
 
