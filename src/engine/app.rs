@@ -67,6 +67,21 @@ impl App {
     pub fn get_version (&self) -> &Version {
         &self._version
     }
+
+/*================================================================================================*/
+/*------APPVERSION PUBLIC METHODS-----------------------------------------------------------------*/
+/*================================================================================================*/
+
+    /// Returns a new instance of the app builder
+    ///
+    /// # Return value
+    /// A new instance of the app builder.
+    pub fn builder () -> AppBuilder {
+
+        AppBuilder {_name: "Ion App".to_string (),
+                    _developer: "None".to_string (),
+                    _version: Version {major: 0, minor: 1, patch: 0}}
+    }
 }
 
 /*================================================================================================*/
@@ -95,16 +110,16 @@ impl AppBuilder {
     /// Builds the application
     ///
     /// # Return value
-    /// A result containing the new app instance
-    pub fn build (&self) -> Result <App, ()> {
+    /// A new app instance.
+    pub fn build (&self) -> App {
 
         Logger::init ("./ionCore.log", true).unwrap ();
         info! ("Initializing ionCore | Version: {}", env! ("CARGO_PKG_VERSION"));
 
-        Ok (App {plugin_manager: PluginManager::new (),
-                 _name: self._name.clone (),
-                 _developer: self._developer.clone (),
-                 _version: self._version})
+        App {plugin_manager: PluginManager::new (),
+             _name: self._name.clone (),
+             _developer: self._developer.clone (),
+             _version: self._version}
     }
 
     /// Sets the application name.
@@ -188,20 +203,5 @@ impl AppBuilder {
 
         self._version.patch = patch;
         self
-    }
-
-/*================================================================================================*/
-/*------APPBUILDER PUBLIC STATIC METHODS----------------------------------------------------------*/
-/*================================================================================================*/
-
-    /// Creates a new instance of the app builder
-    ///
-    /// # Return value
-    /// A new instance of the AppBuilder with default values set.
-    pub fn new () -> AppBuilder {
-
-        AppBuilder {_name: "Ion App".to_string (),
-                    _developer: "None".to_string (),
-                    _version: Version {major: 0, minor: 1, patch: 0}}
     }
 }
