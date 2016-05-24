@@ -15,17 +15,14 @@
 /*================================================================================================*/
 
 /*================================================================================================*/
-//! The engine module
-//!
-//! This module contains all functionality relatin to the core engine.
-//! This includes things such as the application and plugin manager.
+/*------CONFIGMANAGER STRUCT----------------------------------------------------------------------*/
 /*================================================================================================*/
 
-// Modules
-mod app;
-mod config;
-mod plugin;
+/// Handles the application config.
+///
+/// It is resposible for loading the app config, and allowing other modules easy access to that data.
+/// It is also used for saving the app config.
+#[derive (Copy, Clone)]
+pub struct ConfigManager {
 
-pub use self::app::App;
-pub use self::config::ConfigManager;
-pub use self::plugin::{Plugin, PluginState, PluginType, PluginManager};
+}

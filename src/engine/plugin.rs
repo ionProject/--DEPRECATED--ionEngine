@@ -33,7 +33,9 @@ pub enum PluginType {
     /// Used by audio backends.
     AudioBackend,
     /// Used by rendering backends.
-    RenderBackend
+    RenderBackend,
+    /// Used by the window backends.
+    WindowBackend
 }
 
 /*================================================================================================*/
