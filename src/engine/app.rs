@@ -17,6 +17,9 @@
 use ::util::{Logger, Version};
 use ::engine::PluginManager;
 
+use std::cell::RefCell;
+use std::rc::Rc;
+
 /*================================================================================================*/
 /*------APP STRUCT--------------------------------------------------------------------------------*/
 /*================================================================================================*/
@@ -26,16 +29,22 @@ use ::engine::PluginManager;
 /// This is the main control center of ionCore.
 /// It is in charge of initialization, updating, and shutdown of all modules,
 /// as well as the handing of any inter-module communication.
+#[derive (Clone)]
 pub struct App {
 
     // Public
-    /// Manages all plugins
+    /// Manages all plugins.
     pub plugin_manager: PluginManager,
 
     // Private
-    _name: String,
-    _developer: String,
-    _version: Version
+    ///
+    pub _name: String,
+    ///
+    pub _developer: String,
+    ///
+    pub _version: Version,
+    ///
+    pub _self_ref: Option<Rc<RefCell<App>>>
 }
 
 /*================================================================================================*/
@@ -69,7 +78,7 @@ impl App {
     }
 
 /*================================================================================================*/
-/*------APPVERSION PUBLIC METHODS-----------------------------------------------------------------*/
+/*------APPVERSION PUBLIC STATIC METHODS----------------------------------------------------------*/
 /*================================================================================================*/
 
     /// Returns a new instance of the app builder
@@ -79,7 +88,7 @@ impl App {
     pub fn builder () -> AppBuilder {
 
         AppBuilder {_name: "Ion App".to_string (),
-                    _developer: "None".to_string (),
+                    _developer: String::new (),
                     _version: Version {major: 0, minor: 1, patch: 0}}
     }
 }
@@ -119,7 +128,8 @@ impl AppBuilder {
         App {plugin_manager: PluginManager::new (),
              _name: self._name.clone (),
              _developer: self._developer.clone (),
-             _version: self._version}
+             _version: self._version,
+             _self_ref: None}
     }
 
     /// Sets the application name.
