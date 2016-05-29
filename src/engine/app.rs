@@ -37,14 +37,10 @@ pub struct App {
     pub plugin_manager: PluginManager,
 
     // Private
-    ///
-    pub _name: String,
-    ///
-    pub _developer: String,
-    ///
-    pub _version: Version,
-    ///
-    pub _self_ref: Option<Rc<RefCell<App>>>
+    _name: String,
+    _developer: String,
+    _version: Version,
+    _self_ref: Option<Rc<RefCell<App>>>
 }
 
 /*================================================================================================*/
