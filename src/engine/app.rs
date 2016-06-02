@@ -17,8 +17,13 @@
 use ::util::{Logger, Version};
 use ::engine::PluginManager;
 
-use std::cell::RefCell;
-use std::rc::Rc;
+use std::boxed::Box;
+
+/*================================================================================================*/
+/*------STATIC VARIABLES--------------------------------------------------------------------------*/
+/*================================================================================================*/
+
+static mut APP_POINTER: Option <*mut App> = None;
 
 /*================================================================================================*/
 /*------APP STRUCT--------------------------------------------------------------------------------*/
@@ -39,8 +44,7 @@ pub struct App {
     // Private
     _name: String,
     _developer: String,
-    _version: Version,
-    _self_ref: Option<Rc<RefCell<App>>>
+    _version: Version
 }
 
 /*================================================================================================*/
@@ -87,6 +91,24 @@ impl App {
                     _developer: String::new (),
                     _version: Version {major: 0, minor: 1, patch: 0}}
     }
+
+    /// Gets a reference to the current app instance.
+    pub fn instance () -> &'static App {
+        unsafe {&*APP_POINTER.unwrap ()}
+    }
+
+    /// Releases the app instance.
+    pub fn release () {
+
+        info! ("Shutting down ion Core
+        Using 'App' after this point will result in a panic.");
+
+        unsafe {
+
+            drop (Box::from_raw (APP_POINTER.unwrap ()));
+            APP_POINTER = None;
+        };
+    }
 }
 
 /*================================================================================================*/
@@ -116,16 +138,18 @@ impl AppBuilder {
     ///
     /// # Return value
     /// A new app instance.
-    pub fn build (&self) -> App {
+    pub fn build (&self) -> &'static App  {
 
         Logger::init ("./ionCore.log", true).unwrap ();
         info! ("Initializing ionCore | Version: {}", env! ("CARGO_PKG_VERSION"));
 
-        App {plugin_manager: PluginManager::new (),
-             _name: self._name.clone (),
-             _developer: self._developer.clone (),
-             _version: self._version,
-             _self_ref: None}
+        let app_box = Box::new (App {plugin_manager: PluginManager::new (),
+                                     _name: self._name.clone (),
+                                     _developer: self._developer.clone (),
+                                     _version: self._version});
+
+        unsafe {APP_POINTER = Some (Box::into_raw (app_box))};
+        App::instance ()
     }
 
     /// Sets the application name.
