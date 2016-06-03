@@ -429,10 +429,10 @@ impl Index <u8> for Mat4 {
 
         match index {
 
-            0 => return &self._value[0],
-            1 => return &self._value[1],
-            2 => return &self._value[2],
-            3 => return &self._value[3],
+            0 => &self._value[0],
+            1 => &self._value[1],
+            2 => &self._value[2],
+            3 => &self._value[3],
             _ => unreachable! ("Index out of range for Mat4")
         }
     }
@@ -445,10 +445,10 @@ impl IndexMut <u8> for Mat4 {
 
         match index {
 
-            0 => return &mut self._value[0],
-            1 => return &mut self._value[1],
-            2 => return &mut self._value[2],
-            3 => return &mut self._value[3],
+            0 => &mut self._value[0],
+            1 => &mut self._value[1],
+            2 => &mut self._value[2],
+            3 => &mut self._value[3],
             _ => unreachable! ("Index out of range for Mat4")
         }
     }

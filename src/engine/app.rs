@@ -100,12 +100,12 @@ impl App {
     /// Releases the app instance.
     pub fn release () {
 
-        info! ("Shutting down ion Core
+        info! ("Shutting down ion Core.
         Using 'App' after this point will result in a panic.");
 
         unsafe {
 
-            drop (Box::from_raw (APP_POINTER.unwrap ()));
+            Box::from_raw (APP_POINTER.unwrap ());
             APP_POINTER = None;
         };
     }

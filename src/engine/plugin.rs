@@ -31,11 +31,11 @@ use std::vec::Vec;
 pub enum PluginType {
 
     /// Used by audio backends.
-    AudioBackend,
+    Audio,
     /// Used by rendering backends.
-    RenderBackend,
+    Renderer,
     /// Used by the window backends.
-    WindowBackend
+    Window
 }
 
 /*================================================================================================*/
@@ -86,7 +86,7 @@ pub struct Plugin {
 /*================================================================================================*/
 
 /// Manages the finding and loading of plugins.
-#[derive (Clone)]
+#[derive (Default, Clone)]
 pub struct PluginManager {
 
     // Public
@@ -192,16 +192,12 @@ impl PluginManager {
     /// A result contaning a reference the plugin.
     pub fn get_plugin (&self, name: &str) -> Result<&Plugin, ()> {
 
-        let mut index = 0;
-
         // Loop through all plugins
-        for p in &self.plugin_list {
+        for (index, item) in self.plugin_list.iter ().enumerate () {
 
-            if p.name == name {
+            if item.name == name {
                 return Ok (&self.plugin_list [index]);
             }
-
-            index += 1;
         }
 
         Err (())

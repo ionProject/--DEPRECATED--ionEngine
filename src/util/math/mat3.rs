@@ -393,9 +393,9 @@ impl Index <u8> for Mat3 {
 
         match index {
 
-            0 => return &self._value[0],
-            1 => return &self._value[1],
-            2 => return &self._value[2],
+            0 => &self._value[0],
+            1 => &self._value[1],
+            2 => &self._value[2],
             _ => unreachable! ("Index out of range for Mat3")
         }
     }
@@ -408,9 +408,9 @@ impl IndexMut <u8> for Mat3 {
 
         match index {
 
-            0 => return &mut self._value[0],
-            1 => return &mut self._value[1],
-            2 => return &mut self._value[2],
+            0 => &mut self._value[0],
+            1 => &mut self._value[1],
+            2 => &mut self._value[2],
             _ => unreachable! ("Index out of range for Mat3")
         }
     }

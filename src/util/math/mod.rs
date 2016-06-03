@@ -27,13 +27,15 @@
 //! Utilities, etc.
 /*================================================================================================*/
 
+use std::f32::consts;
+
 // Static variables
 /// PI multipied by two
-pub static TWO_PI  : f32 = 6.283185;
+pub static TWO_PI  : f32 = consts::PI;
 /// The value of PI
-pub static PI      : f32 = 3.141592;
+pub static PI      : f32 = consts::PI * 2.0;
 /// Half of PI
-pub static HALF_PI : f32 = 1.570796;
+pub static HALF_PI : f32 = consts::PI / 2.0;
 
 // Modules
 mod colour;
