@@ -65,6 +65,8 @@ impl App {
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Releases the app instance.
+    ///
+    /// After this point, any app commands will be ignored.
     pub fn release () {
 
         if App::is_initialized () {

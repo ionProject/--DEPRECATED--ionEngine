@@ -1,4 +1,4 @@
-/*================================================================================================*/
+/*===============================================================================================*/
 // Copyright 2016 Kyle Finlay
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,13 +12,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-/*================================================================================================*/
+/*===============================================================================================*/
 
 use ::util::math::Vec2;
 
-/*================================================================================================*/
-/*------WINDOWBACKEND TRAIT-----------------------------------------------------------------------*/
-/*================================================================================================*/
+/*===============================================================================================*/
+/*------WINDOWBACKEND TRAIT----------------------------------------------------------------------*/
+/*===============================================================================================*/
 
 /// Implemented by various window backends
 pub trait WindowBackend {
@@ -30,11 +30,15 @@ pub trait WindowBackend {
     ///           will be set to.
     fn set_position (&mut self, pos: &Vec2);
 
+/*-----------------------------------------------------------------------------------------------*/
+
     /// Gets the position of the window.
     ///
     /// # Return value
     /// The return value is a Vec2 containing the current position of the window.
     fn get_position (&self) -> Vec2;
+
+/*-----------------------------------------------------------------------------------------------*/
 
     /// Sets the size of the window.
     ///
@@ -42,17 +46,23 @@ pub trait WindowBackend {
     /// * `size` - Contains the width and height you would like to set the window to.
     fn set_size (&mut self, size: &Vec2);
 
+/*-----------------------------------------------------------------------------------------------*/
+
     /// Gets the size of the window.
     ///
     /// # Return value
     /// The return value is a Vec2 containing the current size of the window.
     fn get_size (&self) -> Vec2;
 
+/*-----------------------------------------------------------------------------------------------*/
+
     /// Sets the title of the window.
     ///
     /// # Arguments
     /// * `title` - A string literal which is used to set the window title
     fn set_title (&mut self, title: String);
+
+/*-----------------------------------------------------------------------------------------------*/
 
     /// Gets the title of the window.
     ///
