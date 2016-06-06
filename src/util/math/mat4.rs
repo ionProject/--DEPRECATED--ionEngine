@@ -248,13 +248,13 @@ impl Mat4 {
     pub fn view (eye: &Vec3, target: &Vec3, up: &Vec3) -> Mat4 {
 
         let z_axis = Vec3::normalize (& (*eye - *target));
-        let x_axis = Vec3::normalize (&Vec3::cross (&up, &z_axis));
+        let x_axis = Vec3::normalize (&Vec3::cross (up, &z_axis));
         let y_axis = Vec3::cross     (&z_axis, &x_axis);
 
         Mat4 {_value: [Vec4 {x: x_axis.x,                   y: y_axis.x,                   z: z_axis.x,                   w: 0.0},
                        Vec4 {x: x_axis.y,                   y: y_axis.y,                   z: z_axis.y,                   w: 0.0},
                        Vec4 {x: x_axis.z,                   y: y_axis.z,                   z: z_axis.z,                   w: 0.0},
-                       Vec4 {x: -Vec3::dot (&x_axis, &eye), y: -Vec3::dot (&y_axis, &eye), z: -Vec3::dot (&z_axis, &eye), w: 1.0}]}
+                       Vec4 {x: -Vec3::dot (&x_axis, eye), y: -Vec3::dot (&y_axis, eye), z: -Vec3::dot (&z_axis, eye), w: 1.0}]}
     }
 }
 

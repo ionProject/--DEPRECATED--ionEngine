@@ -245,7 +245,7 @@ impl Colour {
         // If delta is not 0, calc h value
         if del != 0.0 {
 
-            if colour.r == max {
+            if colour.r >= max {
 
                 hsv.0 = (colour.g - colour.b) / del;
 
@@ -254,11 +254,11 @@ impl Colour {
                 }
             }
 
-            else if colour.g == max {
+            else if colour.g >= max {
                 hsv.0 = ((colour.b - colour.r) / del) + 2.0;
             }
 
-            else if colour.b == max {
+            else if colour.b >= max {
                 hsv.0 = ((colour.r - colour.g) / del) + 4.0;
             }
 
