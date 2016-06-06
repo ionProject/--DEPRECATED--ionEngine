@@ -36,9 +36,8 @@ static mut APP_POINTER: Option <*mut App> = None;
 #[derive (Clone)]
 pub struct App {
 
-    // Public
-    /// Manages all plugins.
-    pub plugin_manager: PluginManager,
+    // Private
+    pub plugin_manager: Option<PluginManager>,
 }
 
 /*===============================================================================================*/
