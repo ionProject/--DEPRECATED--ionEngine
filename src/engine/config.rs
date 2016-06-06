@@ -22,45 +22,7 @@
 ///
 /// It is resposible for loading the app config, and allowing other modules easy access to that data.
 /// It is also used for saving the app config.
-#[derive (Clone)]
+#[derive (Copy, Clone)]
 pub struct ConfigManager {
 
-    // Public
-    /// The path to the config file.
-    pub config_file: String
-}
-
-/*===============================================================================================*/
-/*------CONFIGMANAGER PUBLIC MEMBERS-------------------------------------------------------------*/
-/*===============================================================================================*/
-
-impl ConfigManager {
-
-    /// Resets the config to it's default state.
-    pub fn reset_config (&self) {
-        unimplemented! ();
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    /// Loads values from the config file.
-    pub fn load_config (&self) {
-        unimplemented! ();
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    /// Saves values to the config file.
-    pub fn save_config (&self) {
-        unimplemented! ();
-    }
-
-/*===============================================================================================*/
-/*------CONFIGMANAGER PUBLIC STATIC MEMBERS------------------------------------------------------*/
-/*===============================================================================================*/
-
-    /// Returns a new instance of the config manager.
-    pub fn new (config_file_path: &str) -> ConfigManager {
-        ConfigManager {config_file: config_file_path.to_string ()}
-    }
 }
