@@ -1,4 +1,4 @@
-/*================================================================================================*/
+/*===============================================================================================*/
 // Copyright 2016 Kyle Finlay
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,22 +12,21 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-/*================================================================================================*/
+/*===============================================================================================*/
 
-use ::util::{Logger, Version};
 use ::engine::PluginManager;
 
 use std::boxed::Box;
 
-/*================================================================================================*/
-/*------STATIC VARIABLES--------------------------------------------------------------------------*/
-/*================================================================================================*/
+/*===============================================================================================*/
+/*------STATIC VARIABLES-------------------------------------------------------------------------*/
+/*===============================================================================================*/
 
 static mut APP_POINTER: Option <*mut App> = None;
 
-/*================================================================================================*/
-/*------APP STRUCT--------------------------------------------------------------------------------*/
-/*================================================================================================*/
+/*===============================================================================================*/
+/*------APP STRUCT-------------------------------------------------------------------------------*/
+/*===============================================================================================*/
 
 /// The app
 ///
@@ -40,198 +39,44 @@ pub struct App {
     // Public
     /// Manages all plugins.
     pub plugin_manager: PluginManager,
-
-    // Private
-    _name: String,
-    _developer: String,
-    _version: Version
 }
 
-/*================================================================================================*/
-/*------APPVERSION PUBLIC METHODS-----------------------------------------------------------------*/
-/*================================================================================================*/
+/*===============================================================================================*/
+/*------APPVERSION PUBLIC STATIC METHODS---------------------------------------------------------*/
+/*===============================================================================================*/
 
 impl App {
 
-    /// Returns the name of the application.
+    /// Checks if the app has been initialized.
     ///
     /// # Return value
-    /// An immutable reference to the app name.
-    pub fn get_name (&self) -> &str {
-        &self._name
+    /// A bool returning whether the app has been initialized.
+    pub fn is_initialized () -> bool {
+
+        unsafe {
+
+            match APP_POINTER {
+
+                Some (pointer) => !pointer.is_null (),
+                None => false
+            }
+        }
     }
 
-    /// Returns the application developer
-    ///
-    /// # Return value
-    /// An immutable reference to the app developer
-    pub fn get_developer (&self) -> &str {
-        &self._developer
-    }
-
-    /// Returns the version of the application.
-    ///
-    /// # Return value
-    /// An immutable reference to the app version.
-    pub fn get_version (&self) -> &Version {
-        &self._version
-    }
-
-/*================================================================================================*/
-/*------APPVERSION PUBLIC STATIC METHODS----------------------------------------------------------*/
-/*================================================================================================*/
-
-    /// Returns a new instance of the app builder
-    ///
-    /// # Return value
-    /// A new instance of the app builder.
-    pub fn builder () -> AppBuilder {
-
-        AppBuilder {_name: "Ion App".to_string (),
-                    _developer: String::new (),
-                    _version: Version {major: 0, minor: 1, patch: 0}}
-    }
-
-    /// Gets a reference to the current app instance.
-    pub fn instance () -> &'static App {
-        unsafe {&*APP_POINTER.unwrap ()}
-    }
+/*-----------------------------------------------------------------------------------------------*/
 
     /// Releases the app instance.
     pub fn release () {
 
-        info! ("Shutting down ion Core.
-        Using 'App' after this point will result in a panic.");
+        if App::is_initialized () {
 
-        unsafe {
+            info! ("Shutting down ion Core.");
 
-            Box::from_raw (APP_POINTER.unwrap ());
-            APP_POINTER = None;
-        };
-    }
-}
+            unsafe {
 
-/*================================================================================================*/
-/*------APPBUILDER STRUCT-------------------------------------------------------------------------*/
-/*================================================================================================*/
-
-/// The app builder
-///
-/// The app builder provides an easy and straightforward way of creating and
-/// configuring a new app instance.
-#[derive (Clone)]
-pub struct AppBuilder {
-
-    // Private
-    _name: String,
-    _developer: String,
-    _version: Version
-}
-
-/*================================================================================================*/
-/*------APPBUILDER PUBLIC METHODS-----------------------------------------------------------------*/
-/*================================================================================================*/
-
-impl AppBuilder {
-
-    /// Builds the application
-    ///
-    /// # Return value
-    /// A new app instance.
-    pub fn build (&self) -> &'static App  {
-
-        Logger::init ("./ionCore.log", true).unwrap ();
-        info! ("Initializing ionCore | Version: {}", env! ("CARGO_PKG_VERSION"));
-
-        let app_box = Box::new (App {plugin_manager: PluginManager::new (),
-                                     _name: self._name.clone (),
-                                     _developer: self._developer.clone (),
-                                     _version: self._version});
-
-        unsafe {APP_POINTER = Some (Box::into_raw (app_box))};
-        App::instance ()
-    }
-
-    /// Sets the application name.
-    ///
-    /// # Arguments
-    /// * `name` - The desired name of the application.
-    ///
-    /// # Return value
-    /// A mutable reference to the current AppBuilder instance.
-    pub fn name (&mut self, name: &str) -> &mut AppBuilder {
-
-        self._name = name.to_string ();
-        self
-    }
-
-    /// Sets the application developer.
-    ///
-    /// # Arguments
-    /// * `developer` - The name of the developer.
-    ///
-    /// # Return value
-    /// A mutable reference to the current AppBuilder instance.
-    pub fn developer (&mut self, developer: &str) -> &mut AppBuilder {
-
-        self._developer = developer.to_string ();
-        self
-    }
-
-    /// Sets the version of the app.
-    ///
-    /// # Arguments
-    /// * 'major' - The major version of the app.
-    /// * `minor` - The minor version of the app.
-    /// * `patch` - The patch version of the app.
-    ///
-    /// # Return value
-    /// A mutable reference to the current AppBuilder instance.
-    pub fn version (&mut self, major: i32, minor: i32, patch: i32) -> &mut AppBuilder {
-
-        self._version.major = major;
-        self._version.minor = minor;
-        self._version.patch = patch;
-
-        self
-    }
-
-    /// Sets the major version of the app.
-    ///
-    /// # Arguments
-    /// * `major` - The major version of the app.
-    ///
-    /// # Return value
-    /// A mutable reference to the current AppBuilder instance.
-    pub fn version_major (&mut self, major: i32) -> &mut AppBuilder {
-
-        self._version.major = major;
-        self
-    }
-
-    /// Sets the minor version of the app.
-    ///
-    /// # Arguments
-    /// * `minor` - The minor version of the app.
-    ///
-    /// # Return value
-    /// A mutable reference to the current AppBuilder instance.
-    pub fn version_minor (&mut self, minor: i32) -> &mut AppBuilder {
-
-        self._version.minor = minor;
-        self
-    }
-
-    /// Sets the patch version of the app.
-    ///
-    /// # Arguments
-    /// * `patch` - The patch version of the app.
-    ///
-    /// # Return value
-    /// A mutable reference to the current AppBuilder instance.
-    pub fn version_patch (&mut self, patch: i32) -> &mut AppBuilder {
-
-        self._version.patch = patch;
-        self
+                Box::from_raw (APP_POINTER.unwrap ());
+                APP_POINTER = None;
+            };
+        }
     }
 }
