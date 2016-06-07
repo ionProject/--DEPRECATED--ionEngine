@@ -14,8 +14,11 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::engine::PluginManager;
+use ::engine::{ConfigManager, PluginManager};
+use ::util::Logger;
 
+use std::cell::RefCell;
+use std::rc::Rc;
 use std::boxed::Box;
 
 /*===============================================================================================*/
@@ -37,8 +40,10 @@ static mut APP_POINTER: Option <*mut App> = None;
 pub struct App {
 
     // Public
+    /// The config manager.
+    pub config_manager: Rc<RefCell<ConfigManager>>,
     /// The plugin manager.
-    pub plugin_manager: Option<PluginManager>,
+    pub plugin_manager: Rc<RefCell<PluginManager>>,
 }
 
 /*===============================================================================================*/
@@ -46,6 +51,24 @@ pub struct App {
 /*===============================================================================================*/
 
 impl App {
+
+    /// Initializes the app
+    pub fn init () {
+
+        // Check if not already initialized
+        if !App::is_initialized () {
+
+            Logger::init ("./ionCore.log", true).unwrap ();
+            info! ("Initializing ionCore | Version: {}", env! ("CARGO_PKG_VERSION"));
+
+            let ab = Box::new (App {config_manager: Rc::new (RefCell::new (ConfigManager {})),
+                                    plugin_manager: Rc::new (RefCell::new (PluginManager::new ()))});
+
+            unsafe {APP_POINTER = Some (Box::into_raw (ab))};
+        }
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
 
     /// Checks if the app has been initialized.
     ///
@@ -65,11 +88,38 @@ impl App {
 
 /*-----------------------------------------------------------------------------------------------*/
 
+    /// Returns a pointer to the config manager instance
+    pub fn get_config_manager () -> Option<Rc<RefCell<ConfigManager>>> {
+
+        // Check if app is initialized
+        if App::is_initialized () {
+            return Some (unsafe {&*APP_POINTER.unwrap ()}.config_manager.clone ());
+        }
+
+        None
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Returns a pointer to the plugin manager instance
+    pub fn get_plugin_manager () -> Option<Rc<RefCell<PluginManager>>> {
+
+        // Check if app is initialized
+        if App::is_initialized () {
+            return Some (unsafe {&*APP_POINTER.unwrap ()}.plugin_manager.clone ());
+        }
+
+        None
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
     /// Releases the app instance.
     ///
     /// After this point, any app commands will be ignored.
     pub fn release () {
 
+        // Check if app is initialized
         if App::is_initialized () {
 
             info! ("Shutting down ion Core.");
