@@ -14,6 +14,9 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+extern crate serde;
+extern crate serde_json;
+
 /*===============================================================================================*/
 /*------CONFIGMANAGER STRUCT---------------------------------------------------------------------*/
 /*===============================================================================================*/
@@ -22,7 +25,29 @@
 ///
 /// It is resposible for loading the app config, and allowing other modules easy access to that data.
 /// It is also used for saving the app config.
-#[derive (Copy, Clone)]
+#[derive (Clone)]
 pub struct ConfigManager {
 
+    // Public
+    /// The path to the config directory.
+    pub config_dir: String
+}
+
+/*===============================================================================================*/
+/*------CONFIGMANAGER PUBLIC STATIC METHODS------------------------------------------------------*/
+/*===============================================================================================*/
+
+impl ConfigManager {
+
+    /// Returns a new instance of the config manager.
+    ///
+    /// # Default values
+    /// * `config_dir` - "config".to_string ()
+    ///
+    /// # Return value
+    /// A new config manager instance.
+    pub fn new () -> ConfigManager {
+
+        ConfigManager {config_dir: "config".to_string ()}
+    }
 }

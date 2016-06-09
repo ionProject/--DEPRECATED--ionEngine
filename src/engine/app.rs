@@ -61,7 +61,7 @@ impl App {
             Logger::init ("./ionCore.log", true).unwrap ();
             info! ("Initializing ionCore | Version: {}", env! ("CARGO_PKG_VERSION"));
 
-            let ab = Box::new (App {config_manager: Rc::new (RefCell::new (ConfigManager {})),
+            let ab = Box::new (App {config_manager: Rc::new (RefCell::new (ConfigManager::new ())),
                                     plugin_manager: Rc::new (RefCell::new (PluginManager::new ()))});
 
             unsafe {APP_POINTER = Some (Box::into_raw (ab))};
