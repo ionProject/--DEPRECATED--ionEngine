@@ -89,6 +89,14 @@ impl App {
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Returns a pointer to the config manager instance
+    ///
+    /// # Examples
+    /// ```
+    /// # use ion_core::engine::App;
+    /// #
+    /// # App::Init ();
+    /// let cfg = App::get_config_manager ().unwrap ();
+    /// println! ("{}", cfg.borrow ().config_dir);
     pub fn get_config_manager () -> Option<Rc<RefCell<ConfigManager>>> {
 
         // Check if app is initialized

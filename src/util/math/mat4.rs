@@ -44,8 +44,8 @@ impl Mat4 {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::Mat4;
-    ///
+    /// # use ion_core::util::math::Mat4;
+    /// #
     /// let mat = Mat4::identity ();
     /// println! ("{}", mat.to_string ());
     /// ```
@@ -70,8 +70,8 @@ impl Mat4 {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::Mat4;
-    ///
+    /// # use ion_core::util::math::Mat4;
+    /// #
     /// let mat = Mat4::new (); // Returns a matrix with all zeros
     pub fn new () -> Mat4 {
 
@@ -96,8 +96,8 @@ impl Mat4 {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::Mat4;
-    ///
+    /// # use ion_core::util::math::Mat4;
+    /// #
     /// let mat = Mat4::identity ();
     /// println! ("Determinant = {}", Mat4::determinant (&mat));
     /// ```
@@ -152,8 +152,8 @@ impl Mat4 {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::{Mat4, Vec3};
-    ///
+    /// # use ion_core::util::math::{Mat4, Vec3};
+    /// #
     /// let pos = Vec3 {x : 10.0, y : 43.0, z : 29.0};
     /// let mat = Mat4::translate (&pos);
     pub fn translate (position: &Vec3) -> Mat4 {
@@ -175,8 +175,8 @@ impl Mat4 {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::{Mat4, Vec3};
-    ///
+    /// # use ion_core::util::math::{Mat4, Vec3};
+    /// #
     /// let rot = Vec3 {x : 45.0, y : 0.0, z : 180.0};
     /// let mat = Mat4::rotate (&rot);
     pub fn rotate (rotation: &Vec3) -> Mat4 {
@@ -220,8 +220,8 @@ impl Mat4 {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::{Mat4, Vec3};
-    ///
+    /// # use ion_core::util::math::{Mat4, Vec3};
+    /// # 
     /// let scale = Vec3 {x : 5.0, y : 1.0, z : 9.0};
     /// let mat = Mat4::scale (&scale);
     pub fn scale (scale: &Vec3) -> Mat4 {

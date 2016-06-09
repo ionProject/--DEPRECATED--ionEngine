@@ -51,8 +51,8 @@ impl Colour {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::Colour;
-    ///
+    /// # use ion_core::util::math::Colour;
+    /// #
     /// let colour = Colour {r : 0.5, g : 1.0, b : 0.0, a : 1.0};
     /// println! ("Colour = {}", colour.to_string ());
     /// ```
@@ -74,8 +74,8 @@ impl Colour {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::Colour;
-    ///
+    /// # use ion_core::util::math::Colour;
+    /// #
     /// let col = Colour::new (); // Resulting colour is white
     pub fn new () -> Colour {
 
@@ -119,8 +119,8 @@ impl Colour {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::Colour;
-    ///
+    /// # use ion_core::util::math::Colour;
+    /// #
     /// let col = Colour::from_hex ("20b2aaff");
     /// println! ("{}", col.to_string ());
     /// ```
@@ -150,8 +150,8 @@ impl Colour {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::Colour;
-    ///
+    /// # use ion_core::util::math::Colour;
+    /// #
     /// let col = Colour::from_hsv (197, 43, 92);
     /// println! ("{}", col.to_string ());
     /// ```
@@ -220,8 +220,8 @@ impl Colour {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::Colour;
-    ///
+    /// # use ion_core::util::math::Colour;
+    /// # 
     /// let col = Colour {r : 0.5, g : 0.2, b : 0.9, a : 1.0};
     /// println! ("{}", Colour::to_hex (&col));
     /// ```

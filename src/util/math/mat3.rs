@@ -47,8 +47,8 @@ impl Mat3 {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::Mat3;
-    ///
+    /// # use ion_core::util::math::Mat3;
+    /// #
     /// let mat = Mat3::identity ();
     /// println! ("{}", mat.to_string ());
     /// ```
@@ -74,8 +74,8 @@ impl Mat3 {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::Mat3;
-    ///
+    /// # use ion_core::util::math::Mat3;
+    /// #
     /// let mat = Mat3::new (); // Returns a matrix with all zeros
     pub fn new () -> Mat3 {
 
@@ -108,8 +108,8 @@ impl Mat3 {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::Mat3;
-    ///
+    /// # use ion_core::util::math::Mat3;
+    /// #
     /// let mat = Mat3::identity ();
     /// println! ("Determinant = {}", Mat3::determinant (&mat));
     /// ```
@@ -168,8 +168,8 @@ impl Mat3 {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::{Mat3, Vec2};
-    ///
+    /// # use ion_core::util::math::{Mat3, Vec2};
+    /// #
     /// let pos = Vec2 {x : 10.0, y : 43.0};
     /// let mat = Mat3::translate (&pos);
     pub fn translate (position: &Vec2) -> Mat3 {
@@ -196,8 +196,8 @@ impl Mat3 {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::Mat3;
-    ///
+    /// # use ion_core::util::math::Mat3;
+    /// #
     /// let rot = 45.0;
     /// let mat = Mat3::rotate (rot);
     pub fn rotate (rotation: f32) -> Mat3 {
@@ -229,8 +229,8 @@ impl Mat3 {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::{Mat3, Vec2};
-    ///
+    /// # use ion_core::util::math::{Mat3, Vec2};
+    /// # 
     /// let scale = Vec2 {x : 5.0, y : 1.0};
     /// let mat = Mat3::scale (&scale);
     pub fn scale (scale: &Vec2) -> Mat3 {
