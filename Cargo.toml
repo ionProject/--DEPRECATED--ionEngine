@@ -10,7 +10,8 @@ path       = "src/lib.rs"
 crate-type = ["dylib"]
 
 [dependencies]
-glob       = "0.2.x"
-libloading = "0.2.x"
-log        = "0.3.x"
-toml       = "0.1.x"
+glob       = "*"
+libloading = "*"
+log        = "*"
+serde      = "*"
+serde_json = "*"
