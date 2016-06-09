@@ -25,7 +25,7 @@ extern crate serde_json;
 ///
 /// It is resposible for loading the app config, and allowing other modules easy access to that data.
 /// It is also used for saving the app config.
-#[derive (Clone)]
+#[derive (Clone, Default)]
 pub struct ConfigManager {
 
     // Public

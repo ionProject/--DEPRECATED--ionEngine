@@ -86,7 +86,7 @@ pub struct Plugin {
 /*===============================================================================================*/
 
 /// Manages the finding and loading of plugins.
-#[derive (Default, Clone)]
+#[derive (Clone, Default)]
 pub struct PluginManager {
 
     // Public
