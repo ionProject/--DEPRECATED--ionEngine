@@ -52,8 +52,8 @@ impl Vec4 {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::Vec4;
-    ///
+    /// # use ion_core::util::math::Vec4;
+    /// #
     /// let vec = Vec4 {x : 10.0, y : 5.0, z : 1.0, w : 0.0};
     /// println! ("Vector = {}", vec.to_string ());
     /// ```
@@ -72,8 +72,8 @@ impl Vec4 {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::Vec4;
-    ///
+    /// # use ion_core::util::math::Vec4;
+    /// #
     /// let vec = Vec4::new ();
     pub fn new () -> Vec4 {
 

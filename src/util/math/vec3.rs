@@ -50,8 +50,8 @@ impl Vec3 {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::Vec3;
-    ///
+    /// # use ion_core::util::math::Vec3;
+    /// #
     /// let vec = Vec3 {x : 10.0, y : 5.0, z : 1.0};
     /// println! ("Vector = {}", vec.to_string ());
     /// ```
@@ -70,8 +70,8 @@ impl Vec3 {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::Vec3;
-    ///
+    /// # use ion_core::util::math::Vec3;
+    /// #
     /// let vec = Vec3::new ();
     pub fn new () -> Vec3 {
 

@@ -47,8 +47,8 @@ impl Vec2 {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::Vec2;
-    ///
+    /// # use ion_core::util::math::Vec2;
+    /// # 
     /// let vec = Vec2 {x : 10.0, y : 5.0};
     /// println! ("Vector = {}", vec.to_string ());
     /// ```
@@ -67,8 +67,8 @@ impl Vec2 {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::Vec2;
-    ///
+    /// # use ion_core::util::math::Vec2;
+    /// #
     /// let vec = Vec2::new ();
     pub fn new () -> Vec2 {
 

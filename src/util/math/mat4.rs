@@ -221,7 +221,7 @@ impl Mat4 {
     /// # Examples
     /// ```
     /// # use ion_core::util::math::{Mat4, Vec3};
-    /// # 
+    /// #
     /// let scale = Vec3 {x : 5.0, y : 1.0, z : 9.0};
     /// let mat = Mat4::scale (&scale);
     pub fn scale (scale: &Vec3) -> Mat4 {
@@ -265,7 +265,7 @@ impl Mat4 {
     /// Returns a view matrix
     pub fn view (eye: &Vec3, target: &Vec3, up: &Vec3) -> Mat4 {
 
-        let z_axis = Vec3::normalize (& (*eye - *target));
+        let z_axis = Vec3::normalize (&(*eye - *target));
         let x_axis = Vec3::normalize (&Vec3::cross (up, &z_axis));
         let y_axis = Vec3::cross     (&z_axis, &x_axis);
 

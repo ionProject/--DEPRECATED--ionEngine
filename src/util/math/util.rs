@@ -39,8 +39,8 @@ impl Util {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::Util;
-    ///
+    /// # use ion_core::util::math::Util;
+    /// #
     /// let val = 23.0;
     /// let min = 5.0;
     /// let max = 19.0;
@@ -68,8 +68,8 @@ impl Util {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::Util;
-    ///
+    /// # use ion_core::util::math::Util;
+    /// #
     /// let deg = 95.0;
     /// println! ("Value as radians = {}", Util::deg2rad (deg));
     /// ```
@@ -86,8 +86,8 @@ impl Util {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::Util;
-    ///
+    /// # use ion_core::util::math::Util;
+    /// #
     /// let start = 9.0;
     /// let end = 22.0;
     /// let percent = 0.5;
@@ -147,8 +147,8 @@ impl Util {
     ///
     /// # Examples
     /// ```
-    /// use ion_utils::math::Util;
-    ///
+    /// # use ion_core::util::math::Util;
+    /// # 
     /// let rad = 2.5;
     /// println! ("Value as degrees = {}", Util::rad2deg (rad));
     /// ```

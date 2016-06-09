@@ -94,7 +94,7 @@ impl App {
     /// ```
     /// # use ion_core::engine::App;
     /// #
-    /// # App::Init ();
+    /// # App::init ();
     /// let cfg = App::get_config_manager ().unwrap ();
     /// println! ("{}", cfg.borrow ().config_dir);
     pub fn get_config_manager () -> Option<Rc<RefCell<ConfigManager>>> {
