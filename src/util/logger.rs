@@ -62,7 +62,7 @@ impl Logger {
     /// # Examples
     /// ```
     /// # use ion_core::util::Logger;
-    /// # 
+    /// #
     /// Logger::init ("LogFile.log", false);
     pub fn init (log_file_path: &str, log_to_console: bool) -> Result<(), log::SetLoggerError> {
 
