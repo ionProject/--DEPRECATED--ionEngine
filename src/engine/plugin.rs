@@ -90,56 +90,30 @@ pub struct Plugin {
 pub struct PluginManager {
 
     // Public
-    /// The list of plugins
-    pub plugin_list: Vec<Plugin>,
+    /// The path to the config directory
+    pub plugin_dir: String,
 
     // Private
+    _plugin_list: Vec<Plugin>,
     _plugin_ext: String
 }
 
 /*===============================================================================================*/
-/*------PLUGINMANAGER PUBLIC MEMBERS-------------------------------------------------------------*/
+/*------PLUGINMANAGER PUBLIC METHODS-------------------------------------------------------------*/
 /*===============================================================================================*/
 
 impl PluginManager {
 
-    /// Returns a new plugin manager.
-    ///
-    /// # Arguments
-    /// * `plugin_dir` - The location of the plugin directory.
-    ///
-    /// # Return value
-    /// A new instance of the plugin manager.
-    pub fn new () -> PluginManager {
-
-        // Set the platform extension
-        let plug_ext = if cfg! (target_os = "windows") {".dll"}
-                       else if cfg! (target_os = "linux") {".so"}
-                       else if cfg! (target_os = "macos") {".dylib"}
-                       else {panic! ("Platform unsupported")};
-
-        PluginManager {plugin_list: Vec::new (),
-                       _plugin_ext: plug_ext.to_owned ()}
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
     /// Queries the plugin directory, and stores a list of plugins.
-    ///
-    /// # Arguments
-    /// * `plugin_dir` - The directory which contains the plugins.
-    ///
-    /// # Return value
-    /// An immutable reference to the list of plugins.
-    pub fn query_plugins (&mut self, plugin_dir: &str) -> &Vec<Plugin> {
+    pub fn query_plugin_dir (&mut self) {
 
         // Clear the old plugin list
-        self.plugin_list.clear ();
+        self._plugin_list.clear ();
 
         info! ("Searching for plugins...");
 
         // Recurse through all items in the plugin directory
-        for path in glob (&format! ("{}/*{}", plugin_dir, &self._plugin_ext)).unwrap ().filter_map (Result::ok) {
+        for path in glob (&format! ("{}/*{}", &self.plugin_dir, &self._plugin_ext)).unwrap ().filter_map (Result::ok) {
 
             // Load the library, and get function symbols
             let lib = Library::new (&path).unwrap ();
@@ -163,26 +137,24 @@ impl PluginManager {
             unsafe {
 
                 // Add the plugin to the list
-                self.plugin_list.push (Plugin {name: get_name (),
-                                               author: get_author (),
-                                               description: get_description (),
-                                               path: path.to_str ().unwrap ().to_owned (),
-                                               plugin_type: get_type (),
-                                               plugin_state: PluginState::Unloaded});
-
-                info! ("Found: {:?}", &path);
+                self._plugin_list.push (Plugin {name: get_name (),
+                                                author: get_author (),
+                                                description: get_description (),
+                                                path: path.to_str ().unwrap ().to_owned (),
+                                                plugin_type: get_type (),
+                                                plugin_state: PluginState::Unloaded});
             }
+
+            info! ("Found: {:?}", &path.file_name ().unwrap ());
         }
 
-        if self.plugin_list.is_empty () {
+        if self._plugin_list.is_empty () {
             info! ("No plugins found.");
         }
 
         else {
             info! ("Plugin searching complete.");
         }
-
-        &self.plugin_list
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -194,16 +166,40 @@ impl PluginManager {
     ///
     /// # Return value
     /// A result contaning a reference the plugin.
-    pub fn get_plugin (&self, name: &str) -> Result<&Plugin, ()> {
+    pub fn get_plugin (&self, name: &str) -> Result<Plugin, ()> {
 
         // Loop through all plugins
-        for (index, item) in self.plugin_list.iter ().enumerate () {
+        for (index, item) in self._plugin_list.iter ().enumerate () {
 
             if item.name == name {
-                return Ok (&self.plugin_list [index]);
+                return Ok (self._plugin_list [index].clone ());
             }
         }
 
         Err (())
+    }
+
+/*===============================================================================================*/
+/*------PLUGINMANAGER PUBLIC STATIC METHODS------------------------------------------------------*/
+/*===============================================================================================*/
+
+    /// Returns a new plugin manager.
+    ///
+    /// # Arguments
+    /// * `plugin_dir` - The location of the plugin directory.
+    ///
+    /// # Return value
+    /// A new instance of the plugin manager.
+    pub fn new () -> PluginManager {
+
+        // Set the platform extension
+        let plug_ext = if cfg! (target_os = "windows") {".dll"}
+                       else if cfg! (target_os = "linux") {".so"}
+                       else if cfg! (target_os = "macos") {".dylib"}
+                       else {panic! ("Platform unsupported")};
+
+        PluginManager {plugin_dir: "plugins".to_string (),
+                       _plugin_list: Vec::new (),
+                       _plugin_ext: plug_ext.to_owned ()}
     }
 }
