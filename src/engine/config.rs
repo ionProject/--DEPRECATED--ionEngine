@@ -19,6 +19,7 @@ extern crate serde;
 extern crate serde_json;
 
 use self::glob::glob;
+use self::serde::{Serialize, Deserialize};
 
 use std::vec::Vec;
 
@@ -87,6 +88,23 @@ impl ConfigManager {
         else {
             info! ("Config searching complete.");
         }
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Loads a config of a given name.
+    ///
+    /// The config file is then converted into the type `T`. `T` must derive both the
+    /// [`Serialize`] (http://serde-rs.github.io/serde/serde/ser/trait.Serialize.html) and
+    /// [`Deserialize`] (http://serde-rs.github.io/serde/serde/de/trait.Deserialize.html) traits.
+    ///
+    /// If this fails, an [`Err`] (https://doc.rust-lang.org/std/result/) is returned.
+    ///
+    /// # Return value
+    /// A result containing the config struct `T`.
+    pub fn load_config<T: Serialize + Deserialize> (&self, config_name: &str) -> Result<T, ()> {
+
+        unimplemented! ();
     }
 
 /*===============================================================================================*/
