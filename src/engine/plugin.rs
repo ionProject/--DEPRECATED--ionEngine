@@ -159,7 +159,7 @@ impl PluginManager {
 
 /*-----------------------------------------------------------------------------------------------*/
 
-    /// Returns an instance of a plugin
+    /// Returns an instance of a plugin.
     ///
     /// # Arguments
     /// * `name` - The name of the plugin.
