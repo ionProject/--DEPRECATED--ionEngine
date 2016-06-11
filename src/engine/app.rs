@@ -97,27 +97,27 @@ impl App {
     /// # App::init ();
     /// let cfg = App::get_config_manager ().unwrap ();
     /// println! ("{}", cfg.borrow ().config_dir);
-    pub fn get_config_manager () -> Option<Rc<RefCell<ConfigManager>>> {
+    pub fn get_config_manager () -> Result<Rc<RefCell<ConfigManager>>, ()> {
 
         // Check if app is initialized
         if App::is_initialized () {
-            return Some (unsafe {&*APP_POINTER.unwrap ()}.config_manager.clone ());
+            return Ok (unsafe {&*APP_POINTER.unwrap ()}.config_manager.clone ());
         }
 
-        None
+        Err (())
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Returns a pointer to the plugin manager instance
-    pub fn get_plugin_manager () -> Option<Rc<RefCell<PluginManager>>> {
+    pub fn get_plugin_manager () -> Result<Rc<RefCell<PluginManager>>, ()> {
 
         // Check if app is initialized
         if App::is_initialized () {
-            return Some (unsafe {&*APP_POINTER.unwrap ()}.plugin_manager.clone ());
+            return Ok (unsafe {&*APP_POINTER.unwrap ()}.plugin_manager.clone ());
         }
 
-        None
+        Err (())
     }
 
 /*-----------------------------------------------------------------------------------------------*/
