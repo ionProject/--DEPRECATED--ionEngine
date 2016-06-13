@@ -21,6 +21,8 @@ extern crate serde_json;
 use self::glob::glob;
 use self::serde::{Serialize, Deserialize};
 
+use std::io::{Read, Write};
+use std::fs::File;
 use std::vec::Vec;
 
 /*===============================================================================================*/
@@ -104,7 +106,45 @@ impl ConfigManager {
     /// A result containing the config struct `T`.
     pub fn load_config<T: Serialize + Deserialize> (&self, config_name: &str) -> Result<T, ()> {
 
-        unimplemented! ();
+        debug! ("Loading config file with name: '{}'", config_name);
+
+        for item in &self._config_list {
+
+            if item.name == config_name {
+
+                let mut f = File::open (&item.path).unwrap ();
+                let mut s = String::new ();
+
+                f.read_to_string (&mut s).unwrap ();
+                return Ok (serde_json::from_str::<T> (&s).unwrap ());
+            }
+        }
+
+        warn! ("Could not find config file: '{}'.
+                Try creating it first.", config_name);
+        Err (())
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Saves a config of a given name.
+    pub fn save_config<T: Serialize + Deserialize> (&self, config_name: &str, data: &T) -> Result<(), ()> {
+
+        debug! ("Saving config file with name: '{}'", config_name);
+
+        for item in &self._config_list {
+
+            if item.name == config_name {
+
+                let mut f = File::create (&item.path).unwrap ();
+                f.write (serde_json::to_string_pretty (&data).unwrap ().as_bytes ()).unwrap ();
+                return Ok (())
+            }
+        }
+
+        warn! ("Could not find config file: '{}'.
+                Try creating it first.", config_name);
+        Err (())
     }
 
 /*===============================================================================================*/
