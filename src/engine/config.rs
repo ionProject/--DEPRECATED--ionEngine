@@ -94,6 +94,20 @@ impl ConfigManager {
 
 /*-----------------------------------------------------------------------------------------------*/
 
+    /// Creates a new config with given name.
+    pub fn create_config<T: Serialize + Deserialize + Default> (&mut self, config_name: &str) {
+
+        debug! ("Creating config file with name: '{}'", config_name);
+
+        let mut f = File::create (format! ("{}/{}.json", &self.config_dir, config_name)).unwrap ();
+        f.write (serde_json::to_string_pretty (&T::default ()).unwrap ().as_bytes ()).unwrap ();
+
+        self._config_list.push (Config {name: config_name.to_string (),
+                                        path: format! ("{}/{}.json", &self.config_dir, config_name)});
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
     /// Loads a config of a given name.
     ///
     /// The config file is then converted into the type `T`. `T` must derive both the
