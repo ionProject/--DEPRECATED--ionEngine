@@ -22,6 +22,7 @@ use self::glob::glob;
 use self::serde::{Serialize, Deserialize};
 
 use std::io::{Read, Write};
+use std::fs;
 use std::fs::File;
 use std::vec::Vec;
 
@@ -71,6 +72,29 @@ impl ConfigManager {
         self._config_list.clear ();
 
         info! ("Searching for config files...");
+
+        // Make sure the config directoy already exists
+        if fs::metadata (&self.config_dir).is_err () {
+
+            info! ("Config directory does not exist. Creating one now.");
+
+            // Create new directory and check for errors
+            match fs::create_dir (&self.config_dir) {
+
+                Ok  (_) => {
+
+                    info! ("Directory creation successful.");
+                    info! ("No config files found.");
+                    return;
+                },
+
+                Err (e) => {
+
+                    error! ("Failed to create config directory: {}", e);
+                    panic! ();
+                }
+            }
+        }
 
         // Recurse through all items in the config directory
         for path in glob (&format! ("{}/*{}", &self.config_dir, ".json")).unwrap ().filter_map (Result::ok) {
