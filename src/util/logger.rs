@@ -20,7 +20,10 @@
 //! It provides basic logging functionality.
 /*===============================================================================================*/
 
+extern crate ansi_term;
 extern crate log;
+
+use self::ansi_term::Colour::{Blue, White, Yellow, Red};
 
 use std::boxed::Box;
 use std::fs::File;
@@ -102,11 +105,19 @@ impl log::Log for Logger {
     fn log (&self, record: &log::LogRecord) {
 
         let string_output = format! ("{} ({} : {}) - {}\n", record.level (),
-                                                            record.location ().file (),
+                                                            record.location ().module_path (),
                                                             record.location ().line (),
                                                             record.args ());
         if self.log_to_console {
-            print! ("{}", string_output);
+
+            match record.level () {
+
+                log::LogLevel::Debug => print! ("{}", Blue.paint (string_output.as_str ())),
+                log::LogLevel::Info  => print! ("{}", White.paint (string_output.as_str ())),
+                log::LogLevel::Warn  => print! ("{}", Yellow.paint (string_output.as_str ())),
+                log::LogLevel::Error => print! ("{}", Red.paint (string_output.as_str ())),
+                _ => {}
+            }
         }
 
         self.log_file.get_ref ().write (string_output.as_bytes ()).unwrap ();
