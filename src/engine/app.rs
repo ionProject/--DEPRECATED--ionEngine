@@ -14,7 +14,7 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::engine::{ConfigManager, PluginManager};
+use ::engine::ConfigManager;
 use ::util::Logger;
 
 use std::cell::RefCell;
@@ -42,8 +42,6 @@ pub struct App {
     // Public
     /// The config manager.
     pub config_manager: Rc<RefCell<ConfigManager>>,
-    /// The plugin manager.
-    pub plugin_manager: Rc<RefCell<PluginManager>>,
 }
 
 /*===============================================================================================*/
@@ -61,8 +59,7 @@ impl App {
             Logger::init ("./ionCore.log", true).unwrap ();
             info! ("Initializing ionCore | Version: {}", env! ("CARGO_PKG_VERSION"));
 
-            let ab = Box::new (App {config_manager: Rc::new (RefCell::new (ConfigManager::new ())),
-                                    plugin_manager: Rc::new (RefCell::new (PluginManager::new ()))});
+            let ab = Box::new (App {config_manager: Rc::new (RefCell::new (ConfigManager::new ()))});
 
             unsafe {APP_POINTER = Some (Box::into_raw (ab))};
         }
@@ -102,19 +99,6 @@ impl App {
         // Check if app is initialized
         if App::is_initialized () {
             return Ok (unsafe {&*APP_POINTER.unwrap ()}.config_manager.clone ());
-        }
-
-        Err (())
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    /// Returns a pointer to the plugin manager instance
-    pub fn get_plugin_manager () -> Result<Rc<RefCell<PluginManager>>, ()> {
-
-        // Check if app is initialized
-        if App::is_initialized () {
-            return Ok (unsafe {&*APP_POINTER.unwrap ()}.plugin_manager.clone ());
         }
 
         Err (())

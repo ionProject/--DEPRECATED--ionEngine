@@ -24,8 +24,6 @@
 // Modules
 mod app;
 mod config;
-mod plugin;
 
 pub use self::app::App;
 pub use self::config::ConfigManager;
-pub use self::plugin::{Plugin, PluginState, PluginType, PluginManager};
