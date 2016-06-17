@@ -20,6 +20,7 @@ use ::util::Logger;
 use std::cell::RefCell;
 use std::rc::Rc;
 use std::boxed::Box;
+use std::process;
 
 /*===============================================================================================*/
 /*------STATIC VARIABLES-------------------------------------------------------------------------*/
@@ -121,6 +122,10 @@ impl App {
                 Box::from_raw (APP_POINTER.unwrap ());
                 APP_POINTER = None;
             };
+
+            // Shut down the application
+            info! ("Terminating the application.");
+            process::exit (0);
         }
     }
 }
