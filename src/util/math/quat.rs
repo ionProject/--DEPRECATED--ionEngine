@@ -25,12 +25,12 @@
 pub struct Quat {
 
     // Public
-    /// X-axis coordinate
+    /// X-axis coordinate.
     pub x: f32,
-    /// Y-axis coordinate
+    /// Y-axis coordinate.
     pub y: f32,
-    /// Z-axis coordinate
+    /// Z-axis coordinate.
     pub z: f32,
-    /// W-axis coordinate
+    /// W-axis coordinate.
     pub w: f32,
 }

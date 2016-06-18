@@ -145,7 +145,7 @@ impl App {
 
             unsafe {
 
-                Box::from_raw (APP_POINTER.unwrap ());
+                drop (Box::from_raw (APP_POINTER.unwrap ()));
                 APP_POINTER = None;
             };
 
