@@ -23,6 +23,9 @@
 // Crate attributes
 #![deny (missing_copy_implementations)]
 #![deny (missing_docs)]
+#![feature (custom_derive)]
+#![feature (plugin)]
+#![plugin (serde_macros)]
 
 #[macro_use]
 extern crate log;

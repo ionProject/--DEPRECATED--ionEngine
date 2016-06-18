@@ -14,7 +14,7 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::engine::ConfigManager;
+use ::engine::{BackendManager, ConfigManager};
 use ::util::Logger;
 
 use std::cell::RefCell;
@@ -41,8 +41,10 @@ static mut APP_POINTER: Option <*mut App> = None;
 pub struct App {
 
     // Public
+    /// The backend manager.
+    pub backend_mgr: Rc<RefCell<BackendManager>>,
     /// The config manager.
-    pub config_manager: Rc<RefCell<ConfigManager>>,
+    pub config_mgr: Rc<RefCell<ConfigManager>>,
 }
 
 /*===============================================================================================*/
@@ -60,7 +62,11 @@ impl App {
             Logger::init ("./ionCore.log", true).unwrap ();
             info! ("Initializing ionCore | Version: {}", env! ("CARGO_PKG_VERSION"));
 
-            let ab = Box::new (App {config_manager: Rc::new (RefCell::new (ConfigManager::new ()))});
+            let ab = Box::new (App {
+
+                backend_mgr: Rc::new (RefCell::new (BackendManager::new ())),
+                config_mgr: Rc::new (RefCell::new (ConfigManager::new ()))
+            });
 
             unsafe {APP_POINTER = Some (Box::into_raw (ab))};
         }
@@ -86,7 +92,27 @@ impl App {
 
 /*-----------------------------------------------------------------------------------------------*/
 
-    /// Returns a pointer to the config manager instance
+    /// Returns a pointer to the backend manager instance.
+    ///
+    /// # Examples
+    /// ```
+    /// # use ion_core::engine::App;
+    /// # App::init ();
+    /// let backend_mgr = App::get_backend_manager ().unwrap ();
+    /// println! ("{}", backend_mgr.borrow ().default_audio_backend);
+    pub fn get_backend_manager () -> Result<Rc<RefCell<BackendManager>>, ()> {
+
+        // Check if app is initialized
+        if App::is_initialized () {
+            return Ok (unsafe {&*APP_POINTER.unwrap ()}.backend_mgr.clone ());
+        }
+
+        Err (())
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Returns a pointer to the config manager instance.
     ///
     /// # Examples
     /// ```
@@ -99,7 +125,7 @@ impl App {
 
         // Check if app is initialized
         if App::is_initialized () {
-            return Ok (unsafe {&*APP_POINTER.unwrap ()}.config_manager.clone ());
+            return Ok (unsafe {&*APP_POINTER.unwrap ()}.config_mgr.clone ());
         }
 
         Err (())
