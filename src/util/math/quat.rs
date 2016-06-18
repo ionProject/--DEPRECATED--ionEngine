@@ -15,43 +15,22 @@
 /*===============================================================================================*/
 
 /*===============================================================================================*/
-//! The math module.
-//!
-//! It contains various bits of mathematical functionality, including:
-//! Vectors,
-//! Matrices,
-//! Quaternions,
-//! Colours,
-//! Bounding volumes,
-//! Random numbers,
-//! Utilities, etc.
+/*------QUAT STRUCT------------------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-use std::f32::consts;
+/// Quaternion implementation.
+///
+/// Allows for representing rotations without gimbal lock.
+#[derive (Copy, Clone, Default)]
+pub struct Quat {
 
-// Static variables
-/// PI multipied by two
-pub static TWO_PI  : f32 = consts::PI;
-/// The value of PI
-pub static PI      : f32 = consts::PI * 2.0;
-/// Half of PI
-pub static HALF_PI : f32 = consts::PI / 2.0;
-
-// Modules
-mod colour;
-mod mat3;
-mod mat4;
-mod quat;
-mod util;
-mod vec2;
-mod vec3;
-mod vec4;
-
-pub use self::colour::Colour;
-pub use self::util::Util;
-pub use self::mat3::Mat3;
-pub use self::mat4::Mat4;
-pub use self::quat::Quat;
-pub use self::vec2::Vec2;
-pub use self::vec3::Vec3;
-pub use self::vec4::Vec4;
+    // Public
+    /// X-axis coordinate
+    pub x: f32,
+    /// Y-axis coordinate
+    pub y: f32,
+    /// Z-axis coordinate
+    pub z: f32,
+    /// W-axis coordinate
+    pub w: f32,
+}
