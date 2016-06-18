@@ -59,6 +59,7 @@ impl Default for BackendConfig {
 /*===============================================================================================*/
 
 /// Manages the loading of the various backend systems.
+#[derive (Default)]
 pub struct BackendManager {
 
     // Public
