@@ -15,16 +15,17 @@
 /*===============================================================================================*/
 
 /*===============================================================================================*/
-//! The engine module
+//! The backend module.
 //!
-//! This module contains all functionality relating to the core engine.
-//! This includes things such as the application and plugin manager.
+//! Contains everything required to load and manage different backend systems.
 /*===============================================================================================*/
 
-// Modules
-pub mod backend;
-mod app;
-mod config;
+mod backend_config;
+mod backend_enum;
+mod backend_manager;
+mod backend_plugin;
 
-pub use self::app::App;
-pub use self::config::ConfigManager;
+pub use self::backend_config::Config;
+pub use self::backend_enum::Type;
+pub use self::backend_manager::Manager;
+pub use self::backend_plugin::Plugin;

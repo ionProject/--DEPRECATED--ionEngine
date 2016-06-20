@@ -19,11 +19,12 @@ extern crate serde;
 use self::serde::{Serialize, Deserialize};
 
 /*===============================================================================================*/
-/*------BACKENDCONFIG STRUCT---------------------------------------------------------------------*/
+/*------CONFIG STRUCT----------------------------------------------------------------------------*/
 /*===============================================================================================*/
 
+/// Used to load the backend configuration.
 #[derive (Serialize, Deserialize)]
-pub struct BackendConfig {
+pub struct Config {
 
     // Public
     /// The backend directory.
@@ -37,51 +38,19 @@ pub struct BackendConfig {
 }
 
 /*===============================================================================================*/
-/*------BACKENDCONFIG PUBLIC STATIC METHODS------------------------------------------------------*/
+/*------CONFIG PUBLIC STATIC METHODS-------------------------------------------------------------*/
 /*===============================================================================================*/
 
-impl Default for BackendConfig {
+impl Default for Config {
 
-    fn default () -> BackendConfig {
+    fn default () -> Config {
 
-        BackendConfig {
+        Config {
 
             backend_dir: "backend".to_string (),
             default_window_backend: "fallback".to_string (),
             default_rendering_backend: "fallback".to_string (),
             default_audio_backend: "fallback".to_string ()
-        }
-    }
-}
-
-/*===============================================================================================*/
-/*------BACKENDMANAGER STRUCT--------------------------------------------------------------------*/
-/*===============================================================================================*/
-
-/// Manages the loading of the various backend systems.
-#[derive (Default)]
-pub struct BackendManager {
-
-    // Public
-    /// The backend configuration.
-    pub backend_config: BackendConfig
-}
-
-/*===============================================================================================*/
-/*------BACKENDMANAGER PUBLIC STATIC METHODS-----------------------------------------------------*/
-/*===============================================================================================*/
-
-impl BackendManager {
-
-    /// Creates a new instance of the BackendManager.
-    ///
-    /// # Return value
-    /// A new instance of the backend manager.
-    pub fn new () -> BackendManager {
-
-        BackendManager {
-
-            backend_config: BackendConfig::default ()
         }
     }
 }

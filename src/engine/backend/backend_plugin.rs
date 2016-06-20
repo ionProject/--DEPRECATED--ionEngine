@@ -14,17 +14,24 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+use ::engine::backend::Type;
+
 /*===============================================================================================*/
-//! The engine module
-//!
-//! This module contains all functionality relating to the core engine.
-//! This includes things such as the application and plugin manager.
+/*------PLUGIN STRUCT----------------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-// Modules
-pub mod backend;
-mod app;
-mod config;
+/// Used to store information on a backend plugin.
+pub struct Plugin {
 
-pub use self::app::App;
-pub use self::config::ConfigManager;
+    // Public
+    /// The name of the backend.
+    pub name: String,
+    /// The author.
+    pub author: String,
+    /// Description of the backend.
+    pub description: String,
+    /// Path to the plugin.
+    pub path: String,
+    /// The type of backend.
+    pub backend_type: Type,
+}

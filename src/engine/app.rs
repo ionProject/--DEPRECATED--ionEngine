@@ -14,7 +14,8 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::engine::{BackendManager, ConfigManager};
+use ::engine::ConfigManager;
+use ::engine::backend;
 use ::util::Logger;
 
 use std::cell::RefCell;
@@ -42,7 +43,7 @@ pub struct App {
 
     // Public
     /// The backend manager.
-    pub backend_mgr: Rc<RefCell<BackendManager>>,
+    pub backend_mgr: Rc<RefCell<backend::Manager>>,
     /// The config manager.
     pub config_mgr: Rc<RefCell<ConfigManager>>,
 }
@@ -64,7 +65,7 @@ impl App {
 
             let ab = Box::new (App {
 
-                backend_mgr: Rc::new (RefCell::new (BackendManager::new ())),
+                backend_mgr: Rc::new (RefCell::new (backend::Manager::new ())),
                 config_mgr: Rc::new (RefCell::new (ConfigManager::new ()))
             });
 
@@ -100,7 +101,7 @@ impl App {
     /// # App::init ();
     /// let backend_mgr = App::get_backend_manager ().unwrap ();
     /// println! ("{}", backend_mgr.borrow ().default_audio_backend);
-    pub fn get_backend_manager () -> Result<Rc<RefCell<BackendManager>>, ()> {
+    pub fn get_backend_manager () -> Result<Rc<RefCell<backend::Manager>>, ()> {
 
         // Check if app is initialized
         if App::is_initialized () {

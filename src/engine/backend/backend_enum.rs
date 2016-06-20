@@ -15,16 +15,19 @@
 /*===============================================================================================*/
 
 /*===============================================================================================*/
-//! The engine module
-//!
-//! This module contains all functionality relating to the core engine.
-//! This includes things such as the application and plugin manager.
+/*------BACKEND TYPE ENUM------------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-// Modules
-pub mod backend;
-mod app;
-mod config;
+/// The backend type.
+///
+/// Used to determine the type of a backend plugin.
+#[derive (Copy, Clone)]
+pub enum Type {
 
-pub use self::app::App;
-pub use self::config::ConfigManager;
+    /// Window type.
+    Window,
+    /// Renderer type.
+    Renderer,
+    /// Audio type.
+    Audio,
+}
