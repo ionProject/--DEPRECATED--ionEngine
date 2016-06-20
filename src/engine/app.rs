@@ -14,7 +14,7 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::engine::ConfigManager;
+use ::engine::config;
 use ::engine::backend;
 use ::util::Logger;
 
@@ -45,7 +45,7 @@ pub struct App {
     /// The backend manager.
     pub backend_mgr: Rc<RefCell<backend::Manager>>,
     /// The config manager.
-    pub config_mgr: Rc<RefCell<ConfigManager>>,
+    pub config_mgr: Rc<RefCell<config::Manager>>,
 }
 
 /*===============================================================================================*/
@@ -65,7 +65,7 @@ impl App {
 
             let ab = Box::new (App {
 
-                config_mgr: Rc::new (RefCell::new (ConfigManager::new ())),
+                config_mgr: Rc::new (RefCell::new (config::Manager::new ())),
                 backend_mgr: Rc::new (RefCell::new (backend::Manager::new ())),
             });
 
@@ -136,7 +136,7 @@ impl App {
     /// # App::init ();
     /// let cfg = App::get_config_manager ().unwrap ();
     /// println! ("{}", cfg.borrow ().config_dir);
-    pub fn get_config_manager () -> Result<Rc<RefCell<ConfigManager>>, ()> {
+    pub fn get_config_manager () -> Result<Rc<RefCell<config::Manager>>, ()> {
 
         // Check if app is initialized
         if App::is_initialized () {

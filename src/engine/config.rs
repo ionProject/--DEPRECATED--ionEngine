@@ -14,6 +14,12 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+/*===============================================================================================*/
+//! The config module.
+//!
+//! Contains everything required to load and manage configuration files.
+/*===============================================================================================*/
+
 extern crate glob;
 extern crate serde;
 extern crate serde_json;
@@ -31,7 +37,7 @@ use std::vec::Vec;
 /*===============================================================================================*/
 
 #[derive (Clone)]
-pub struct Config {
+struct Config {
 
     // Public
     /// The name of the config file.
@@ -49,7 +55,7 @@ pub struct Config {
 /// It is resposible for loading the app config, and allowing other modules easy access to that data.
 /// It is also used for saving the app config.
 #[derive (Clone, Default)]
-pub struct ConfigManager {
+pub struct Manager {
 
     // Public
     /// The path to the config directory.
@@ -63,7 +69,7 @@ pub struct ConfigManager {
 /*------CONFIGMANAGER PUBLIC METHODS-------------------------------------------------------------*/
 /*===============================================================================================*/
 
-impl ConfigManager {
+impl Manager {
 
     /// Queries the config directory, and stores a list of configs.
     pub fn query_config_dir (&mut self) {
@@ -211,9 +217,9 @@ impl ConfigManager {
     ///
     /// # Return value
     /// A new config manager instance.
-    pub fn new () -> ConfigManager {
+    pub fn new () -> Manager {
 
-        ConfigManager {config_dir: "config".to_string (),
-                       _config_list: Vec::new ()}
+        Manager {config_dir: "config".to_string (),
+                 _config_list: Vec::new ()}
     }
 }

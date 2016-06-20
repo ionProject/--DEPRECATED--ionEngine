@@ -23,8 +23,7 @@
 
 // Modules
 pub mod backend;
+pub mod config;
 mod app;
-mod config;
 
 pub use self::app::App;
-pub use self::config::ConfigManager;
