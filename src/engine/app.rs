@@ -65,12 +65,26 @@ impl App {
 
             let ab = Box::new (App {
 
+                config_mgr: Rc::new (RefCell::new (ConfigManager::new ())),
                 backend_mgr: Rc::new (RefCell::new (backend::Manager::new ())),
-                config_mgr: Rc::new (RefCell::new (ConfigManager::new ()))
             });
 
             unsafe {APP_POINTER = Some (Box::into_raw (ab))};
         }
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Load the config files for all modules.
+    pub fn load_config () {
+
+        // Query the config directory
+        let cfg_mgr = App::get_config_manager ().unwrap ();
+        cfg_mgr.borrow_mut ().query_config_dir ();
+
+        // Load config files
+        let backend_mgr = App::get_backend_manager ().unwrap ();
+        backend_mgr.borrow_mut ().load_config ();
     }
 
 /*-----------------------------------------------------------------------------------------------*/
