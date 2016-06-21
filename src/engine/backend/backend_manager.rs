@@ -14,8 +14,14 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+extern crate glob;
+extern crate libloading;
+
 use ::engine::App;
 use ::engine::backend::{Config, Plugin};
+
+use self::glob::glob;
+use self::libloading::{Library, Symbol};
 
 /*===============================================================================================*/
 /*------MANAGER STRUCT---------------------------------------------------------------------------*/
@@ -66,10 +72,17 @@ impl Manager {
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Queries the backend directory.
-    ///
-    ///
-    pub fn query_backend_dir (&self) {
+    pub fn query_backend_dir (&mut self) {
+
+        // Clear the old backend list
+        self._backend_list.clear ();
+        info! ("Searching for backend plugins...");
         
+        // Recurse through the backend directory, and get all backend plugins
+        for path in glob (&format! ("{}/*{}", &self._config.backend_dir, &self._ext)).unwrap ().filter_map (Result::ok) {
+
+
+        }
     }
 
 /*===============================================================================================*/

@@ -14,7 +14,7 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::engine::backend::Type;
+use ::engine::backend::{State, Type};
 
 /*===============================================================================================*/
 /*------PLUGIN STRUCT----------------------------------------------------------------------------*/
@@ -34,4 +34,6 @@ pub struct Plugin {
     pub path: String,
     /// The type of backend.
     pub backend_type: Type,
+    /// The current state of the backend.
+    pub state: State,
 }

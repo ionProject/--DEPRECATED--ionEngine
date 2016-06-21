@@ -31,3 +31,22 @@ pub enum Type {
     /// Audio type.
     Audio,
 }
+
+/*===============================================================================================*/
+/*------BACKEND STATE ENUM-----------------------------------------------------------------------*/
+/*===============================================================================================*/
+
+/// Stores the state of the backend plugins.
+#[derive (Copy, Clone)]
+pub enum State {
+
+    /// The plugin is not loaded.
+    /// This is the default.
+    Unloaded,
+    /// The plugin is active.
+    /// This means the plugin has been loaded, and is being used.
+    Active,
+    /// The plugin is disabled and cannot be used.
+    /// This usually means the plugin has failed to load.
+    Disabled,
+}

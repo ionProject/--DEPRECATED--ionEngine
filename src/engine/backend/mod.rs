@@ -26,6 +26,6 @@ mod backend_manager;
 mod backend_plugin;
 
 pub use self::backend_config::Config;
-pub use self::backend_enum::Type;
+pub use self::backend_enum::{State, Type};
 pub use self::backend_manager::Manager;
 pub use self::backend_plugin::Plugin;
