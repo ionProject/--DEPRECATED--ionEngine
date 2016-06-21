@@ -15,6 +15,7 @@
 /*===============================================================================================*/
 
 use ::engine::backend::{State, Type};
+use ::util::Version;
 
 /*===============================================================================================*/
 /*------PLUGIN STRUCT----------------------------------------------------------------------------*/
@@ -28,6 +29,8 @@ pub struct Plugin {
     pub name: String,
     /// The author.
     pub author: String,
+    /// The plugin version
+    pub version: Version,
     /// Description of the backend.
     pub description: String,
     /// Path to the plugin.

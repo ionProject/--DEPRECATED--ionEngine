@@ -19,6 +19,7 @@ extern crate libloading;
 
 use ::engine::App;
 use ::engine::backend::{Config, Plugin};
+use ::util::Version;
 
 use self::glob::glob;
 use self::libloading::{Library, Symbol};
@@ -71,7 +72,10 @@ impl Manager {
 
 /*-----------------------------------------------------------------------------------------------*/
 
-    /// Queries the backend directory.
+    /// Queries the backend directory for plugins.
+    ///
+    /// All valid backend plugins are then registered with the manager for loading.
+    /// Any plugins with errors are ignored.
     pub fn query_backend_dir (&mut self) {
 
         // Clear the old backend list
@@ -81,7 +85,95 @@ impl Manager {
         // Recurse through the backend directory, and get all backend plugins
         for path in glob (&format! ("{}/*{}", &self._config.backend_dir, &self._ext)).unwrap ().filter_map (Result::ok) {
 
+            info! ("Found: {:?}", &path.file_name ());
 
+            // Load the library and get the function symbols.
+            match Library::new (&path) {
+
+                Ok (lib) => {
+
+                    // Plugin name
+                    let get_name: Symbol<unsafe extern fn () -> String> = unsafe {
+
+                        match lib.get (b"get_name\0") {
+
+                            Ok (l) => l,
+                            Err (e) => {
+
+                                warn! ("Could not find function 'get_name' in library {:?}\n{}",
+                                       &path.file_name ().unwrap (), e);
+                                continue;
+                            }
+                        }
+                    };
+
+                    // Plugin author
+                    let get_author: Symbol<unsafe extern fn () -> String> = unsafe {
+
+                        match lib.get (b"get_author\0") {
+
+                            Ok (l) => l,
+                            Err (e) => {
+
+                                warn! ("Could not find function 'get_author' in library {:?}\n{}",
+                                       &path.file_name ().unwrap (), e);
+                                continue;
+                            }
+                        }
+                    };
+
+                    // Plugin version
+                    let get_version: Symbol<unsafe extern fn () -> Version> = unsafe {
+
+                        match lib.get (b"get_version\0") {
+
+                            Ok (l) => l,
+                            Err (e) => {
+
+                                warn! ("Could not find function 'get_version' in library {:?}\n{}",
+                                       &path.file_name ().unwrap (), e);
+                                continue;
+                            }
+                        }
+                    };
+
+                    // Plugin description
+                    let get_description: Symbol<unsafe extern fn () -> String> = unsafe {
+
+                        match lib.get (b"get_description\0") {
+
+                            Ok (l) => l,
+                            Err (e) => {
+
+                                warn! ("Could not find function 'get_description' in library {:?}\n{}",
+                                       &path.file_name ().unwrap (), e);
+                                continue;
+                            }
+                        }
+                    };
+
+                    // Plugin type
+                    let get_type: Symbol<unsafe extern fn () -> String> = unsafe {
+
+                        match lib.get (b"get_type\0") {
+
+                            Ok (l) => l,
+                            Err (e) => {
+
+                                warn! ("Could not find function 'get_type' in library {:?}\n{}",
+                                       &path.file_name ().unwrap (), e);
+                                continue;
+                            }
+                        }
+                    };
+                },
+
+                Err (e) => {
+
+                    warn! ("Could not load library {:?}\n{}", &path.file_name ().unwrap (), e);
+                    continue;
+                }
+            }
         }
     }
 
