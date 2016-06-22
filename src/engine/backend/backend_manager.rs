@@ -18,7 +18,7 @@ extern crate glob;
 extern crate libloading;
 
 use ::engine::App;
-use ::engine::backend::{Config, Plugin};
+use ::engine::backend::{Config, Plugin, State, Type};
 use ::util::Version;
 
 use self::glob::glob;
@@ -153,7 +153,7 @@ impl Manager {
                     };
 
                     // Plugin type
-                    let get_type: Symbol<unsafe extern fn () -> String> = unsafe {
+                    let get_type: Symbol<unsafe extern fn () -> Type> = unsafe {
 
                         match lib.get (b"get_type\0") {
 
@@ -166,6 +166,20 @@ impl Manager {
                             }
                         }
                     };
+
+                    // Create a new instance of the plugin, and add it to the list
+                    unsafe {
+
+                        self._backend_list.push (Plugin {name: get_name (),
+                                                         author: get_author (),
+                                                         version: get_version (),
+                                                         description: get_description (),
+                                                         path: path.to_str ().unwrap ().to_string (),
+                                                         b_type: get_type (),
+                                                         state: State::Unloaded});
+                    }
+
+                    info! ("Added: {:?}", &path.file_name ());
                 },
 
                 Err (e) => {

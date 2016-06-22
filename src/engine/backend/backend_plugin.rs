@@ -36,7 +36,7 @@ pub struct Plugin {
     /// Path to the plugin.
     pub path: String,
     /// The type of backend.
-    pub backend_type: Type,
+    pub b_type: Type,
     /// The current state of the backend.
     pub state: State,
 }
