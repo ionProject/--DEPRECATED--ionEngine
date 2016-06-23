@@ -21,7 +21,7 @@
 /// The backend type.
 ///
 /// Used to determine the type of a backend plugin.
-#[derive (Copy, Clone)]
+#[derive (Copy, Clone, PartialEq)]
 pub enum Type {
 
     /// Window type.

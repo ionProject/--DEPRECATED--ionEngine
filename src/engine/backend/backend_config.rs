@@ -50,7 +50,7 @@ impl Default for Config {
             backend_dir: "backend".to_string (),
             default_window_backend: "fallback".to_string (),
             default_rendering_backend: "fallback".to_string (),
-            default_audio_backend: "fallback".to_string ()
+            default_audio_backend: "fallback".to_string (),
         }
     }
 }

@@ -79,10 +79,10 @@ impl Manager {
 
         info! ("Searching for config files...");
 
-        // Make sure the config directoy already exists
+        // Make sure the config directory already exists
         if fs::metadata (&self.config_dir).is_err () {
 
-            info! ("Config directory does not exist. Creating one now.");
+            warn! ("Config directory does not exist. Creating one now.");
 
             // Create new directory and check for errors
             match fs::create_dir (&self.config_dir) {
