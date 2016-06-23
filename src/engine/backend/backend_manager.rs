@@ -24,6 +24,8 @@ use ::util::Version;
 use self::glob::glob;
 use self::libloading::{Library, Symbol};
 
+use std::fs;
+
 /*===============================================================================================*/
 /*------MANAGER STRUCT---------------------------------------------------------------------------*/
 /*===============================================================================================*/
@@ -81,11 +83,15 @@ impl Manager {
         // Clear the old backend list
         self._backend_list.clear ();
         info! ("Searching for backend plugins...");
+
+        if !&self._check_backend_dir_exists () {
+            return;
+        }
         
         // Recurse through the backend directory, and get all backend plugins
         for path in glob (&format! ("{}/*{}", &self._config.backend_dir, &self._ext)).unwrap ().filter_map (Result::ok) {
 
-            info! ("Found: {:?}", &path.file_name ());
+            info! ("Found: {:?}", &path.file_name ().unwrap ());
 
             // Load the library and get the function symbols.
             match Library::new (&path) {
@@ -179,7 +185,7 @@ impl Manager {
                                                          state: State::Unloaded});
                     }
 
-                    info! ("Added: {:?}", &path.file_name ());
+                    info! ("Added: {:?}", &path.file_name ().unwrap ());
                 },
 
                 Err (e) => {
@@ -189,6 +195,33 @@ impl Manager {
                 }
             }
         }
+
+        // If list is empty, print empty
+        // Otherwise, print searching complete
+        if self._backend_list.is_empty () {
+            info! ("No backend plugins found.");
+        }
+
+        else {
+            info! ("Backend searching complete.");
+        }
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Lists all avaliable backends of a given type.
+    pub fn list_backends (&self, backend_type: Type) -> Vec<String> {
+
+        let mut return_vec = Vec::<String>::new ();
+
+        for backend in &self._backend_list {
+
+            if backend.b_type == backend_type {
+                return_vec.push (backend.name.clone ());
+            }
+        }
+
+        return_vec
     }
 
 /*===============================================================================================*/
@@ -212,5 +245,38 @@ impl Manager {
             _backend_list: Vec::new (),
             _ext: plug_ext.to_string ()
         }
+    }
+
+/*===============================================================================================*/
+/*------MANAGER PRIVATE METHODS------------------------------------------------------------------*/
+/*===============================================================================================*/
+
+    // Checks if the backend directory exists.
+    // If not, a new one is created.
+    fn _check_backend_dir_exists (&self) -> bool {
+
+        if fs::metadata (&self._config.backend_dir).is_err () {
+
+            warn! ("Backend directory does not exist. Creating one now.");
+
+            // Create new directory and check for errors
+            match fs::create_dir (&self._config.backend_dir) {
+
+                Ok  (_) => {
+
+                    info! ("Directory creation successful.");
+                    info! ("No backend plugins found.");
+                    return false;
+                },
+
+                Err (e) => {
+
+                    error! ("Failed to create backend directory: {}", e);
+                    panic! ();
+                }
+            }
+        }
+
+        true
     }
 }
