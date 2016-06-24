@@ -74,6 +74,29 @@ impl Manager {
 
 /*-----------------------------------------------------------------------------------------------*/
 
+    /// Saves the configuration file.
+    pub fn save_config (&self) {
+
+        // Get a pointer to the config manager
+        let cfg_mgr = App::get_config_manager ().unwrap ();
+        let cfg_exists = cfg_mgr.borrow ().config_exists ("backend_manager");
+
+        // Check if the config file for the backend manager exists.
+        // If so, save it.
+        // If not, create it.
+        if cfg_exists {
+            cfg_mgr.borrow ().save_config ("backend_manager", &self._config).unwrap ();
+        }
+
+        else {
+
+            cfg_mgr.borrow_mut ().create_config::<Config> ("backend_manager");
+            cfg_mgr.borrow ().save_config ("backend_manager", &self._config).unwrap ();
+        }
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
     /// Queries the backend directory for plugins.
     ///
     /// All valid backend plugins are then registered with the manager for loading.
@@ -222,6 +245,30 @@ impl Manager {
         }
 
         return_vec
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Sets the default backend.
+    pub fn set_backend (&mut self, backend_name: &str) {
+
+        // Find the backend with the given name
+        for b in &self._backend_list {
+
+            if b.name == backend_name {
+
+                match b.b_type {
+
+                    Type::Audio    => self._config.default_audio_backend     = b.name.clone (),
+                    Type::Renderer => self._config.default_rendering_backend = b.name.clone (),
+                    Type::Window   => self._config.default_window_backend    = b.name.clone (),
+                }
+
+                return;
+            }
+        }
+
+        warn! ("No backend plugin with name '{}' found.", backend_name);
     }
 
 /*===============================================================================================*/
