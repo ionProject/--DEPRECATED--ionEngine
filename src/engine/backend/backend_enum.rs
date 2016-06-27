@@ -27,11 +27,11 @@ use ::engine::backend::Info;
 pub enum Type {
 
     /// Window type.
-    Window (Info),
+    Window (Option<Info>),
     /// Renderer type.
-    Renderer (Info),
+    Renderer (Option<Info>),
     /// Audio type.
-    Audio (Info),
+    Audio (Option<Info>),
 }
 
 /*===============================================================================================*/

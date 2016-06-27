@@ -166,18 +166,20 @@ impl Manager {
     /// Lists all avaliable backends of a given type.
     pub fn list_backends (&self, backend_type: Type) -> Vec<String> {
 
-        unimplemented! ();
+        let mut return_vec = Vec::<String>::new ();
 
-        /*let mut return_vec = Vec::<String>::new ();
+        for backend in self._backend_list.clone () {
+            
+            match (backend, &backend_type) {
 
-        for backend in &self._backend_list {
-
-            if backend.b_type == backend_type {
-                return_vec.push (backend.name.clone ());
+                (Type::Audio    (info), &Type::Audio    (_)) |
+                (Type::Renderer (info), &Type::Renderer (_)) |
+                (Type::Window   (info), &Type::Window   (_)) => return_vec.push (info.unwrap ().name),
+                _ => continue,
             }
         }
 
-        return_vec*/
+        return_vec
     }
 
 /*-----------------------------------------------------------------------------------------------*/
