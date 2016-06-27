@@ -14,7 +14,7 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::engine::backend::{State, Type};
+use ::engine::backend::State;
 use ::util::Version;
 
 /*===============================================================================================*/
@@ -22,7 +22,8 @@ use ::util::Version;
 /*===============================================================================================*/
 
 /// Used to store information on a backend plugin.
-pub struct Plugin {
+#[derive (Clone)]
+pub struct Info {
 
     // Public
     /// The name of the backend.
@@ -35,8 +36,6 @@ pub struct Plugin {
     pub description: String,
     /// Path to the plugin.
     pub path: String,
-    /// The type of backend.
-    pub b_type: Type,
     /// The current state of the backend.
     pub state: State,
 }

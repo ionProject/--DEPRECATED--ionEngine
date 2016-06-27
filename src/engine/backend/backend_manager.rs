@@ -18,8 +18,7 @@ extern crate glob;
 extern crate libloading;
 
 use ::engine::App;
-use ::engine::backend::{Config, Plugin, State, Type};
-use ::util::Version;
+use ::engine::backend::{Config, Type};
 
 use self::glob::glob;
 use self::libloading::{Library, Symbol};
@@ -36,7 +35,7 @@ pub struct Manager {
 
     // Private
     _config: Config,
-    _backend_list: Vec<Plugin>,
+    _backend_list: Vec<Type>,
     _ext: String,
 }
 
@@ -121,75 +120,14 @@ impl Manager {
 
                 Ok (lib) => {
 
-                    // Plugin name
-                    let get_name: Symbol<unsafe extern fn () -> String> = unsafe {
+                    let get_backend_info: Symbol<unsafe extern fn () -> Type> = unsafe {
 
-                        match lib.get (b"get_name\0") {
-
-                            Ok (l) => l,
-                            Err (e) => {
-
-                                warn! ("Could not find function 'get_name' in library {:?}\n{}",
-                                       &path.file_name ().unwrap (), e);
-                                continue;
-                            }
-                        }
-                    };
-
-                    // Plugin author
-                    let get_author: Symbol<unsafe extern fn () -> String> = unsafe {
-
-                        match lib.get (b"get_author\0") {
+                        match lib.get (b"get_backend_info\0") {
 
                             Ok (l) => l,
                             Err (e) => {
 
-                                warn! ("Could not find function 'get_author' in library {:?}\n{}",
-                                       &path.file_name ().unwrap (), e);
-                                continue;
-                            }
-                        }
-                    };
-
-                    // Plugin version
-                    let get_version: Symbol<unsafe extern fn () -> Version> = unsafe {
-
-                        match lib.get (b"get_version\0") {
-
-                            Ok (l) => l,
-                            Err (e) => {
-
-                                warn! ("Could not find function 'get_version' in library {:?}\n{}",
-                                       &path.file_name ().unwrap (), e);
-                                continue;
-                            }
-                        }
-                    };
-
-                    // Plugin description
-                    let get_description: Symbol<unsafe extern fn () -> String> = unsafe {
-
-                        match lib.get (b"get_description\0") {
-
-                            Ok (l) => l,
-                            Err (e) => {
-
-                                warn! ("Could not find function 'get_description' in library {:?}\n{}",
-                                       &path.file_name ().unwrap (), e);
-                                continue;
-                            }
-                        }
-                    };
-
-                    // Plugin type
-                    let get_type: Symbol<unsafe extern fn () -> Type> = unsafe {
-
-                        match lib.get (b"get_type\0") {
-
-                            Ok (l) => l,
-                            Err (e) => {
-
-                                warn! ("Could not find function 'get_type' in library {:?}\n{}",
+                                warn! ("Could not find function 'get_backend_info' in library {:?}\n{}",
                                        &path.file_name ().unwrap (), e);
                                 continue;
                             }
@@ -198,14 +136,7 @@ impl Manager {
 
                     // Create a new instance of the plugin, and add it to the list
                     unsafe {
-
-                        self._backend_list.push (Plugin {name: get_name (),
-                                                         author: get_author (),
-                                                         version: get_version (),
-                                                         description: get_description (),
-                                                         path: path.to_str ().unwrap ().to_string (),
-                                                         b_type: get_type (),
-                                                         state: State::Unloaded});
+                        self._backend_list.push (get_backend_info ());
                     }
 
                     info! ("Added: {:?}", &path.file_name ().unwrap ());
@@ -235,7 +166,9 @@ impl Manager {
     /// Lists all avaliable backends of a given type.
     pub fn list_backends (&self, backend_type: Type) -> Vec<String> {
 
-        let mut return_vec = Vec::<String>::new ();
+        unimplemented! ();
+
+        /*let mut return_vec = Vec::<String>::new ();
 
         for backend in &self._backend_list {
 
@@ -244,15 +177,17 @@ impl Manager {
             }
         }
 
-        return_vec
+        return_vec*/
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Sets the default backend.
-    pub fn set_backend (&mut self, backend_name: &str) {
+    pub fn set_default_backend (&mut self, backend_name: &str) {
 
-        // Find the backend with the given name
+        unimplemented! ();
+
+        /*// Find the backend with the given name
         for b in &self._backend_list {
 
             if b.name == backend_name {
@@ -268,7 +203,7 @@ impl Manager {
             }
         }
 
-        warn! ("No backend plugin with name '{}' found.", backend_name);
+        warn! ("No backend plugin with name '{}' found.", backend_name);*/
     }
 
 /*===============================================================================================*/
