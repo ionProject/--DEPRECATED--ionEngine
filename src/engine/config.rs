@@ -125,7 +125,7 @@ impl Manager {
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Creates a new config with given name.
-    pub fn create_config<T: Serialize + Deserialize + Default> (&mut self, config_name: &str) {
+    pub fn create_config<T: Serialize + Default> (&mut self, config_name: &str) {
 
         debug! ("Creating config file with name: '{}'", config_name);
 
@@ -148,7 +148,7 @@ impl Manager {
     ///
     /// # Return value
     /// A result containing the config struct `T`.
-    pub fn load_config<T: Serialize + Deserialize> (&self, config_name: &str) -> Result<T, ()> {
+    pub fn load_config<T: Deserialize> (&self, config_name: &str) -> Result<T, ()> {
 
         debug! ("Loading config file with name: '{}'", config_name);
 
@@ -172,7 +172,7 @@ impl Manager {
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Saves a config of a given name.
-    pub fn save_config<T: Serialize + Deserialize> (&self, config_name: &str, data: &T) -> Result<(), ()> {
+    pub fn save_config<T: Serialize> (&self, config_name: &str, data: &T) -> Result<(), ()> {
 
         debug! ("Saving config file with name: '{}'", config_name);
 
