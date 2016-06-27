@@ -18,7 +18,7 @@ extern crate glob;
 extern crate libloading;
 
 use ::engine::App;
-use ::engine::backend::{Config, Type};
+use ::engine::backend::{Config, Info, Type};
 
 use self::glob::glob;
 use self::libloading::{Library, Symbol};
@@ -35,7 +35,7 @@ pub struct Manager {
 
     // Private
     _config: Config,
-    _backend_list: Vec<Type>,
+    _backend_list: Vec<Info>,
     _ext: String,
 }
 
@@ -120,7 +120,7 @@ impl Manager {
 
                 Ok (lib) => {
 
-                    let get_backend_info: Symbol<unsafe extern fn () -> Type> = unsafe {
+                    let get_backend_info: Symbol<unsafe extern fn () -> Info> = unsafe {
 
                         match lib.get (b"get_backend_info\0") {
 
@@ -169,13 +169,9 @@ impl Manager {
         let mut return_vec = Vec::<String>::new ();
 
         for backend in self._backend_list.clone () {
-            
-            match (backend, &backend_type) {
 
-                (Type::Audio    (info), &Type::Audio    (_)) |
-                (Type::Renderer (info), &Type::Renderer (_)) |
-                (Type::Window   (info), &Type::Window   (_)) => return_vec.push (info.unwrap ().name),
-                _ => continue,
+            if backend.b_type == backend_type {
+                return_vec.push (backend.name);
             }
         }
 

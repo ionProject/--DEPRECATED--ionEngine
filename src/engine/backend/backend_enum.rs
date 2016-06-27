@@ -14,8 +14,6 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::engine::backend::Info;
-
 /*===============================================================================================*/
 /*------BACKEND TYPE ENUM------------------------------------------------------------------------*/
 /*===============================================================================================*/
@@ -23,15 +21,15 @@ use ::engine::backend::Info;
 /// The backend type.
 ///
 /// Used to determine the type of a backend plugin.
-#[derive (Clone)]
+#[derive (Copy, Clone, PartialEq)]
 pub enum Type {
 
     /// Window type.
-    Window (Option<Info>),
+    Window,
     /// Renderer type.
-    Renderer (Option<Info>),
+    Renderer,
     /// Audio type.
-    Audio (Option<Info>),
+    Audio,
 }
 
 /*===============================================================================================*/
