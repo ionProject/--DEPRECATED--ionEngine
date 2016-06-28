@@ -19,13 +19,12 @@ extern crate libloading;
 
 use ::engine::App;
 use ::engine::backend::{Config, Info, Type, State};
+use ::util::Version;
 
 use self::glob::glob;
 use self::libloading::{Library, Symbol};
 
-use std::cell::RefCell;
 use std::fs;
-use std::rc::Rc;
 
 /*===============================================================================================*/
 /*------MANAGER STRUCT---------------------------------------------------------------------------*/
@@ -37,7 +36,7 @@ pub struct Manager {
 
     // Private
     _config: Config,
-    _backend_list: Vec<Rc<RefCell<Info>>>,
+    _backend_list: Vec<Info>,
     _ext: String,
 }
 
@@ -138,13 +137,13 @@ impl Manager {
 
                     // Create a new instance of the plugin, and add it to the list
                     unsafe {
-                        self._backend_list.push (Rc::new (RefCell::new (get_backend_info ())));
+                        self._backend_list.push (get_backend_info ());
                     }
 
                     // Set the path and state of the backend plugin
                     let index = self._backend_list.len () - 1;
-                    self._backend_list[index].borrow_mut ().path  = path.to_str ().unwrap ().to_string ();
-                    self._backend_list[index].borrow_mut ().state = State::Unloaded;
+                    self._backend_list[index].path  = path.to_str ().unwrap ().to_string ();
+                    self._backend_list[index].state = State::Unloaded;
 
                     info! ("Added: {:?}", &path.file_name ().unwrap ());
                 },
@@ -177,12 +176,12 @@ impl Manager {
 
         let mut return_vec = Vec::<String>::new ();
 
-        for backend in &self._backend_list.clone () {
+        for backend in &self._backend_list {
 
-            if backend.borrow ().b_type == backend_type &&
-               backend.borrow ().state != State::Disabled {
+            if backend.b_type == backend_type &&
+               backend.state != State::Disabled {
 
-                return_vec.push (backend.borrow ().name.clone ());
+                return_vec.push (backend.name.clone ());
             }
         }
 
@@ -192,26 +191,51 @@ impl Manager {
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Gets the default backend.
-    pub fn get_default_backend (&self, backend_type: Type) -> Option<Rc<RefCell<Info>>> {
+    pub fn get_default_backend (&self, backend_type: Type) -> Info {
 
-        let back_name = self._config.default_backend [backend_type as usize].clone ();
+        let backend_name = self._config.default_backend [backend_type as usize].clone ();
 
-        // Check if the backend is the fallback
-        if back_name == "fallback" {
+        // Check if the default backend has been set.
+        // If not, pick the first suitable backend from the list.
+        if backend_name == "None" {
 
-            warn! ("Using fallback for backend: {:?}.\nThings may not work as expected.", backend_type);
-            return None;
-        }
+            for item in &self._backend_list {
 
-        // Otherwise return the default backend for that type
-        for b in &self._backend_list {
-
-            if b.borrow ().name == back_name {
-                return Some (b.clone ());
+                if item.b_type == backend_type {
+                    return item.clone ();
+                }
             }
         }
 
-        None
+        // Otherwise return the default backend for that type.
+        else {
+
+            // Find the plugin by its name and return it.
+            for item in &self._backend_list {
+
+                if item.name == backend_name {
+                    return item.clone ();
+                }
+            }
+
+            // If plugin name not found, get first suitable type.
+            for item in &self._backend_list {
+
+                if item.b_type == backend_type {
+                    return item.clone ();
+                }
+            }
+        }
+
+        warn! ("No suitable backend for {:?} was found. Dropping into fallback mode.", backend_type);
+
+        Info {name:   "Fallback".to_string (),
+              author: "Fallback".to_string (),
+              version: Version {major: 0, minor: 0, patch: 0},
+              description: "Fallback".to_string (),
+              path: "Fallback".to_string (),
+              b_type: Type::Fallback,
+              state: State::Unloaded}
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -221,14 +245,29 @@ impl Manager {
 
         for b in &self._backend_list {
 
-            if b.borrow ().name == backend_name {
+            if b.name == backend_name {
 
-                self._config.default_backend [b.borrow ().b_type as usize] = b.borrow ().name.clone ();
+                self._config.default_backend [b.b_type as usize] = b.name.clone ();
                 return;
             }
         }
 
         warn! ("No backend plugin with name '{}' found.", backend_name);
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Sets the backend state.
+    pub fn set_backend_state (&mut self, backend_name: &str, backend_state: State) {
+
+        for b in &mut self._backend_list {
+
+            if b.name == backend_name {
+                
+                b.state = backend_state;
+                break;
+            }
+        }
     }
 
 /*===============================================================================================*/

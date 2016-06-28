@@ -14,10 +14,6 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-extern crate serde;
-
-use self::serde::{Serialize, Deserialize};
-
 /*===============================================================================================*/
 /*------CONFIG STRUCT----------------------------------------------------------------------------*/
 /*===============================================================================================*/
@@ -34,7 +30,8 @@ pub struct Config {
     /// * `Index 0` - Audio backend.
     /// * `Index 1` - Rendering backend.
     /// * `Index 2` - Window backend.
-    pub default_backend: [String; 3],
+    /// * `Index 3` - Input backend.
+    pub default_backend: [String; 4],
 }
 
 /*===============================================================================================*/
@@ -48,9 +45,10 @@ impl Default for Config {
         Config {
 
             backend_dir: "backend".to_string (),
-            default_backend: ["fallback".to_string (),
-                              "fallback".to_string (),
-                              "fallback".to_string ()],
+            default_backend: ["None".to_string (),
+                              "None".to_string (),
+                              "None".to_string (),
+                              "None".to_string ()],
         }
     }
 }

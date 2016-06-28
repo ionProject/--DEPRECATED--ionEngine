@@ -30,6 +30,11 @@ pub enum Type {
     Renderer,
     /// Window type.
     Window,
+    /// Input type.
+    Input,
+    /// Fallback type.
+    /// Only to be used when no suitable backend is avaliable.
+    Fallback,
 }
 
 /*===============================================================================================*/
