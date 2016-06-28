@@ -22,7 +22,7 @@ use ::util::Version;
 /*===============================================================================================*/
 
 /// Used to store information on a backend plugin.
-#[derive (Clone)]
+#[derive (Debug, Clone)]
 pub struct Info {
 
     // Public

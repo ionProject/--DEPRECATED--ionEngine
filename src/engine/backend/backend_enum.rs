@@ -21,7 +21,7 @@
 /// The backend type.
 ///
 /// Used to determine the type of a backend plugin.
-#[derive (Copy, Clone, PartialEq)]
+#[derive (Debug, Copy, Clone, PartialEq)]
 pub enum Type {
 
     /// Audio type.
@@ -37,7 +37,7 @@ pub enum Type {
 /*===============================================================================================*/
 
 /// Stores the state of the backend plugins.
-#[derive (Copy, Clone)]
+#[derive (Debug, Copy, Clone)]
 pub enum State {
 
     /// The plugin is not loaded.
