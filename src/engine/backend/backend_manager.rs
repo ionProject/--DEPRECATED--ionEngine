@@ -183,25 +183,16 @@ impl Manager {
     /// Sets the default backend.
     pub fn set_default_backend (&mut self, backend_name: &str) {
 
-        unimplemented! ();
-
-        /*// Find the backend with the given name
         for b in &self._backend_list {
 
             if b.name == backend_name {
 
-                match b.b_type {
-
-                    Type::Audio    => self._config.default_audio_backend     = b.name.clone (),
-                    Type::Renderer => self._config.default_rendering_backend = b.name.clone (),
-                    Type::Window   => self._config.default_window_backend    = b.name.clone (),
-                }
-
+                self._config.default_backend [b.b_type as usize] = b.name.clone ();
                 return;
             }
         }
 
-        warn! ("No backend plugin with name '{}' found.", backend_name);*/
+        warn! ("No backend plugin with name '{}' found.", backend_name);
     }
 
 /*===============================================================================================*/

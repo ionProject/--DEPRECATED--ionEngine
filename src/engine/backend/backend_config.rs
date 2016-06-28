@@ -29,12 +29,12 @@ pub struct Config {
     // Public
     /// The backend directory.
     pub backend_dir: String,
-    /// The default window backend.
-    pub default_window_backend: String,
-    /// The default rendering backend.
-    pub default_rendering_backend: String,
-    /// The default audio backend.
-    pub default_audio_backend: String,
+    /// The array of default backends.
+    ///
+    /// * `Index 0` - Audio backend.
+    /// * `Index 1` - Rendering backend.
+    /// * `Index 2` - Window backend.
+    pub default_backend: [String; 3],
 }
 
 /*===============================================================================================*/
@@ -48,9 +48,9 @@ impl Default for Config {
         Config {
 
             backend_dir: "backend".to_string (),
-            default_window_backend: "fallback".to_string (),
-            default_rendering_backend: "fallback".to_string (),
-            default_audio_backend: "fallback".to_string (),
+            default_backend: ["fallback".to_string (),
+                              "fallback".to_string (),
+                              "fallback".to_string ()],
         }
     }
 }

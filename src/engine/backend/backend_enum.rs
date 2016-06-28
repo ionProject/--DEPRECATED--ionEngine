@@ -24,12 +24,12 @@
 #[derive (Copy, Clone, PartialEq)]
 pub enum Type {
 
-    /// Window type.
-    Window,
-    /// Renderer type.
-    Renderer,
     /// Audio type.
     Audio,
+    /// Renderer type.
+    Renderer,
+    /// Window type.
+    Window,
 }
 
 /*===============================================================================================*/
