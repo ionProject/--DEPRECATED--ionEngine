@@ -37,7 +37,7 @@ pub enum Type {
 /*===============================================================================================*/
 
 /// Stores the state of the backend plugins.
-#[derive (Debug, Copy, Clone)]
+#[derive (Debug, Copy, Clone, PartialEq)]
 pub enum State {
 
     /// The plugin is not loaded.

@@ -171,13 +171,17 @@ impl Manager {
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Lists all avaliable backends of a given type.
+    ///
+    /// Only backends that are either active or unloaded will be displayed.
     pub fn list_backends (&self, backend_type: Type) -> Vec<String> {
 
         let mut return_vec = Vec::<String>::new ();
 
         for backend in &self._backend_list.clone () {
 
-            if backend.borrow ().b_type == backend_type {
+            if backend.borrow ().b_type == backend_type &&
+               backend.borrow ().state != State::Disabled {
+
                 return_vec.push (backend.borrow ().name.clone ());
             }
         }
@@ -194,6 +198,8 @@ impl Manager {
 
         // Check if the backend is the fallback
         if back_name == "fallback" {
+
+            warn! ("Using fallback for backend: {:?}.\nThings may not work as expected.", backend_type);
             return None;
         }
 
