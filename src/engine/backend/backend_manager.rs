@@ -18,12 +18,14 @@ extern crate glob;
 extern crate libloading;
 
 use ::engine::App;
-use ::engine::backend::{Config, Info, Type};
+use ::engine::backend::{Config, Info, Type, State};
 
 use self::glob::glob;
 use self::libloading::{Library, Symbol};
 
+use std::cell::RefCell;
 use std::fs;
+use std::rc::Rc;
 
 /*===============================================================================================*/
 /*------MANAGER STRUCT---------------------------------------------------------------------------*/
@@ -35,7 +37,7 @@ pub struct Manager {
 
     // Private
     _config: Config,
-    _backend_list: Vec<Info>,
+    _backend_list: Vec<Rc<RefCell<Info>>>,
     _ext: String,
 }
 
@@ -136,8 +138,13 @@ impl Manager {
 
                     // Create a new instance of the plugin, and add it to the list
                     unsafe {
-                        self._backend_list.push (get_backend_info ());
+                        self._backend_list.push (Rc::new (RefCell::new (get_backend_info ())));
                     }
+
+                    // Set the path and state of the backend plugin
+                    let index = self._backend_list.len () - 1;
+                    self._backend_list[index].borrow_mut ().path  = path.to_str ().unwrap ().to_string ();
+                    self._backend_list[index].borrow_mut ().state = State::Unloaded;
 
                     info! ("Added: {:?}", &path.file_name ().unwrap ());
                 },
@@ -168,14 +175,37 @@ impl Manager {
 
         let mut return_vec = Vec::<String>::new ();
 
-        for backend in self._backend_list.clone () {
+        for backend in &self._backend_list.clone () {
 
-            if backend.b_type == backend_type {
-                return_vec.push (backend.name);
+            if backend.borrow ().b_type == backend_type {
+                return_vec.push (backend.borrow ().name.clone ());
             }
         }
 
         return_vec
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Gets the default backend.
+    pub fn get_default_backend (&self, backend_type: Type) -> Option<Rc<RefCell<Info>>> {
+
+        let back_name = self._config.default_backend [backend_type as usize].clone ();
+
+        // Check if the backend is the fallback
+        if back_name == "fallback" {
+            return None;
+        }
+
+        // Otherwise return the default backend for that type
+        for b in &self._backend_list {
+
+            if b.borrow ().name == back_name {
+                return Some (b.clone ());
+            }
+        }
+
+        None
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -185,9 +215,9 @@ impl Manager {
 
         for b in &self._backend_list {
 
-            if b.name == backend_name {
+            if b.borrow ().name == backend_name {
 
-                self._config.default_backend [b.b_type as usize] = b.name.clone ();
+                self._config.default_backend [b.borrow ().b_type as usize] = b.borrow ().name.clone ();
                 return;
             }
         }
