@@ -15,23 +15,7 @@
 /*===============================================================================================*/
 
 /*===============================================================================================*/
-//! This crate is the core of ionProject.
+//! The resource module.
 //!
-//! It provides an easy to use framework for creating 2D / 3D games and multimedia applications.
+//! Everything related to resource loading, management, and unloading is handled here.
 /*===============================================================================================*/
-
-// Crate attributes
-#![deny (missing_copy_implementations)]
-#![deny (missing_docs)]
-#![feature (custom_derive)]
-#![feature (plugin)]
-#![plugin (serde_macros)]
-
-#[macro_use]
-extern crate log;
-
-// Modules
-pub mod engine;
-pub mod renderer;
-pub mod resource;
-pub mod util;
