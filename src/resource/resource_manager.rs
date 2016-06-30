@@ -15,25 +15,11 @@
 /*===============================================================================================*/
 
 /*===============================================================================================*/
-//! The resource module.
-//!
-//! Everything related to resource loading, management, and unloading is handled here.  
-//! There are two main parts to it:
-//!
-//! 1. The Resource Manager.
-//! 2. Resource Loaders.
-//!
-//! The Resource Manager is the main interface to the resource module.  
-//! (Almost) all interaction with the module goes through it.
-//!
-//! The loaders are small structs that take care of a single resource (eg. the Texture  
-//! Loader would handle textures, the Plugin Loader would handle plugins, etc).  
-//! Each loader is indirectly accessed via the Resource Manager.
+/*------RESOURCE MANAGER STRUCT------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-// Modules
-mod resource_directory;
-mod resource_manager;
+/// Interface for resource loading and management.
+#[derive (Copy, Clone)]
+pub struct ResourceManager {
 
-pub use self::resource_directory::ResourceDirectory;
-pub use self::resource_manager::ResourceManager;
+}
