@@ -14,12 +14,24 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+use std::vec::Vec;
+
 /*===============================================================================================*/
 /*------RESOURCE DIRECTORY STRUCT----------------------------------------------------------------*/
 /*===============================================================================================*/
 
 /// Stores information about a resource directory.
-#[derive (Copy, Clone)]
+#[derive (Clone, Debug, Serialize, Deserialize)]
 pub struct ResourceDirectory {
 
+    // Public
+    /// Path to the resource directory.
+    pub directory_path: String,
+    /// A list of tags to help the Resource Manager determine what sort of content  
+    /// is contained in this directory.
+    ///
+    /// While this is not strictly required, it can help speed up resource indexing.
+    pub directory_tags: Vec<String>,
+    /// Should the Resource Manager search this directory recursively.
+    pub is_recursive: bool,
 }
