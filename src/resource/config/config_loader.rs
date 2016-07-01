@@ -14,16 +14,12 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::resource::ResourceConfig;
-
 /*===============================================================================================*/
-/*------RESOURCE MANAGER STRUCT------------------------------------------------------------------*/
+/*------CONFIG LOADER STRUCT---------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-/// Interface for resource loading and management.
-#[derive (Clone)]
-pub struct ResourceManager {
+/// Allows the loading of configuration files.
+#[derive (Copy, Clone, Debug)]
+pub struct ConfigLoader {
 
-    // Private
-    _config: ResourceConfig,
 }
