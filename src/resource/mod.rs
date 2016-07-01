@@ -32,6 +32,7 @@
 /*===============================================================================================*/
 
 // Modules
+pub mod config;
 mod resource_config;
 mod resource_directory;
 mod resource_manager;
