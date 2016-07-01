@@ -14,28 +14,19 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+use ::resource::ResourceDirectory;
+
+use std::vec::Vec;
+
 /*===============================================================================================*/
-//! The resource module.
-//!
-//! Everything related to resource loading, management, and unloading is handled here.  
-//! There are two main parts to it:
-//!
-//! 1. The Resource Manager.
-//! 2. Resource Loaders.
-//!
-//! The Resource Manager is the main interface to the resource module.  
-//! (Almost) all interaction with the module goes through it.
-//!
-//! The loaders are small structs that take care of a single resource (eg. the Texture  
-//! Loader would handle textures, the Plugin Loader would handle plugins, etc).  
-//! Each loader is indirectly accessed via the Resource Manager.
+/*------RESOURCE CONFIG STRUCT-------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-// Modules
-mod resource_config;
-mod resource_directory;
-mod resource_manager;
+/// Stores the configuration for the Resource Manager.
+#[derive (Clone, Debug, Serialize, Deserialize)]
+pub struct ResourceConfig {
 
-pub use self::resource_config::ResourceConfig;
-pub use self::resource_directory::ResourceDirectory;
-pub use self::resource_manager::ResourceManager;
+    // Public
+    /// A list of resource directories.
+    resource_dir_list: Vec<ResourceDirectory>,
+}
