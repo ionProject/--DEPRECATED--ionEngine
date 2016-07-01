@@ -13,18 +13,3 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 /*===============================================================================================*/
-
-/*===============================================================================================*/
-//! This is the utility module for ionCore.
-//!
-//! It is designed to contain any and all utility functionality that may be required.
-/*===============================================================================================*/
-
-// Modules
-pub mod math;
-pub mod serialization;
-mod logger;
-mod version;
-
-pub use self::logger::Logger;
-pub use self::version::Version;

@@ -15,16 +15,11 @@
 /*===============================================================================================*/
 
 /*===============================================================================================*/
-//! This is the utility module for ionCore.
+//! The serialization module.
 //!
-//! It is designed to contain any and all utility functionality that may be required.
+//! Contains functionality for easy file serialization / deserialization.
 /*===============================================================================================*/
 
 // Modules
-pub mod math;
-pub mod serialization;
-mod logger;
-mod version;
-
-pub use self::logger::Logger;
-pub use self::version::Version;
+mod deserializer;
+mod serializer;
