@@ -17,9 +17,12 @@
 /*===============================================================================================*/
 //! The serialization module.
 //!
-//! Contains functionality for easy file serialization / deserialization.
+//! Contains functionality for easy JSON serialization / deserialization.
 /*===============================================================================================*/
 
 // Modules
 mod deserializer;
 mod serializer;
+
+pub use self::deserializer::Deserializer;
+pub use self::serializer::Serializer;
