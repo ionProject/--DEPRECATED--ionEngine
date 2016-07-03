@@ -38,6 +38,40 @@ pub struct Serializer;
 impl Serializer {
 
     /// Serializes an object to a file.
+    ///
+    /// The contents of type `T` is converted into a JSON text file.  
+    /// `T` must derive from the [`serde::Serialize`](http://serde-rs.github.io/serde/serde/ser/trait.Serialize.html)
+    /// trait.
+    ///
+    /// # Arguments
+    /// * `item` - The instance of `T` to serialize.
+    /// * `file_path` - The path to the file to be serialized.  
+    /// It can be either a full or local path.  
+    /// If the file doesn't exist, it will be created.
+    ///
+    /// # Returns
+    /// A `Result` containing a `std::io::Error` on failure.
+    ///
+    /// # Examples
+    /// ```
+    /// # #![feature (custom_derive)]
+    /// # #![feature (plugin)]
+    /// # #![plugin (serde_macros)]
+    /// # extern crate serde;
+    /// # extern crate ion_core;
+    /// # use self::ion_core::util::serialization::Serializer;
+    /// # use self::serde::Serialize;
+    /// #[derive (Serialize)]
+    /// struct Person {
+    ///     
+    ///     name: String,
+    ///     age: u32
+    /// }
+    /// # fn main () {
+    /// let person = Person {name: "John Doe".to_string (), age: 31};
+    /// Serializer::to_file (&person, "person.json");
+    /// # }
+    /// ```
     pub fn to_file<T: Serialize> (item: &T, file_path: &str) -> Result<(), io::Error> {
 
         let mut file = try! (File::create (file_path));
@@ -55,6 +89,38 @@ impl Serializer {
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Serializes an object to a String.
+    ///
+    /// The type `T` is converted into a JSON string.
+    /// `T` must derive from the [`serde::Serialize`](http://serde-rs.github.io/serde/serde/ser/trait.Serialize.html)
+    /// trait.
+    ///
+    /// # Arguments
+    /// * `item` - The instance of `T` to serialize.  
+    ///
+    /// # Returns
+    /// A `Result` containing a JSON string on success,    
+    /// and a `serde_json::Error` on failure.
+    ///
+    /// # Examples
+    /// ```
+    /// # #![feature (custom_derive)]
+    /// # #![feature (plugin)]
+    /// # #![plugin (serde_macros)]
+    /// # extern crate serde;
+    /// # extern crate ion_core;
+    /// # use self::ion_core::util::serialization::Serializer;
+    /// # use self::serde::Serialize;
+    /// #[derive (Serialize)]
+    /// struct Person {
+    ///     
+    ///     name: String,
+    ///     age: u32
+    /// }
+    /// # fn main () {
+    /// let person = Person {name: "John Doe".to_string (), age: 31};
+    /// let string = Serializer::to_string (&person).unwrap ();
+    /// # }
+    /// ```
     pub fn to_string<T: Serialize> (item: &T) -> Result<String, serde_json::Error> {
 
         Ok (try! (serde_json::to_string_pretty (item)))

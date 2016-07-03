@@ -96,7 +96,7 @@ impl Deserializer {
     ///
     /// # Returns
     /// A `Result` containing an instance of `T` on success,  
-    /// and an `serde_json::Error` on failure.
+    /// and a `serde_json::Error` on failure.
     ///
     /// # Examples
     /// ```
