@@ -38,11 +38,11 @@ pub struct Serializer;
 impl Serializer {
 
     /// Serializes an object to a file.
-    pub fn serialize_to_file<T: Serialize> (item: &T, file_path: &str) -> Result<(), io::Error> {
+    pub fn to_file<T: Serialize> (item: &T, file_path: &str) -> Result<(), io::Error> {
 
         let mut file = try! (File::create (file_path));
 
-        let string = match Serializer::serialize_to_string (item) {
+        let string = match Serializer::to_string (item) {
 
             Ok  (s) => s,
             Err (e) => return Err (io::Error::new (io::ErrorKind::Other, e.to_string ()))
@@ -55,7 +55,7 @@ impl Serializer {
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Serializes an object to a String.
-    pub fn serialize_to_string<T: Serialize> (item: &T) -> Result<String, serde_json::Error> {
+    pub fn to_string<T: Serialize> (item: &T) -> Result<String, serde_json::Error> {
 
         Ok (try! (serde_json::to_string_pretty (item)))
     }
