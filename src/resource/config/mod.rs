@@ -22,3 +22,5 @@
 
 // Modules
 mod config_loader;
+
+pub use self::config_loader::ConfigLoader;

@@ -19,7 +19,7 @@
 /*===============================================================================================*/
 
 /// Allows the loading of configuration files.
-#[derive (Copy, Clone, Debug)]
+#[derive (Copy, Clone, Debug, Default)]
 pub struct ConfigLoader {
 
 }

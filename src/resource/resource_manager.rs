@@ -15,14 +15,18 @@
 /*===============================================================================================*/
 
 use ::resource::ResourceConfig;
+use ::resource::config::ConfigLoader;
 use ::util::serialization::Deserializer;
+
+use std::cell::RefCell;
+use std::rc::Rc;
 
 /*===============================================================================================*/
 /*------RESOURCE MANAGER STRUCT------------------------------------------------------------------*/
 /*===============================================================================================*/
 
 /// Interface for resource loading and management.
-#[derive (Clone, Default)]
+#[derive (Clone)]
 pub struct ResourceManager {
 
     // Public
@@ -31,6 +35,7 @@ pub struct ResourceManager {
 
     // Private
     _config: ResourceConfig,
+    _config_loader: Rc<RefCell<ConfigLoader>>
 }
 
 /*===============================================================================================*/
@@ -39,11 +44,13 @@ pub struct ResourceManager {
 
 impl ResourceManager {
 
-    /// Loads the resource manager config.
+    /// Loads the resource manager config, as well as the config for all resource loaders.
     pub fn load_config (&mut self) {
 
+        // Get the resource config from the config path.
         let config_path = format! ("{}resource.cfg", &self.config_path);
 
+        // Load and store the resource manager config.
         match Deserializer::from_file::<ResourceConfig> (&config_path) {
 
             Ok  (config) => self._config = config,
@@ -61,7 +68,8 @@ impl ResourceManager {
         ResourceManager {
 
             config_path: "resource.cfg".to_string (),
-            _config: ResourceConfig::default ()
+            _config: ResourceConfig::default (),
+            _config_loader: Rc::new (RefCell::new (ConfigLoader::default ()))
         }
     }
 }
