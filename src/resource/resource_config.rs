@@ -23,7 +23,7 @@ use std::vec::Vec;
 /*===============================================================================================*/
 
 /// Stores the configuration for the Resource Manager.
-#[derive (Clone, Debug, Serialize, Deserialize)]
+#[derive (Clone, Debug, Default, Serialize, Deserialize)]
 pub struct ResourceConfig {
 
     // Public

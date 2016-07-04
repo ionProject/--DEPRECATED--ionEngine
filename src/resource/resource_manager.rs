@@ -15,15 +15,53 @@
 /*===============================================================================================*/
 
 use ::resource::ResourceConfig;
+use ::util::serialization::Deserializer;
 
 /*===============================================================================================*/
 /*------RESOURCE MANAGER STRUCT------------------------------------------------------------------*/
 /*===============================================================================================*/
 
 /// Interface for resource loading and management.
-#[derive (Clone)]
+#[derive (Clone, Default)]
 pub struct ResourceManager {
+
+    // Public
+    /// The path to the config directory.
+    pub config_path: String,
 
     // Private
     _config: ResourceConfig,
+}
+
+/*===============================================================================================*/
+/*------RESOURCE MANAGER PUBLIC METHODS----------------------------------------------------------*/
+/*===============================================================================================*/
+
+impl ResourceManager {
+
+    /// Loads the resource manager config.
+    pub fn load_config (&mut self) {
+
+        let config_path = format! ("{}resource.cfg", &self.config_path);
+
+        match Deserializer::from_file::<ResourceConfig> (&config_path) {
+
+            Ok  (config) => self._config = config,
+            Err (e) => error! ("Failed to load \"{}\"\n{}\nThings will not work as expected.", &config_path, e)
+        };
+    }
+
+/*===============================================================================================*/
+/*------RESOURCE MANAGER PUBLIC STATIC METHODS---------------------------------------------------*/
+/*===============================================================================================*/
+
+    /// Create a new instance of the Resource Manager.
+    pub fn new () -> ResourceManager {
+
+        ResourceManager {
+
+            config_path: "resource.cfg".to_string (),
+            _config: ResourceConfig::default ()
+        }
+    }
 }
