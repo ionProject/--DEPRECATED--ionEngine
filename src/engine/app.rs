@@ -37,7 +37,6 @@ static mut APP_POINTER: Option <*mut App> = None;
 /// This is the main control center of ionCore.
 /// It is in charge of initialization, updating, and shutdown of all modules,
 /// as well as the handing of any inter-module communication.
-#[derive (Clone)]
 pub struct App {
 
     // Public
