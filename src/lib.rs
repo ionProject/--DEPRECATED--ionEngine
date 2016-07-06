@@ -23,9 +23,10 @@
 // Crate attributes
 #![deny (missing_copy_implementations)]
 #![deny (missing_docs)]
+
 #![feature (custom_derive)]
 #![feature (plugin)]
-#![feature (pub_restricted)]
+
 #![plugin (serde_macros)]
 
 #[macro_use]

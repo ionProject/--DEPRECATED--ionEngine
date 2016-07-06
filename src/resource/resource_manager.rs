@@ -57,7 +57,7 @@ impl ResourceManager {
                 info! ("Loaded \"{}\".", &config_path);
                 self._config = config;
             },
-            
+
             Err (e) => {
 
                 error! ("Failed to load \"{}\"\n{}\nThings will not work as expected.", &config_path, e);
@@ -65,8 +65,28 @@ impl ResourceManager {
             }
         };
 
-        // Get list of config files
-        self.config_loader._config_paths = self.get_paths_with_tag ("config");
+        // Build the resource caches
+        if !self.config_loader.build_cache_exists () {
+            self.config_loader.build_cache ();
+        }
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Returns the first path with the given tag.
+    pub fn get_path_with_tag (&self, tag: &str) -> Option<ResourceDirectory> {
+
+        for path in &self._config.resource_dir_list {
+
+            for path_tag in &path.directory_tags {
+
+                if path_tag == tag {
+                    return Some (path.clone ());
+                }
+            }
+        }
+
+        None
     }
 
 /*-----------------------------------------------------------------------------------------------*/

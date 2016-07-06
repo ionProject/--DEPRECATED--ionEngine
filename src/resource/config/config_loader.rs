@@ -14,18 +14,52 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::resource::ResourceDirectory;
+extern crate serde;
 
-use std::vec::Vec;
+use self::serde::{Serialize, Deserialize};
 
 /*===============================================================================================*/
 /*------CONFIG LOADER STRUCT---------------------------------------------------------------------*/
 /*===============================================================================================*/
 
 /// Allows the loading of configuration files.
-#[derive (Clone, Debug, Default)]
+#[derive (Copy, Clone, Debug, Default)]
 pub struct ConfigLoader {
 
-    // Public Restricted
-    pub (::resource) _config_paths: Vec<ResourceDirectory>,
+}
+
+/*===============================================================================================*/
+/*------CONFIG LOADER PUBLIC METHODS-------------------------------------------------------------*/
+/*===============================================================================================*/
+
+impl ConfigLoader {
+
+    /// Builds the config cache.
+    ///
+    /// The cache stores a list of all config files for faster loading.
+    /// Building the cache can take some time, depending on how many files need to be found.
+    pub fn build_cache (&mut self) {
+        unimplemented! ();
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Checks if the config cache exists.
+    pub fn build_cache_exists (&self) -> bool {
+        unimplemented! ();
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Loads the config file of a given name.
+    pub fn load_config<T: Deserialize> (&self, config_name: &str) -> Result<T, ()> {
+        unimplemented! ();
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Saves the config file of a given name.
+    pub fn save_config<T: Serialize> (&self, config_name: &str, config_data: &T) -> Result<(), ()> {
+        unimplemented! ();
+    }
 }
