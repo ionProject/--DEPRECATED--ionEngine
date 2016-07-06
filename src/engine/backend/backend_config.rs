@@ -19,7 +19,7 @@
 /*===============================================================================================*/
 
 /// Used to load the backend configuration.
-#[derive (Serialize, Deserialize)]
+#[derive (Deserialize)]
 pub struct Config {
 
     // Public

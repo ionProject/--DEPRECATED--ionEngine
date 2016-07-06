@@ -17,7 +17,7 @@
 extern crate glob;
 extern crate libloading;
 
-use ::engine::App;
+//use ::engine::App;
 use ::engine::backend::{Config, Info, Type, State};
 use ::util::Version;
 

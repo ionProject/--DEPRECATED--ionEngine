@@ -21,7 +21,7 @@ use std::vec::Vec;
 /*===============================================================================================*/
 
 /// Stores information about a resource directory.
-#[derive (Clone, Debug, Serialize, Deserialize)]
+#[derive (Clone, Debug, Default, Deserialize)]
 pub struct ResourceDirectory {
 
     // Public

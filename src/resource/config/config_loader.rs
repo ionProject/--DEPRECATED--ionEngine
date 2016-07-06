@@ -14,7 +14,6 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::engine::App;
 use ::resource::ResourceDirectory;
 
 use std::vec::Vec;

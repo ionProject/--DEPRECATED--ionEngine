@@ -46,7 +46,7 @@ pub struct App {
 }
 
 /*===============================================================================================*/
-/*------APPVERSION PUBLIC STATIC METHODS---------------------------------------------------------*/
+/*------APP PUBLIC STATIC METHODS----------------------------------------------------------------*/
 /*===============================================================================================*/
 
 impl App {
@@ -66,16 +66,10 @@ impl App {
             });
 
             unsafe {APP_POINTER = Some (Box::into_raw (ab))};
+
+            // Init the managers
+            App::_init_managers ();
         }
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    /// Load the config files for all modules.
-    pub fn load_config () {
-
-        let resource_mgr = App::get_resource_manager ().unwrap ();
-        resource_mgr.borrow_mut ().load_config ();
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -136,5 +130,19 @@ impl App {
             info! ("Terminating the application.");
             process::exit (0);
         }
+    }
+
+/*===============================================================================================*/
+/*------APP PRIVATE STATIC METHODS---------------------------------------------------------------*/
+/*===============================================================================================*/
+
+    // Initializes the various managers.
+    fn _init_managers () {
+
+        // Get a reference to all managers.
+        let resource_mgr = App::get_resource_manager ().unwrap ();
+
+        // Init the managers
+        resource_mgr.borrow_mut ().init ();
     }
 }

@@ -42,19 +42,30 @@ pub struct ResourceManager {
 
 impl ResourceManager {
 
-    /// Loads the resource manager config, as well as the config for all resource loaders.
-    pub fn load_config (&mut self) {
+    /// Initializes the Resource Manager.
+    pub fn init (&mut self) {
 
         // Get the resource config from the config path.
         let config_path = format! ("{}resource.cfg", &self.default_config_path);
+        info! ("Loading \"{}\".", &config_path);
 
         // Load and store the resource manager config.
         match Deserializer::from_file::<ResourceConfig> (&config_path) {
 
-            Ok  (config) => self._config = config,
-            Err (e) => error! ("Failed to load \"{}\"\n{}\nThings will not work as expected.", &config_path, e)
+            Ok (config) => {
+                
+                info! ("Loaded \"{}\".", &config_path);
+                self._config = config;
+            },
+            
+            Err (e) => {
+
+                error! ("Failed to load \"{}\"\n{}\nThings will not work as expected.", &config_path, e);
+                return;
+            }
         };
 
+        // Get list of config files
         self.config_loader._config_paths = self.get_paths_with_tag ("config");
     }
 
