@@ -14,8 +14,7 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::engine::config;
-use ::engine::backend;
+use ::resource::ResourceManager;
 use ::util::Logger;
 
 use std::cell::RefCell;
@@ -42,10 +41,8 @@ static mut APP_POINTER: Option <*mut App> = None;
 pub struct App {
 
     // Public
-    /// The backend manager.
-    pub backend_mgr: Rc<RefCell<backend::Manager>>,
-    /// The config manager.
-    pub config_mgr: Rc<RefCell<config::Manager>>,
+    /// The resource manager.
+    pub resource_mgr: Rc<RefCell<ResourceManager>>,
 }
 
 /*===============================================================================================*/
@@ -65,8 +62,7 @@ impl App {
 
             let ab = Box::new (App {
 
-                config_mgr: Rc::new (RefCell::new (config::Manager::new ())),
-                backend_mgr: Rc::new (RefCell::new (backend::Manager::new ())),
+                resource_mgr: Rc::new (RefCell::new (ResourceManager::new ())),
             });
 
             unsafe {APP_POINTER = Some (Box::into_raw (ab))};
@@ -78,13 +74,8 @@ impl App {
     /// Load the config files for all modules.
     pub fn load_config () {
 
-        // Query the config directory
-        let cfg_mgr = App::get_config_manager ().unwrap ();
-        cfg_mgr.borrow_mut ().query_config_dir ();
-
-        // Load config files
-        let backend_mgr = App::get_backend_manager ().unwrap ();
-        backend_mgr.borrow_mut ().load_config ();
+        let resource_mgr = App::get_resource_manager ().unwrap ();
+        resource_mgr.borrow_mut ().load_config ();
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -107,40 +98,19 @@ impl App {
 
 /*-----------------------------------------------------------------------------------------------*/
 
-    /// Returns a pointer to the backend manager instance.
+    /// Returns a pointer to the resource manager instance.
     ///
     /// # Examples
     /// ```
     /// # use ion_core::engine::App;
     /// # App::init ();
-    /// let backend_mgr = App::get_backend_manager ().unwrap ();
-    /// println! ("{}", backend_mgr.borrow ().default_audio_backend);
-    pub fn get_backend_manager () -> Result<Rc<RefCell<backend::Manager>>, ()> {
+    /// let resource_mgr = App::get_resource_manager ().unwrap ();
+    /// println! ("{}", resource_mgr.borrow ().load_config ());
+    pub fn get_resource_manager () -> Result<Rc<RefCell<ResourceManager>>, ()> {
 
         // Check if app is initialized
         if App::is_initialized () {
-            return Ok (unsafe {&*APP_POINTER.unwrap ()}.backend_mgr.clone ());
-        }
-
-        Err (())
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    /// Returns a pointer to the config manager instance.
-    ///
-    /// # Examples
-    /// ```
-    /// # use ion_core::engine::App;
-    /// #
-    /// # App::init ();
-    /// let cfg = App::get_config_manager ().unwrap ();
-    /// println! ("{}", cfg.borrow ().config_dir);
-    pub fn get_config_manager () -> Result<Rc<RefCell<config::Manager>>, ()> {
-
-        // Check if app is initialized
-        if App::is_initialized () {
-            return Ok (unsafe {&*APP_POINTER.unwrap ()}.config_mgr.clone ());
+            return Ok (unsafe {&*APP_POINTER.unwrap ()}.resource_mgr.clone ());
         }
 
         Err (())

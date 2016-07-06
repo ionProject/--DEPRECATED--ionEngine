@@ -14,12 +14,19 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+use ::engine::App;
+use ::resource::ResourceDirectory;
+
+use std::vec::Vec;
+
 /*===============================================================================================*/
 /*------CONFIG LOADER STRUCT---------------------------------------------------------------------*/
 /*===============================================================================================*/
 
 /// Allows the loading of configuration files.
-#[derive (Copy, Clone, Debug, Default)]
+#[derive (Clone, Debug, Default)]
 pub struct ConfigLoader {
 
+    // Public Restricted
+    pub (::resource) _config_paths: Vec<ResourceDirectory>,
 }

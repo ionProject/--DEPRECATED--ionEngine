@@ -14,28 +14,26 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::resource::ResourceConfig;
+use ::resource::{ResourceConfig, ResourceDirectory};
 use ::resource::config::ConfigLoader;
 use ::util::serialization::Deserializer;
-
-use std::cell::RefCell;
-use std::rc::Rc;
 
 /*===============================================================================================*/
 /*------RESOURCE MANAGER STRUCT------------------------------------------------------------------*/
 /*===============================================================================================*/
 
 /// Interface for resource loading and management.
-#[derive (Clone)]
+#[derive (Clone, Default)]
 pub struct ResourceManager {
 
     // Public
     /// The path to the config directory.
-    pub config_path: String,
+    pub default_config_path: String,
+    /// The config loader.
+    pub config_loader: ConfigLoader,
 
     // Private
     _config: ResourceConfig,
-    _config_loader: Rc<RefCell<ConfigLoader>>
 }
 
 /*===============================================================================================*/
@@ -48,7 +46,7 @@ impl ResourceManager {
     pub fn load_config (&mut self) {
 
         // Get the resource config from the config path.
-        let config_path = format! ("{}resource.cfg", &self.config_path);
+        let config_path = format! ("{}resource.cfg", &self.default_config_path);
 
         // Load and store the resource manager config.
         match Deserializer::from_file::<ResourceConfig> (&config_path) {
@@ -56,6 +54,30 @@ impl ResourceManager {
             Ok  (config) => self._config = config,
             Err (e) => error! ("Failed to load \"{}\"\n{}\nThings will not work as expected.", &config_path, e)
         };
+
+        self.config_loader._config_paths = self.get_paths_with_tag ("config");
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Returns all paths with the specified tag.
+    pub fn get_paths_with_tag (&self, tag: &str) -> Vec<ResourceDirectory> {
+
+        let mut return_vec = Vec::new ();
+
+        for path in &self._config.resource_dir_list {
+
+            for path_tag in &path.directory_tags {
+
+                if path_tag == tag {
+
+                    return_vec.push (path.clone ());
+                    break;
+                }
+            }
+        }
+
+        return_vec
     }
 
 /*===============================================================================================*/
@@ -67,9 +89,9 @@ impl ResourceManager {
 
         ResourceManager {
 
-            config_path: "resource.cfg".to_string (),
-            _config: ResourceConfig::default (),
-            _config_loader: Rc::new (RefCell::new (ConfigLoader::default ()))
+            default_config_path: "config/".to_string (),
+            config_loader: ConfigLoader::default (),
+            _config: ResourceConfig::default ()
         }
     }
 }

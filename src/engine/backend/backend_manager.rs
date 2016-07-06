@@ -50,7 +50,7 @@ impl Manager {
     pub fn load_config (&mut self) {
 
         // Get a pointer to the config manager
-        let cfg_mgr = App::get_config_manager ().unwrap ();
+        /*let cfg_mgr = App::get_config_manager ().unwrap ();
         let cfg_exists = cfg_mgr.borrow ().config_exists ("backend_manager");
         
         // Check if the config file for the backend manager exists.
@@ -69,7 +69,7 @@ impl Manager {
             }
         };
 
-        self._config = cfg;
+        self._config = cfg;*/
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -78,7 +78,7 @@ impl Manager {
     pub fn save_config (&self) {
 
         // Get a pointer to the config manager
-        let cfg_mgr = App::get_config_manager ().unwrap ();
+        /*let cfg_mgr = App::get_config_manager ().unwrap ();
         let cfg_exists = cfg_mgr.borrow ().config_exists ("backend_manager");
 
         // Check if the config file for the backend manager exists.
@@ -92,7 +92,7 @@ impl Manager {
 
             cfg_mgr.borrow_mut ().create_config::<Config> ("backend_manager");
             cfg_mgr.borrow ().save_config ("backend_manager", &self._config).unwrap ();
-        }
+        }*/
     }
 
 /*-----------------------------------------------------------------------------------------------*/

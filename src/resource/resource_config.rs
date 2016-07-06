@@ -28,5 +28,5 @@ pub struct ResourceConfig {
 
     // Public
     /// A list of resource directories.
-    resource_dir_list: Vec<ResourceDirectory>,
+    pub resource_dir_list: Vec<ResourceDirectory>,
 }
