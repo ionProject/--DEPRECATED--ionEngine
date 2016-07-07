@@ -45,7 +45,7 @@ impl ConfigLoader {
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Checks if the config cache exists.
-    pub fn build_cache_exists (&self) -> bool {
+    pub fn cache_exists (&self) -> bool {
         unimplemented! ();
     }
 

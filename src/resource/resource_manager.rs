@@ -50,12 +50,12 @@ impl ResourceManager {
         info! ("Loading \"{}\".", &config_path);
 
         // Load and store the resource manager config.
-        match Deserializer::from_file::<ResourceConfig> (&config_path) {
+        self._config = match Deserializer::from_file::<ResourceConfig> (&config_path) {
 
             Ok (config) => {
                 
                 info! ("Loaded \"{}\".", &config_path);
-                self._config = config;
+                config
             },
 
             Err (e) => {
@@ -66,7 +66,7 @@ impl ResourceManager {
         };
 
         // Build the resource caches
-        if !self.config_loader.build_cache_exists () {
+        if !self.config_loader.cache_exists () {
             self.config_loader.build_cache ();
         }
     }
