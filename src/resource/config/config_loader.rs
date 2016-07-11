@@ -16,6 +16,7 @@
 
 extern crate serde;
 
+use ::util::serialization::{Deserializer, Serializer};
 use self::serde::{Serialize, Deserialize};
 
 /*===============================================================================================*/
@@ -24,32 +25,13 @@ use self::serde::{Serialize, Deserialize};
 
 /// Allows the loading of configuration files.
 #[derive (Copy, Clone, Debug, Default)]
-pub struct ConfigLoader {
-
-}
+pub struct ConfigLoader;
 
 /*===============================================================================================*/
 /*------CONFIG LOADER PUBLIC METHODS-------------------------------------------------------------*/
 /*===============================================================================================*/
 
 impl ConfigLoader {
-
-    /// Builds the config cache.
-    ///
-    /// The cache stores a list of all config files for faster loading.
-    /// Building the cache can take some time, depending on how many files need to be found.
-    pub fn build_cache (&mut self) {
-        unimplemented! ();
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    /// Checks if the config cache exists.
-    pub fn cache_exists (&self) -> bool {
-        unimplemented! ();
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
 
     /// Loads the config file of a given name.
     pub fn load_config<T: Deserialize> (&self, config_name: &str) -> Result<T, ()> {

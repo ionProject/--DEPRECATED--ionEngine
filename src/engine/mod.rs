@@ -25,5 +25,7 @@
 pub mod backend;
 pub mod config;
 mod app;
+mod app_info;
 
 pub use self::app::App;
+pub use self::app_info::AppInfo;

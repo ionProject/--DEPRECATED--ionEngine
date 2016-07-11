@@ -14,6 +14,7 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+use ::engine::AppInfo;
 use ::resource::ResourceManager;
 use ::util::Logger;
 
@@ -40,6 +41,8 @@ static mut APP_POINTER: Option <*mut App> = None;
 pub struct App {
 
     // Public
+    /// The application info.
+    pub app_info: Rc<RefCell<AppInfo>>,
     /// The resource manager.
     pub resource_mgr: Rc<RefCell<ResourceManager>>,
 }
@@ -51,7 +54,7 @@ pub struct App {
 impl App {
 
     /// Initializes the app
-    pub fn init () {
+    pub fn init (app_info: AppInfo) {
 
         // Check if not already initialized
         if !App::is_initialized () {
@@ -61,6 +64,7 @@ impl App {
 
             let ab = Box::new (App {
 
+                app_info: Rc::new (RefCell::new (app_info)),
                 resource_mgr: Rc::new (RefCell::new (ResourceManager::new ())),
             });
 
@@ -88,6 +92,16 @@ impl App {
             }
         }
     }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Returns a pointer to the app info instance.
+    ///
+    /// # Examples
+    /// ```
+    /// # use ion_core::engine::{App, AppInfo};
+    /// # App::init ();
+    /// let app_info = App::get_app_info ().unwrap ();
 
 /*-----------------------------------------------------------------------------------------------*/
 

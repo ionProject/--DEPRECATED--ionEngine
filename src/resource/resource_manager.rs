@@ -14,9 +14,7 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::resource::{ResourceConfig, ResourceDirectory};
 use ::resource::config::ConfigLoader;
-use ::util::serialization::Deserializer;
 
 /*===============================================================================================*/
 /*------RESOURCE MANAGER STRUCT------------------------------------------------------------------*/
@@ -33,7 +31,9 @@ pub struct ResourceManager {
     pub config_loader: ConfigLoader,
 
     // Private
-    _config: ResourceConfig,
+    _cfg_dir: String,
+    _res_dir: String,
+    _bin_dir: String,
 }
 
 /*===============================================================================================*/
@@ -45,70 +45,6 @@ impl ResourceManager {
     /// Initializes the Resource Manager.
     pub fn init (&mut self) {
 
-        // Get the resource config from the config path.
-        let config_path = format! ("{}resource.cfg", &self.default_config_path);
-        info! ("Loading \"{}\".", &config_path);
-
-        // Load and store the resource manager config.
-        self._config = match Deserializer::from_file::<ResourceConfig> (&config_path) {
-
-            Ok (config) => {
-                
-                info! ("Loaded \"{}\".", &config_path);
-                config
-            },
-
-            Err (e) => {
-
-                error! ("Failed to load \"{}\"\n{}\nThings will not work as expected.", &config_path, e);
-                return;
-            }
-        };
-
-        // Build the resource caches
-        if !self.config_loader.cache_exists () {
-            self.config_loader.build_cache ();
-        }
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    /// Returns the first path with the given tag.
-    pub fn get_path_with_tag (&self, tag: &str) -> Option<ResourceDirectory> {
-
-        for path in &self._config.resource_dir_list {
-
-            for path_tag in &path.directory_tags {
-
-                if path_tag == tag {
-                    return Some (path.clone ());
-                }
-            }
-        }
-
-        None
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    /// Returns all paths with the specified tag.
-    pub fn get_paths_with_tag (&self, tag: &str) -> Vec<ResourceDirectory> {
-
-        let mut return_vec = Vec::new ();
-
-        for path in &self._config.resource_dir_list {
-
-            for path_tag in &path.directory_tags {
-
-                if path_tag == tag {
-
-                    return_vec.push (path.clone ());
-                    break;
-                }
-            }
-        }
-
-        return_vec
     }
 
 /*===============================================================================================*/
@@ -122,7 +58,9 @@ impl ResourceManager {
 
             default_config_path: "config/".to_string (),
             config_loader: ConfigLoader::default (),
-            _config: ResourceConfig::default ()
+            _cfg_dir: "cfg/".to_string (),
+            _res_dir: "res/".to_string (),
+            _bin_dir: "bin/".to_string (),
         }
     }
 }

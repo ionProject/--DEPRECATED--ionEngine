@@ -14,24 +14,25 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use std::vec::Vec;
+use ::util::Version;
 
 /*===============================================================================================*/
-/*------RESOURCE DIRECTORY STRUCT----------------------------------------------------------------*/
+/*------APP VERSION STRUCT-----------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-/// Stores information about a resource directory.
-#[derive (Clone, Debug, Default, Deserialize)]
-pub struct ResourceDirectory {
+/// Stores the application information.
+///
+/// This just includes basic information such as the name of the application,  
+/// the developer, the publisher, and the version.
+pub struct AppInfo {
 
     // Public
-    /// Path to the resource directory.
-    pub directory_path: String,
-    /// A list of tags to help the Resource Manager determine what sort of content  
-    /// is contained in this directory.
-    ///
-    /// While this is not strictly required, it can help speed up resource indexing and caching.
-    pub directory_tags: Vec<String>,
-    /// Should the Resource Manager search this directory recursively.
-    pub is_recursive: bool,
+    /// The application name.
+    app_name: String,
+    /// The application author.
+    app_developer: String,
+    /// The application publisher.
+    app_publisher: String,
+    /// The application version.
+    app_version: Version,
 }

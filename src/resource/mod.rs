@@ -33,10 +33,6 @@
 
 // Modules
 pub mod config;
-mod resource_config;
-mod resource_directory;
 mod resource_manager;
 
-pub use self::resource_config::ResourceConfig;
-pub use self::resource_directory::ResourceDirectory;
 pub use self::resource_manager::ResourceManager;
