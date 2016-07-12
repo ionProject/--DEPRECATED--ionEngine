@@ -42,7 +42,7 @@ pub struct App {
 
     // Public
     /// The application info.
-    pub app_info: Rc<RefCell<AppInfo>>,
+    pub app_info: AppInfo,
     /// The resource manager.
     pub resource_mgr: Rc<RefCell<ResourceManager>>,
 }
@@ -64,7 +64,7 @@ impl App {
 
             let ab = Box::new (App {
 
-                app_info: Rc::new (RefCell::new (app_info)),
+                app_info: app_info,
                 resource_mgr: Rc::new (RefCell::new (ResourceManager::new ())),
             });
 
@@ -95,13 +95,33 @@ impl App {
 
 /*-----------------------------------------------------------------------------------------------*/
 
-    /// Returns a pointer to the app info instance.
+    /// Gets a copy of the AppInfo instance.
     ///
     /// # Examples
     /// ```
     /// # use ion_core::engine::{App, AppInfo};
     /// # App::init ();
     /// let app_info = App::get_app_info ().unwrap ();
+    pub fn get_app_info () -> Result<AppInfo, ()> {
+
+        // Check if app is initialized
+        if App::is_initialized () {
+            return Ok (unsafe {&*APP_POINTER.unwrap ()}.app_info.clone ());
+        }
+
+        Err (())
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Sets the AppInfo instance.
+    pub fn set_app_info (app_info: AppInfo) {
+
+        // Check if app is inistalized
+        if App::is_initialized () {
+            unsafe {&mut *APP_POINTER.unwrap ()}.app_info = app_info;
+        }
+    }
 
 /*-----------------------------------------------------------------------------------------------*/
 

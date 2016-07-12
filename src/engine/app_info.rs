@@ -24,15 +24,16 @@ use ::util::Version;
 ///
 /// This just includes basic information such as the name of the application,  
 /// the developer, the publisher, and the version.
+#[derive (Clone)]
 pub struct AppInfo {
 
     // Public
     /// The application name.
-    app_name: String,
+    pub app_name: String,
     /// The application author.
-    app_developer: String,
+    pub app_developer: String,
     /// The application publisher.
-    app_publisher: String,
+    pub app_publisher: String,
     /// The application version.
-    app_version: Version,
+    pub app_version: Version,
 }
