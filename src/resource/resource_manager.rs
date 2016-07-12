@@ -14,7 +14,11 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+extern crate serde;
+
 use ::resource::config::ConfigLoader;
+
+use self::serde::{Deserialize, Serialize};
 
 /*===============================================================================================*/
 /*------RESOURCE MANAGER STRUCT------------------------------------------------------------------*/
@@ -25,8 +29,6 @@ use ::resource::config::ConfigLoader;
 pub struct ResourceManager {
 
     // Public
-    /// The path to the config directory.
-    pub default_config_path: String,
     /// The config loader.
     pub config_loader: ConfigLoader,
 
@@ -47,6 +49,20 @@ impl ResourceManager {
 
     }
 
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Loads a config file.
+    pub fn load_config<T: Deserialize> (&self, config_name: &str) -> Result<T, ()> {
+        self.config_loader.load_config::<T> (&self._cfg_dir, config_name)
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Saves a config file.
+    pub fn save_config<T: Serialize> (&self, config_name: &str, config_data: &T) -> Result<(), ()> {
+        self.config_loader.save_config::<T> (&self._cfg_dir, config_name, config_data)
+    }
+
 /*===============================================================================================*/
 /*------RESOURCE MANAGER PUBLIC STATIC METHODS---------------------------------------------------*/
 /*===============================================================================================*/
@@ -56,8 +72,7 @@ impl ResourceManager {
 
         ResourceManager {
 
-            default_config_path: "config/".to_string (),
-            config_loader: ConfigLoader::default (),
+            config_loader: ConfigLoader {},
             _cfg_dir: "cfg/".to_string (),
             _res_dir: "res/".to_string (),
             _bin_dir: "bin/".to_string (),

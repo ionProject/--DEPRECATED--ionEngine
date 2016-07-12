@@ -17,6 +17,7 @@
 extern crate serde;
 
 use ::util::serialization::{Deserializer, Serializer};
+
 use self::serde::{Serialize, Deserialize};
 
 /*===============================================================================================*/
@@ -34,14 +35,36 @@ pub struct ConfigLoader;
 impl ConfigLoader {
 
     /// Loads the config file of a given name.
-    pub fn load_config<T: Deserialize> (&self, config_name: &str) -> Result<T, ()> {
-        unimplemented! ();
+    pub fn load_config<T: Deserialize> (&self, cfg_dir: &str, config_name: &str) -> Result<T, ()> {
+
+        let cfg_path = &format! ("{}{}.cfg", cfg_dir, config_name);
+        
+        match Deserializer::from_file::<T> (cfg_path) {
+
+            Ok (config) => Ok (config),
+            Err (e) => {
+
+                error! ("Config file \"{}\" could not be loaded.\n{}", cfg_path, e);
+                Err (())
+            }
+        }
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Saves the config file of a given name.
-    pub fn save_config<T: Serialize> (&self, config_name: &str, config_data: &T) -> Result<(), ()> {
-        unimplemented! ();
+    pub fn save_config<T: Serialize> (&self, cfg_dir: &str, config_name: &str, config_data: &T) -> Result<(), ()> {
+
+        let cfg_path = &format! ("{}{}.cfg", cfg_dir, config_name);
+
+        match Serializer::to_file::<T> (config_data, cfg_path) {
+
+            Ok (_) => Ok (()),
+            Err (e) => {
+
+                error! ("Could not save to config file \"{}\".\n{}", cfg_path, e);
+                Err (())
+            }
+        }
     }
 }
