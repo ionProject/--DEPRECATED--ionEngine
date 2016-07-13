@@ -14,27 +14,17 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+use std::vec::Vec;
+
 /*===============================================================================================*/
-//! This crate is the core of ionProject.
-//!
-//! It provides an easy to use framework for creating 2D / 3D games and multimedia applications.
+/*------PLUGIN CONFIG STRUCT---------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-// Crate attributes
-#![deny (missing_copy_implementations)]
-#![deny (missing_docs)]
+/// Stores the plugin configuration.
+#[derive (Default, Deserialize, Serialize)]
+pub struct PluginConfig {
 
-#![feature (custom_derive)]
-#![feature (plugin)]
-#![feature (pub_restricted)]
-
-#![plugin (serde_macros)]
-
-#[macro_use]
-extern crate log;
-
-// Modules
-pub mod engine;
-pub mod renderer;
-pub mod resource;
-pub mod util;
+    // Public
+    /// The list of default plugins
+    pub plugin_list: Vec<String>
+}

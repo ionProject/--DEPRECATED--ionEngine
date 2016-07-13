@@ -14,27 +14,26 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+use ::util::Version;
+
 /*===============================================================================================*/
-//! This crate is the core of ionProject.
-//!
-//! It provides an easy to use framework for creating 2D / 3D games and multimedia applications.
+/*------APP VERSION STRUCT-----------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-// Crate attributes
-#![deny (missing_copy_implementations)]
-#![deny (missing_docs)]
+/// Stores the application information.
+///
+/// This just includes basic information such as the name of the application,  
+/// the developer, the publisher, and the version.
+#[derive (Clone)]
+pub struct AppInfo {
 
-#![feature (custom_derive)]
-#![feature (plugin)]
-#![feature (pub_restricted)]
-
-#![plugin (serde_macros)]
-
-#[macro_use]
-extern crate log;
-
-// Modules
-pub mod engine;
-pub mod renderer;
-pub mod resource;
-pub mod util;
+    // Public
+    /// The application name.
+    pub app_name: String,
+    /// The application author.
+    pub app_developer: String,
+    /// The application publisher.
+    pub app_publisher: String,
+    /// The application version.
+    pub app_version: Version,
+}

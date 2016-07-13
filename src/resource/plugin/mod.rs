@@ -14,30 +14,15 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::engine::backend::{State, Type};
-use ::util::Version;
-
 /*===============================================================================================*/
-/*------PLUGIN STRUCT----------------------------------------------------------------------------*/
+//! The plugin module.
+//!
+//! Contains the plugin loader.
 /*===============================================================================================*/
 
-/// Used to store information on a backend plugin.
-#[derive (Debug, Clone)]
-pub struct Info {
+// Modules
+mod plugin_config;
+mod plugin_loader;
 
-    // Public
-    /// The name of the backend.
-    pub name: String,
-    /// The author.
-    pub author: String,
-    /// The plugin version
-    pub version: Version,
-    /// Description of the backend.
-    pub description: String,
-    /// Path to the plugin.
-    pub path: String,
-    /// The type of plugin.
-    pub b_type: Type,
-    /// The current state of the backend.
-    pub state: State,
-}
+pub use self::plugin_config::PluginConfig;
+pub use self::plugin_loader::PluginLoader;

@@ -15,17 +15,25 @@
 /*===============================================================================================*/
 
 /*===============================================================================================*/
-//! The backend module.
+//! The resource module.
 //!
-//! Contains everything required to load and manage different backend systems.
+//! Everything related to resource loading, management, and unloading is handled here.  
+//! There are two main parts to it:
+//!
+//! 1. The Resource Manager.
+//! 2. Resource Loaders.
+//!
+//! The Resource Manager is the main interface to the resource module.  
+//! (Almost) all interaction with the module goes through it.
+//!
+//! The loaders are small structs that take care of a single resource (eg. the Texture  
+//! Loader would handle textures, the Plugin Loader would handle plugins, etc).  
+//! Each loader is indirectly accessed via the Resource Manager.
 /*===============================================================================================*/
 
-mod backend_config;
-mod backend_enum;
-mod backend_info;
-mod backend_manager;
+// Modules
+mod config;
+mod plugin;
+mod resource_manager;
 
-pub use self::backend_config::Config;
-pub use self::backend_enum::{State, Type};
-pub use self::backend_info::Info;
-pub use self::backend_manager::Manager;
+pub use self::resource_manager::ResourceManager;

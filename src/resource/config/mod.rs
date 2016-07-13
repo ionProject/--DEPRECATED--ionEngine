@@ -15,26 +15,12 @@
 /*===============================================================================================*/
 
 /*===============================================================================================*/
-//! This crate is the core of ionProject.
+//! The config module.
 //!
-//! It provides an easy to use framework for creating 2D / 3D games and multimedia applications.
+//! Contains the config loader.
 /*===============================================================================================*/
 
-// Crate attributes
-#![deny (missing_copy_implementations)]
-#![deny (missing_docs)]
-
-#![feature (custom_derive)]
-#![feature (plugin)]
-#![feature (pub_restricted)]
-
-#![plugin (serde_macros)]
-
-#[macro_use]
-extern crate log;
-
 // Modules
-pub mod engine;
-pub mod renderer;
-pub mod resource;
-pub mod util;
+mod config_loader;
+
+pub use self::config_loader::ConfigLoader;
