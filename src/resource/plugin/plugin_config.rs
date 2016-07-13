@@ -14,26 +14,17 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+use std::vec::Vec;
+
 /*===============================================================================================*/
-//! The resource module.
-//!
-//! Everything related to resource loading, management, and unloading is handled here.  
-//! There are two main parts to it:
-//!
-//! 1. The Resource Manager.
-//! 2. Resource Loaders.
-//!
-//! The Resource Manager is the main interface to the resource module.  
-//! (Almost) all interaction with the module goes through it.
-//!
-//! The loaders are small structs that take care of a single resource (eg. the Texture  
-//! Loader would handle textures, the Plugin Loader would handle plugins, etc).  
-//! Each loader is indirectly accessed via the Resource Manager.
+/*------PLUGIN CONFIG STRUCT---------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-// Modules
-mod config;
-mod plugin;
-mod resource_manager;
+/// Stores the plugin configuration.
+#[derive (Default, Deserialize, Serialize)]
+pub struct PluginConfig {
 
-pub use self::resource_manager::ResourceManager;
+    // Public
+    /// The list of default plugins
+    pub plugin_list: Vec<String>
+}

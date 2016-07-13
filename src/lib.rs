@@ -26,6 +26,7 @@
 
 #![feature (custom_derive)]
 #![feature (plugin)]
+#![feature (pub_restricted)]
 
 #![plugin (serde_macros)]
 

@@ -17,6 +17,7 @@
 extern crate serde;
 
 use ::resource::config::ConfigLoader;
+use ::resource::plugin::{PluginConfig, PluginLoader};
 
 use self::serde::{Deserialize, Serialize};
 
@@ -25,17 +26,15 @@ use self::serde::{Deserialize, Serialize};
 /*===============================================================================================*/
 
 /// Interface for resource loading and management.
-#[derive (Clone, Default)]
 pub struct ResourceManager {
-
-    // Public
-    /// The config loader.
-    pub config_loader: ConfigLoader,
 
     // Private
     _cfg_dir: String,
     _res_dir: String,
     _bin_dir: String,
+
+    _config_loader: ConfigLoader,
+    _plugin_loader: PluginLoader,
 }
 
 /*===============================================================================================*/
@@ -47,20 +46,24 @@ impl ResourceManager {
     /// Initializes the Resource Manager.
     pub fn init (&mut self) {
 
+        // Load Plugin Loader config
+        if let Ok (config) = self.load_config::<PluginConfig> ("plugins") {
+            self._plugin_loader._plug_config = config;
+        }
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Loads a config file.
     pub fn load_config<T: Deserialize> (&self, config_name: &str) -> Result<T, ()> {
-        self.config_loader.load_config::<T> (&self._cfg_dir, config_name)
+        self._config_loader.load_config::<T> (&self._cfg_dir, config_name)
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Saves a config file.
     pub fn save_config<T: Serialize> (&self, config_name: &str, config_data: &T) -> Result<(), ()> {
-        self.config_loader.save_config::<T> (&self._cfg_dir, config_name, config_data)
+        self._config_loader.save_config::<T> (&self._cfg_dir, config_name, config_data)
     }
 
 /*===============================================================================================*/
@@ -72,10 +75,20 @@ impl ResourceManager {
 
         ResourceManager {
 
-            config_loader: ConfigLoader {},
             _cfg_dir: "cfg/".to_string (),
             _res_dir: "res/".to_string (),
             _bin_dir: "bin/".to_string (),
+            _config_loader: ConfigLoader {},
+            _plugin_loader: PluginLoader::new ()
         }
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+
+impl Default for ResourceManager {
+
+    fn default () -> ResourceManager {
+        ResourceManager::new ()
     }
 }
