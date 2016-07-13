@@ -25,6 +25,7 @@ use self::serde::{Serialize, Deserialize};
 /*===============================================================================================*/
 
 /// Allows the loading of configuration files.
+#[derive (Copy, Clone)]
 pub struct ConfigLoader;
 
 /*===============================================================================================*/

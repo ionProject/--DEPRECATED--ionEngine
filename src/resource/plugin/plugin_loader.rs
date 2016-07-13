@@ -14,6 +14,7 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+use ::resource::ResourceManager;
 use ::resource::plugin::PluginConfig;
 
 /*===============================================================================================*/
@@ -37,6 +38,14 @@ pub struct PluginLoader {
 
 impl PluginLoader {
 
+    /// Initializes the plugin loader.
+    pub fn init (&mut self, resource_manager: &ResourceManager) {
+
+        if let Ok (config) = resource_manager.load_config::<PluginConfig> ("plugins") {
+            self._plug_config = config;
+        }
+    }
+
 /*===============================================================================================*/
 /*------PLUGIN LOADER PUBLIC STATIC METHODS------------------------------------------------------*/
 /*===============================================================================================*/
@@ -52,5 +61,14 @@ impl PluginLoader {
 
         PluginLoader {_plug_ext: plug_ext.to_string (),
                       _plug_config: PluginConfig::default ()}
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+
+impl Default for PluginLoader {
+
+    fn default () -> PluginLoader {
+        PluginLoader::new ()
     }
 }
