@@ -23,6 +23,8 @@
 // Modules
 mod plugin_config;
 mod plugin_loader;
+mod plugin_info;
 
 pub use self::plugin_config::PluginConfig;
 pub use self::plugin_loader::PluginLoader;
+pub use self::plugin_info::PluginInfo;

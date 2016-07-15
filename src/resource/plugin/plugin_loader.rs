@@ -14,8 +14,12 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+extern crate libloading;
+
 use ::resource::ResourceManager;
 use ::resource::plugin::PluginConfig;
+
+use self::libloading::{Library, Symbol};
 
 /*===============================================================================================*/
 /*------PLUGIN LOADER STRUCT---------------------------------------------------------------------*/
@@ -41,8 +45,46 @@ impl PluginLoader {
     /// Initializes the plugin loader.
     pub fn init (&mut self, resource_manager: &ResourceManager) {
 
+        // Load the config file
         if let Ok (config) = resource_manager.load_config::<PluginConfig> ("plugins") {
             self._plug_config = config;
+        }
+
+        // Register the plugins in the list
+        for plugin in &self._plug_config.plugin_list {
+            self.register_plugin (plugin);
+        }
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Registers a plugin with the plugin loader.
+    pub fn register_plugin (&self, plugin_path: &str) {
+
+        // Open the library
+        match Library::new (plugin_path) {
+
+            Ok (lib) => {
+
+                // Get the register function
+                let register: Symbol<unsafe extern fn ()> = unsafe {
+
+                    match lib.get (b"register\0") {
+
+                        Ok (f) => f,
+                        Err (e) => {
+
+                            warn! ("Could not find function \"register\" in plugin \"{}\".\n{}", plugin_path, e);
+                            return;
+                        }
+                    }
+                };
+
+                // Call the register function
+                unsafe {register ();}
+            },
+
+            Err (e) => warn! ("Could not load plugin \"{}\".\n{}", plugin_path, e)
         }
     }
 

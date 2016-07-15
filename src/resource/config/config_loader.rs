@@ -38,6 +38,7 @@ impl ConfigLoader {
     pub fn load_config<T: Deserialize> (&self, cfg_dir: &str, config_name: &str) -> Result<T, ()> {
 
         let cfg_path = &format! ("{}{}.cfg", cfg_dir, config_name);
+        info! ("Loading config file \"{}\".", cfg_path);
         
         match Deserializer::from_file::<T> (cfg_path) {
 
@@ -56,6 +57,7 @@ impl ConfigLoader {
     pub fn save_config<T: Serialize> (&self, cfg_dir: &str, config_name: &str, config_data: &T) -> Result<(), ()> {
 
         let cfg_path = &format! ("{}{}.cfg", cfg_dir, config_name);
+        info! ("Saving config file \"{}\".", cfg_path);
 
         match Serializer::to_file::<T> (config_data, cfg_path) {
 
