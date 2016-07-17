@@ -28,12 +28,9 @@ use self::libloading::{Library, Symbol};
 /// Allows for the loading of the various plugins.
 pub struct PluginLoader {
 
-    // Restricted
-    /// Stores the plugin configuration.
-    pub (resource) _plug_config: PluginConfig,
-
     // Private
     _plug_ext: String,
+    _plug_config: PluginConfig,
 }
 
 /*===============================================================================================*/
