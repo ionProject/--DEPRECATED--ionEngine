@@ -31,10 +31,15 @@ use std::rc::Rc;
 /// Interface for resource loading and management.
 pub struct ResourceManager {
 
-    // Private
-    _cfg_dir: String,
-    _res_dir: String,
-    _bin_dir: String,
+    // Public
+    /// The config directory.
+    pub cfg_dir: String,
+    /// The resource direcotry.
+    pub res_dir: String,
+    /// The binary directory.
+    pub bin_dir: String,
+    /// The plugin directory.
+    pub plug_dir: String,
 
     _config_loader: Rc<RefCell<ConfigLoader>>,
     _plugin_loader: Rc<RefCell<PluginLoader>>,
@@ -55,14 +60,14 @@ impl ResourceManager {
 
     /// Loads a config file.
     pub fn load_config<T: Deserialize> (&self, config_name: &str) -> Result<T, ()> {
-        self._config_loader.borrow ().load_config::<T> (&self._cfg_dir, config_name)
+        self._config_loader.borrow ().load_config::<T> (&self.cfg_dir, config_name)
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Saves a config file.
     pub fn save_config<T: Serialize> (&self, config_name: &str, config_data: &T) -> Result<(), ()> {
-        self._config_loader.borrow ().save_config::<T> (&self._cfg_dir, config_name, config_data)
+        self._config_loader.borrow ().save_config::<T> (&self.cfg_dir, config_name, config_data)
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -88,9 +93,10 @@ impl ResourceManager {
 
         ResourceManager {
 
-            _cfg_dir: "cfg/".to_string (),
-            _res_dir: "res/".to_string (),
-            _bin_dir: "bin/".to_string (),
+            cfg_dir: "cfg/".to_string (),
+            res_dir: "res/".to_string (),
+            bin_dir: "bin/".to_string (),
+            plug_dir: "bin/plugins/".to_string (),
             _config_loader: Rc::new (RefCell::new (ConfigLoader {})),
             _plugin_loader: Rc::new (RefCell::new (PluginLoader::new ()))
         }
