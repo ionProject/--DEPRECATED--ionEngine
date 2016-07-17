@@ -14,11 +14,14 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+use ::util::Version;
+
 /*===============================================================================================*/
 /*------PLUGIN INFO STRUCT-----------------------------------------------------------------------*/
 /*===============================================================================================*/
 
 /// Stores basic information on a plugin.
+#[derive (Debug)]
 pub struct PluginInfo {
 
     // Public
@@ -28,4 +31,6 @@ pub struct PluginInfo {
     plug_developer: String,
     /// The plugin description.
     plug_description: String,
+    /// The plugin version.
+    plug_version: Version,
 }

@@ -18,6 +18,7 @@ extern crate libloading;
 
 use ::resource::ResourceManager;
 use ::resource::plugin::PluginConfig;
+use ::resource::PluginInfo;
 
 use self::libloading::{Library, Symbol};
 
@@ -47,9 +48,11 @@ impl PluginLoader {
             self._plug_config = config;
         }
 
+        info! ("Registering plugins.");
+
         // Register the plugins in the list
         for plugin in &self._plug_config.plugin_list {
-            self.register_plugin (plugin);
+            self.register_plugin (&format! ("{}{}", resource_manager.plug_dir, plugin));
         }
     }
 
@@ -68,7 +71,12 @@ impl PluginLoader {
 
                     match lib.get (b"register\0") {
 
-                        Ok (f) => f,
+                        Ok (f) => {
+                            
+                            info! ("Registered plugin: \"{}\"", plugin_path);
+                            f
+                        },
+
                         Err (e) => {
 
                             warn! ("Could not find function \"register\" in plugin \"{}\".\n{}", plugin_path, e);
@@ -83,6 +91,40 @@ impl PluginLoader {
 
             Err (e) => warn! ("Could not load plugin \"{}\".\n{}", plugin_path, e)
         }
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Retrieves information on a plugin.
+    pub fn get_plugin_info (&self, plugin_path: &str) -> Result<PluginInfo, ()> {
+
+        // Open the library
+        match Library::new (plugin_path) {
+
+            Ok (lib) => {
+
+                // Get the get info function
+                let get_plugin_info: Symbol<unsafe extern fn () -> PluginInfo> = unsafe {
+
+                    match lib.get (b"get_plugin_info\0") {
+
+                        Ok (f) => f,
+                        Err (e) => {
+
+                            warn! ("Could not find function \"get_plugin_info\" in plugin \"{}\".\n{}", plugin_path, e);
+                            return Err (());
+                        }
+                    }
+                };
+
+                // Call the get info function
+                return Ok (unsafe {get_plugin_info ()});
+            }
+
+            Err (e) => warn! ("Could not load plugin \"{}\".\n{}", plugin_path, e)
+        }
+
+        Err (())
     }
 
 /*===============================================================================================*/
