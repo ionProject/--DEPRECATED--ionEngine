@@ -34,6 +34,5 @@ extern crate log;
 
 // Modules
 pub mod engine;
-pub mod renderer;
 pub mod resource;
 pub mod util;
