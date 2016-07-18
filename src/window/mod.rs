@@ -15,25 +15,7 @@
 /*===============================================================================================*/
 
 /*===============================================================================================*/
-//! This crate is the core of ionProject.
+//! The window module.
 //!
-//! It provides an easy to use framework for creating 2D / 3D games and multimedia applications.
+//! Contains the Window Manager, and any window related functionality.
 /*===============================================================================================*/
-
-// Crate attributes
-#![deny (missing_copy_implementations)]
-#![deny (missing_docs)]
-
-#![feature (custom_derive)]
-#![feature (plugin)]
-
-#![plugin (serde_macros)]
-
-#[macro_use]
-extern crate log;
-
-// Modules
-pub mod engine;
-pub mod resource;
-pub mod util;
-pub mod window;
