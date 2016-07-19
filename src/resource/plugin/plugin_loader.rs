@@ -48,6 +48,13 @@ impl PluginLoader {
             self._plug_config = config;
         }
 
+        else {
+
+            match resource_manager.new_config::<PluginConfig> ("plugins") {
+                Ok (_) | Err (_) => {}
+            }
+        }
+
         info! ("Registering plugins.");
 
         // Register the plugins in the list
