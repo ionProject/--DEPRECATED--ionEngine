@@ -13,3 +13,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 /*===============================================================================================*/
+
+/*===============================================================================================*/
+/*------WINDOW TRAIT-----------------------------------------------------------------------------*/
+/*===============================================================================================*/
+
+/// Used for backend agnostic window creation.
+///
+/// Window backend plugins implement this trait. The backend is then accessed by the
+/// Window Manager via a `get_window` function.
+pub trait Window {
+
+    /// Initializes the window.
+    fn init (&self);
+    /// Sets the title of the window.
+    fn get_title (&self) -> String;
+    /// Gets the title of the window.
+    fn set_title (&self, title: &str);
+}
