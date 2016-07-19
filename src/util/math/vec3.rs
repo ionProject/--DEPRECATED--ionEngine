@@ -28,7 +28,7 @@ use std::cmp::PartialEq;
 /// This is the most used out of the three vector structs.
 /// It is used for representing positions in 3D space (vertices, normals, positions, etc).
 /// 32-bit floats are used for the values.
-#[derive (Copy, Clone, Default)]
+#[derive (Copy, Clone, Default, Serialize, Deserialize)]
 pub struct Vec3 {
 
     // Public

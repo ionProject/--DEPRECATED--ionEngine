@@ -27,7 +27,7 @@ use std::cmp::PartialEq;
 ///
 /// This struct represents a 4x4 matrix. It is normally used for 3D graphics transformations,
 /// such as translation, rotation, and scaling.
-#[derive (Copy, Clone, Default)]
+#[derive (Copy, Clone, Default, Serialize, Deserialize)]
 pub struct Mat4 {
 
     // Private
