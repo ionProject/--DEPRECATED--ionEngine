@@ -14,6 +14,7 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+use ::engine::App;
 use ::window::WindowConfig;
 
 /*===============================================================================================*/
@@ -21,7 +22,6 @@ use ::window::WindowConfig;
 /*===============================================================================================*/
 
 /// Handles the creation and destruction of windows.
-#[derive (Copy, Clone)]
 pub struct WindowManager {
 
     // Private
@@ -29,10 +29,35 @@ pub struct WindowManager {
 }
 
 /*===============================================================================================*/
-/*------WINDOW MANAGER PUBLIC STATIC METHODS-----------------------------------------------------*/
+/*------WINDOW MANAGER PUBLIC METHODS------------------------------------------------------------*/
 /*===============================================================================================*/
 
 impl WindowManager {
+
+    /// Initializes the window manager
+    pub fn init (&mut self) {
+
+        info! ("Initializing the Window Manager.");
+
+        // Get a reference to the resource manager and load the window config
+        let resource_mgr  = App::get_resource_manager ().unwrap ();
+        let config_result = resource_mgr.borrow ().load_config::<WindowConfig> ("window");
+
+        if let Ok (config) = config_result {
+            self._window_config = config;
+        }
+
+        else {
+            
+            match resource_mgr.borrow ().new_config::<WindowConfig> ("window") {
+                Ok (_) | Err (_) => {}
+            }
+        }
+    }
+
+/*===============================================================================================*/
+/*------WINDOW MANAGER PUBLIC STATIC METHODS-----------------------------------------------------*/
+/*===============================================================================================*/
 
     /// Returns a new instance of the Window Manager.
     pub fn new () -> WindowManager {
