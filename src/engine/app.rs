@@ -149,6 +149,25 @@ impl App {
 
 /*-----------------------------------------------------------------------------------------------*/
 
+    /// Returns a pointer to the window manager instance.
+    ///
+    /// # Examples
+    /// ```
+    /// # use ion_core::engine::App;
+    /// # App::init ();
+    /// let window_mgr = App::get_window_manager ().unwrap ();
+    pub fn get_window_manager () -> Result<Rc<RefCell<WindowManager>>, ()> {
+
+        // Check if the app is is_initialized
+        if App::is_initialized () {
+            return Ok (unsafe {&*APP_POINTER.unwrap ()}.window_mgr.clone ());
+        }
+
+        Err (())
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
     /// Releases all resources, and exits the application.
     pub fn exit () {
 
@@ -178,8 +197,10 @@ impl App {
 
         // Get a reference to all managers.
         let resource_mgr = App::get_resource_manager ().unwrap ();
+        let window_mgr   = App::get_window_manager   ().unwrap ();
 
         // Init the managers
         resource_mgr.borrow_mut ().init ();
+        window_mgr.borrow_mut   ().init ();
     }
 }
