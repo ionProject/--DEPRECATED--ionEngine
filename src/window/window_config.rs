@@ -15,14 +15,11 @@
 /*===============================================================================================*/
 
 /*===============================================================================================*/
-//! The window module.
-//!
-//! Contains the Window Manager, and any window related functionality.
+/*------WINDOW MANAGER STRUCT--------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-pub mod traits;
-mod window_config;
-mod window_manager;
+/// Stores the config for the window manager.
+#[derive (Copy, Clone, Default, Deserialize, Serialize)]
+pub struct WindowConfig {
 
-pub use self::window_config::WindowConfig;
-pub use self::window_manager::WindowManager;
+}

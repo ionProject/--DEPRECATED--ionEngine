@@ -14,15 +14,37 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+use ::window::WindowConfig;
+
 /*===============================================================================================*/
-//! The window module.
-//!
-//! Contains the Window Manager, and any window related functionality.
+/*------WINDOW MANAGER STRUCT--------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-pub mod traits;
-mod window_config;
-mod window_manager;
+/// Handles the creation and destruction of windows.
+#[derive (Copy, Clone)]
+pub struct WindowManager {
 
-pub use self::window_config::WindowConfig;
-pub use self::window_manager::WindowManager;
+    // Private
+    _window_config: WindowConfig,
+}
+
+/*===============================================================================================*/
+/*------WINDOW MANAGER PUBLIC STATIC METHODS-----------------------------------------------------*/
+/*===============================================================================================*/
+
+impl WindowManager {
+
+    /// Returns a new instance of the Window Manager.
+    pub fn new () -> WindowManager {
+        WindowManager {_window_config: WindowConfig::default ()}
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+
+impl Default for WindowManager {
+
+    fn default () -> WindowManager {
+        WindowManager::new ()
+    }
+}

@@ -16,6 +16,7 @@
 
 use ::engine::AppInfo;
 use ::resource::ResourceManager;
+use ::window::WindowManager;
 use ::util::Logger;
 
 use std::cell::RefCell;
@@ -45,6 +46,8 @@ pub struct App {
     pub app_info: AppInfo,
     /// The resource manager.
     pub resource_mgr: Rc<RefCell<ResourceManager>>,
+    /// The window manager.
+    pub window_mgr: Rc<RefCell<WindowManager>>,
 }
 
 /*===============================================================================================*/
@@ -66,6 +69,7 @@ impl App {
 
                 app_info: app_info,
                 resource_mgr: Rc::new (RefCell::new (ResourceManager::new ())),
+                window_mgr: Rc::new (RefCell::new (WindowManager::new ())),
             });
 
             unsafe {APP_POINTER = Some (Box::into_raw (ab))};

@@ -13,16 +13,3 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 /*===============================================================================================*/
-
-/*===============================================================================================*/
-//! The window module.
-//!
-//! Contains the Window Manager, and any window related functionality.
-/*===============================================================================================*/
-
-pub mod traits;
-mod window_config;
-mod window_manager;
-
-pub use self::window_config::WindowConfig;
-pub use self::window_manager::WindowManager;

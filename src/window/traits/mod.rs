@@ -15,14 +15,9 @@
 /*===============================================================================================*/
 
 /*===============================================================================================*/
-//! The window module.
+//! The traits module.
 //!
-//! Contains the Window Manager, and any window related functionality.
+//! Stores any required traits for the window module.
 /*===============================================================================================*/
 
-pub mod traits;
-mod window_config;
-mod window_manager;
-
-pub use self::window_config::WindowConfig;
-pub use self::window_manager::WindowManager;
+mod window;
