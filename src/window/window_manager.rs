@@ -16,6 +16,7 @@
 
 use ::engine::App;
 use ::window::WindowConfig;
+use ::window::traits::{WindowBackend, WindowFactory};
 
 /*===============================================================================================*/
 /*------WINDOW MANAGER STRUCT--------------------------------------------------------------------*/
@@ -26,6 +27,8 @@ pub struct WindowManager {
 
     // Private
     _window_config: WindowConfig,
+    _window_factory: Option<Box<WindowFactory>>,
+    _window_backend: Option<Box<WindowBackend>>,
 }
 
 /*===============================================================================================*/
@@ -55,13 +58,25 @@ impl WindowManager {
         }
     }
 
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Registers the window plugin.
+    pub fn register_plugin (&mut self, window_factory: Box<WindowFactory>) {
+
+        self._window_backend = Some (window_factory.get_window_backend ());
+        self._window_factory = Some (window_factory);
+    }
+
 /*===============================================================================================*/
 /*------WINDOW MANAGER PUBLIC STATIC METHODS-----------------------------------------------------*/
 /*===============================================================================================*/
 
     /// Returns a new instance of the Window Manager.
     pub fn new () -> WindowManager {
-        WindowManager {_window_config: WindowConfig::default ()}
+
+        WindowManager {_window_config:  WindowConfig::default (),
+                       _window_factory: None,
+                       _window_backend: None,}
     }
 }
 

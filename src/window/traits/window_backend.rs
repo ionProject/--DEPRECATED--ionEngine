@@ -15,18 +15,19 @@
 /*===============================================================================================*/
 
 /*===============================================================================================*/
-//! The plugin module.
-//!
-//! Contains the plugin loader.
+/*------WINDOW BACKEND TRAIT---------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-// Modules
-mod plugin_config;
-mod plugin_loader;
-mod plugin_info;
-mod plugin_enum;
+/// Used for backend agnostic window creation.
+///
+/// Window backend plugins implement this trait. The backend is then accessed by the
+/// Window Manager via a `get_window` function.
+pub trait WindowBackend {
 
-pub use self::plugin_config::PluginConfig;
-pub use self::plugin_loader::PluginLoader;
-pub use self::plugin_info::PluginInfo;
-pub use self::plugin_enum::PluginType;
+    /// Initializes the window.
+    fn init (&self);
+    /// Sets the title of the window.
+    fn get_title (&self) -> String;
+    /// Gets the title of the window.
+    fn set_title (&mut self, title: &str);
+}

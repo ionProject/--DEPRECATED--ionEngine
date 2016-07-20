@@ -41,16 +41,16 @@ pub struct PluginLoader {
 impl PluginLoader {
 
     /// Initializes the plugin loader.
-    pub fn init (&mut self, resource_manager: &ResourceManager) {
+    pub fn init (&mut self, resource_mgr: &ResourceManager) {
 
         // Load the config file
-        if let Ok (config) = resource_manager.load_config::<PluginConfig> ("plugins") {
+        if let Ok (config) = resource_mgr.load_config::<PluginConfig> ("plugins") {
             self._plug_config = config;
         }
 
         else {
 
-            match resource_manager.new_config::<PluginConfig> ("plugins") {
+            match resource_mgr.new_config::<PluginConfig> ("plugins") {
                 Ok (_) | Err (_) => {}
             }
         }
@@ -59,45 +59,16 @@ impl PluginLoader {
 
         // Register the plugins in the list
         for plugin in &self._plug_config.plugin_list {
-            self.register_plugin (&format! ("{}{}", resource_manager.plug_dir, plugin));
+            self.register_plugin (&format! ("{}{}", resource_mgr.plug_dir, plugin)).unwrap ();
         }
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Registers a plugin with the plugin loader.
-    pub fn register_plugin (&self, plugin_path: &str) {
+    pub fn register_plugin (&self, plugin_path: &str) -> Result<(), ()> {
 
-        // Open the library
-        match Library::new (plugin_path) {
-
-            Ok (lib) => {
-
-                // Get the register function
-                let register: Symbol<unsafe extern fn ()> = unsafe {
-
-                    match lib.get (b"register\0") {
-
-                        Ok (f) => {
-                            
-                            info! ("Registered plugin: \"{}\"", plugin_path);
-                            f
-                        },
-
-                        Err (e) => {
-
-                            warn! ("Could not find function \"register\" in plugin \"{}\".\n{}", plugin_path, e);
-                            return;
-                        }
-                    }
-                };
-
-                // Call the register function
-                unsafe {register ();}
-            },
-
-            Err (e) => warn! ("Could not load plugin \"{}\".\n{}", plugin_path, e)
-        }
+        Ok (())
     }
 
 /*-----------------------------------------------------------------------------------------------*/

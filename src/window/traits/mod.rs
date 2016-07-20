@@ -20,6 +20,8 @@
 //! Stores any required traits for the window module.
 /*===============================================================================================*/
 
-mod window;
+mod window_backend;
+mod window_factory;
 
-pub use self::window::Window;
+pub use self::window_backend::WindowBackend;
+pub use self::window_factory::WindowFactory;
