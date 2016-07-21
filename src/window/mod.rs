@@ -21,6 +21,7 @@
 /*===============================================================================================*/
 
 pub mod traits;
+mod detail;
 mod window_config;
 mod window_manager;
 

@@ -16,6 +16,7 @@
 
 use ::engine::App;
 use ::window::WindowConfig;
+use ::window::detail::{WindowBackendDefault, WindowFactoryDefault};
 use ::window::traits::{WindowBackend, WindowFactory};
 
 /*===============================================================================================*/
@@ -27,8 +28,8 @@ pub struct WindowManager {
 
     // Private
     _window_config: WindowConfig,
-    _window_factory: Option<Box<WindowFactory>>,
-    _window_backend: Option<Box<WindowBackend>>,
+    _window_factory: Box<WindowFactory>,
+    _window_backend: Box<WindowBackend>,
 }
 
 /*===============================================================================================*/
@@ -57,8 +58,9 @@ impl WindowManager {
             }
         }
 
-        self._window_backend.as_mut ().unwrap ().set_title ("Moo");
-        println! ("{}", self._window_backend.as_ref ().unwrap ().get_title ());
+        // Initialize the window
+        info! ("Creating a new window.");
+        self._window_backend.init (&self._window_config);
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -66,8 +68,8 @@ impl WindowManager {
     /// Registers the window plugin.
     pub fn register_plugin (&mut self, window_factory: Box<WindowFactory>) {
 
-        self._window_backend = Some (window_factory.get_window_backend ());
-        self._window_factory = Some (window_factory);
+        self._window_backend = window_factory.get_window_backend ();
+        self._window_factory = window_factory;
     }
 
 /*===============================================================================================*/
@@ -78,8 +80,8 @@ impl WindowManager {
     pub fn new () -> WindowManager {
 
         WindowManager {_window_config:  WindowConfig::default (),
-                       _window_factory: None,
-                       _window_backend: None}
+                       _window_factory: Box::new (WindowFactoryDefault::new ()),
+                       _window_backend: Box::new (WindowBackendDefault::new ())}
     }
 }
 

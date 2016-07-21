@@ -14,22 +14,8 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::window::WindowConfig;
+mod window_backend_default;
+mod window_factory_default;
 
-/*===============================================================================================*/
-/*------WINDOW BACKEND TRAIT---------------------------------------------------------------------*/
-/*===============================================================================================*/
-
-/// Used for backend agnostic window creation.
-///
-/// Window backend plugins implement this trait. The backend is then accessed by the
-/// Window Manager via a `get_window` function.
-pub trait WindowBackend {
-
-    /// Initializes the window.
-    fn init (&self, config: &WindowConfig);
-    /// Sets the title of the window.
-    fn get_title (&self) -> String;
-    /// Gets the title of the window.
-    fn set_title (&mut self, title: &str);
-}
+pub use self::window_backend_default::WindowBackendDefault;
+pub use self::window_factory_default::WindowFactoryDefault;
