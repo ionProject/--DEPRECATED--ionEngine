@@ -56,6 +56,9 @@ impl WindowManager {
                 Ok (_) | Err (_) => {}
             }
         }
+
+        self._window_backend.as_mut ().unwrap ().set_title ("Moo");
+        println! ("{}", self._window_backend.as_ref ().unwrap ().get_title ());
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -76,7 +79,7 @@ impl WindowManager {
 
         WindowManager {_window_config:  WindowConfig::default (),
                        _window_factory: None,
-                       _window_backend: None,}
+                       _window_backend: None}
     }
 }
 
