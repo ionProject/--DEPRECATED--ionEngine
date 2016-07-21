@@ -37,3 +37,28 @@ pub struct AppInfo {
     /// The application version.
     pub app_version: Version,
 }
+
+/*===============================================================================================*/
+/*------APP INFO PUBLIC STATIC METHODS-----------------------------------------------------------*/
+/*===============================================================================================*/
+
+impl AppInfo {
+
+    /// Returns a new App Info instance.
+    pub fn new () -> AppInfo {
+
+        AppInfo {app_name: "Unknown".to_string (),
+                 app_developer: "Unknown".to_string (),
+                 app_publisher: "Unknown".to_string (),
+                 app_version: Version::new ()}
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+
+impl Default for AppInfo {
+
+    fn default () -> AppInfo {
+        AppInfo::new ()
+    }
+}

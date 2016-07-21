@@ -41,4 +41,22 @@ impl Version {
     pub fn to_string (&self) -> String {
         format! ("{}.{}.{}", self.major, self.minor, self.patch)
     }
+
+/*===============================================================================================*/
+/*------VERSION PUBLIC STATIC METHODS------------------------------------------------------------*/
+/*===============================================================================================*/
+
+    /// Returns a new version instance.
+    pub fn new () -> Version {
+        Version {major: 0, minor: 1, patch: 0}
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+
+impl Default for Version {
+
+    fn default () -> Version {
+        Version::new ()
+    }
 }

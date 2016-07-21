@@ -104,7 +104,7 @@ impl App {
     /// # Examples
     /// ```
     /// # use ion_core::engine::{App, AppInfo};
-    /// # App::init ();
+    /// # App::init (AppInfo::new ());
     /// let app_info = App::get_app_info ().unwrap ();
     pub fn get_app_info () -> Result<AppInfo, ()> {
 
@@ -133,10 +133,9 @@ impl App {
     ///
     /// # Examples
     /// ```
-    /// # use ion_core::engine::App;
-    /// # App::init ();
+    /// # use ion_core::engine::{App, AppInfo};
+    /// # App::init (AppInfo::new ());
     /// let resource_mgr = App::get_resource_manager ().unwrap ();
-    /// println! ("{}", resource_mgr.borrow ().load_config ());
     pub fn get_resource_manager () -> Result<Rc<RefCell<ResourceManager>>, ()> {
 
         // Check if app is initialized
@@ -153,8 +152,8 @@ impl App {
     ///
     /// # Examples
     /// ```
-    /// # use ion_core::engine::App;
-    /// # App::init ();
+    /// # use ion_core::engine::{App, AppInfo};
+    /// # App::init (AppInfo::new ());
     /// let window_mgr = App::get_window_manager ().unwrap ();
     pub fn get_window_manager () -> Result<Rc<RefCell<WindowManager>>, ()> {
 
