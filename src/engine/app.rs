@@ -181,8 +181,10 @@ impl App {
                 APP_POINTER = None;
             };
 
-            // Shut down the application
+            // Release the logger, and shutdown the application
             info! ("Terminating the application.");
+            Logger::release ();
+
             process::exit (0);
         }
     }

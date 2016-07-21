@@ -83,6 +83,13 @@ impl Logger {
                               log_to_console: log_to_console})
         })
     }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Releases the logger and all of its resources.
+    pub fn release () {
+        drop (log::shutdown_logger ().unwrap ());
+    }
 }
 
 /*===============================================================================================*/
