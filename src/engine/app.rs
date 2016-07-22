@@ -175,6 +175,9 @@ impl App {
 
             info! ("Shutting down ion Core.");
 
+            // Release the managers
+            App::_release_managers ();
+
             unsafe {
 
                 drop (Box::from_raw (APP_POINTER.unwrap ()));
@@ -203,5 +206,17 @@ impl App {
         // Init the managers
         resource_mgr.borrow_mut ().init ();
         window_mgr.borrow_mut   ().init ();
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    // Releases the managers
+    fn _release_managers () {
+
+        // Get a reference to all managers.
+        let window_mgr = App::get_window_manager ().unwrap ();
+
+        // Release the managers
+        window_mgr.borrow_mut ().release ();
     }
 }

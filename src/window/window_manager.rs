@@ -28,8 +28,8 @@ pub struct WindowManager {
 
     // Private
     _window_config: WindowConfig,
-    _window_factory: Box<WindowFactory>,
-    _window_backend: Box<WindowBackend>,
+    _window_factory: Option<Box<WindowFactory>>,
+    _window_backend: Option<Box<WindowBackend>>,
 }
 
 /*===============================================================================================*/
@@ -60,7 +60,7 @@ impl WindowManager {
 
         // Initialize the window
         info! ("Creating a new window.");
-        self._window_backend.init (&self._window_config);
+        self._window_backend.as_ref ().unwrap ().init (&self._window_config);
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -68,8 +68,19 @@ impl WindowManager {
     /// Registers the window plugin.
     pub fn register_plugin (&mut self, window_factory: Box<WindowFactory>) {
 
-        self._window_backend = window_factory.get_window_backend ();
-        self._window_factory = window_factory;
+        self._window_backend = Some (window_factory.get_window_backend ());
+        self._window_factory = Some (window_factory);
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Releases the window manager.
+    pub fn release (&mut self) {
+
+        info! ("Releasing the Window Manager.");
+
+        self._window_backend = None;
+        self._window_factory = None;
     }
 
 /*===============================================================================================*/
@@ -80,8 +91,8 @@ impl WindowManager {
     pub fn new () -> WindowManager {
 
         WindowManager {_window_config:  WindowConfig::default (),
-                       _window_factory: Box::new (WindowFactoryDefault::new ()),
-                       _window_backend: Box::new (WindowBackendDefault::new ())}
+                       _window_factory: Some (Box::new (WindowFactoryDefault::new ())),
+                       _window_backend: Some (Box::new (WindowBackendDefault::new ()))}
     }
 }
 
