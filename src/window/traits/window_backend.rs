@@ -29,7 +29,7 @@ pub trait WindowBackend {
     /// Initializes the window.
     fn init (&mut self, config: &WindowConfig);
     /// Sets the title of the window.
-    fn get_title (&self) -> String;
+    fn get_title (&mut self) -> String;
     /// Gets the title of the window.
     fn set_title (&mut self, title: &str);
     /// Gets the current window state.

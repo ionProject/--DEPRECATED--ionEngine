@@ -89,7 +89,6 @@ impl WindowManager {
 
     /// Called on render.
     pub fn on_render (&mut self) {
-
         self._window_backend.as_mut ().unwrap ().on_render ();
     }
 
@@ -97,7 +96,6 @@ impl WindowManager {
 
     /// Called on post render.
     pub fn on_post_render (&mut self) {
-
         self._window_backend.as_mut ().unwrap ().on_post_render ();
     }
 

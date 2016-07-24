@@ -45,7 +45,7 @@ impl WindowBackend for WindowBackendDefault {
 
 /*-----------------------------------------------------------------------------------------------*/
 
-    fn get_title (&self) -> String {
+    fn get_title (&mut self) -> String {
         self._window_title.clone ()
     }
 
