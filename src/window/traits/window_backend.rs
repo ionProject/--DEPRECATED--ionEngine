@@ -27,11 +27,17 @@ use ::window::{WindowConfig, WindowState};
 pub trait WindowBackend {
 
     /// Initializes the window.
-    fn init (&self, config: &WindowConfig);
+    fn init (&mut self, config: &WindowConfig);
     /// Sets the title of the window.
     fn get_title (&self) -> String;
     /// Gets the title of the window.
     fn set_title (&mut self, title: &str);
     /// Gets the current window state.
     fn get_window_state (&self) -> WindowState;
+    /// On pre render event.
+    fn on_pre_render (&mut self);
+    /// On render event.
+    fn on_render (&mut self);
+    /// On post render even.
+    fn on_post_render (&mut self);
 }

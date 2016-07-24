@@ -63,7 +63,7 @@ impl PluginLoader {
         // Register the plugins in the list
         for plugin in &self._plug_config.plugin_list {
 
-            let lib = self.register_plugin (&format! ("{}{}", resource_mgr.plug_dir, plugin));
+            let lib = self.register_plugin (&format! ("{}{}{}", resource_mgr.plug_dir, plugin, self._plug_ext));
 
             if let Some (s) = lib {
                 self._plug_list.push (s)

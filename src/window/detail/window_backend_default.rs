@@ -14,7 +14,7 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::window::WindowConfig;
+use ::window::{WindowConfig, WindowState};
 use ::window::traits::WindowBackend;
 
 /*===============================================================================================*/
@@ -37,7 +37,7 @@ pub struct WindowBackendDefault {
 
 impl WindowBackend for WindowBackendDefault {
 
-    fn init (&self, _: &WindowConfig) {
+    fn init (&mut self, _: &WindowConfig) {
 
         warn! ("The default window backend is currently being used.\n\
                 While the application will continue running, it may not behave as expected.");
@@ -54,6 +54,18 @@ impl WindowBackend for WindowBackendDefault {
     fn set_title (&mut self, title: &str) {
         self._window_title = title.to_string ();
     }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    fn get_window_state (&self) -> WindowState {
+        WindowState::Active
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    fn on_pre_render  (&mut self) {}
+    fn on_render      (&mut self) {}
+    fn on_post_render (&mut self) {}
 }
 
 /*===============================================================================================*/

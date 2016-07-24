@@ -60,7 +60,7 @@ impl WindowManager {
 
         // Initialize the window
         info! ("Creating a new window.");
-        self._window_backend.as_ref ().unwrap ().init (&self._window_config);
+        self._window_backend.as_mut ().unwrap ().init (&self._window_config);
     }
 
 /*-----------------------------------------------------------------------------------------------*/
