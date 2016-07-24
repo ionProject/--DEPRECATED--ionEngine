@@ -14,7 +14,7 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::window::WindowConfig;
+use ::window::{WindowConfig, WindowState};
 
 /*===============================================================================================*/
 /*------WINDOW BACKEND TRAIT---------------------------------------------------------------------*/
@@ -32,4 +32,6 @@ pub trait WindowBackend {
     fn get_title (&self) -> String;
     /// Gets the title of the window.
     fn set_title (&mut self, title: &str);
+    /// Gets the current window state.
+    fn get_window_state (&self) -> WindowState;
 }

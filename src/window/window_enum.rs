@@ -15,17 +15,21 @@
 /*===============================================================================================*/
 
 /*===============================================================================================*/
-//! The window module.
-//!
-//! Contains the Window Manager, and any window related functionality.
+/*------WINDOW STATE ENUM------------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-pub mod traits;
-mod detail;
-mod window_config;
-mod window_manager;
-mod window_enum;
+/// Stores the current window state.
+#[derive (Copy, Clone)]
+pub enum WindowState {
 
-pub use self::window_config::WindowConfig;
-pub use self::window_manager::WindowManager;
-pub use self::window_enum::WindowState;
+    /// The default window state.
+    Active,
+    /// Window is open, but not currently selected.
+    Inactive,
+    /// Window is minimized.
+    Minimized,
+    /// Window is maximized.
+    Maximized,
+    /// Window has been closed.
+    Closed
+}
