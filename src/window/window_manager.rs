@@ -15,7 +15,7 @@
 /*===============================================================================================*/
 
 use ::engine::App;
-use ::window::WindowConfig;
+use ::window::{WindowConfig, WindowState};
 use ::window::detail::{WindowBackendDefault, WindowFactoryDefault};
 use ::window::traits::{WindowBackend, WindowFactory};
 
@@ -70,6 +70,35 @@ impl WindowManager {
 
         self._window_backend = Some (window_factory.get_window_backend ());
         self._window_factory = Some (window_factory);
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Called on pre render.
+    pub fn on_pre_render (&mut self) {
+
+        // Check the window state
+        if let WindowState::Closed = self._window_backend.as_ref ().unwrap ().get_window_state () {
+            App::exit ();
+        }
+
+        self._window_backend.as_mut ().unwrap ().on_pre_render ();
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Called on render.
+    pub fn on_render (&mut self) {
+
+        self._window_backend.as_mut ().unwrap ().on_render ();
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Called on post render.
+    pub fn on_post_render (&mut self) {
+
+        self._window_backend.as_mut ().unwrap ().on_post_render ();
     }
 
 /*-----------------------------------------------------------------------------------------------*/

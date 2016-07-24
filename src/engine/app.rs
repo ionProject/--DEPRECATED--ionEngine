@@ -255,23 +255,41 @@ impl App {
 
 /*-----------------------------------------------------------------------------------------------*/
 
+    // TODO: Finish me
     // On pre render
     fn _on_pre_render () {
 
+        // Get managers
+        let window_mgr = App::get_window_manager ().unwrap ();
+
+        // Call pre render
+        window_mgr.borrow_mut ().on_pre_render ();
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
+    // TODO: Finish me
     // On render
     fn _on_render () {
 
+        // Get managers
+        let window_mgr = App::get_window_manager ().unwrap ();
+
+        // Call render
+        window_mgr.borrow_mut ().on_render ();
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
+    // TODO: Finish me
     // On post render
     fn _on_post_render () {
-        
+
+        // Get managers
+        let window_mgr = App::get_window_manager ().unwrap ();
+
+        // Call post render
+        window_mgr.borrow_mut ().on_post_render ();
     }
 
 /*-----------------------------------------------------------------------------------------------*/
