@@ -48,6 +48,10 @@ pub struct App {
     pub resource_mgr: Rc<RefCell<ResourceManager>>,
     /// The window manager.
     pub window_mgr: Rc<RefCell<WindowManager>>,
+
+    // Private
+    _is_in_main_loop: bool,
+    _should_exit: bool,
 }
 
 /*===============================================================================================*/
@@ -70,6 +74,8 @@ impl App {
                 app_info: app_info,
                 resource_mgr: Rc::new (RefCell::new (ResourceManager::new ())),
                 window_mgr: Rc::new (RefCell::new (WindowManager::new ())),
+                _is_in_main_loop: false,
+                _should_exit: false,
             });
 
             unsafe {APP_POINTER = Some (Box::into_raw (ab))};
@@ -167,28 +173,67 @@ impl App {
 
 /*-----------------------------------------------------------------------------------------------*/
 
+    /// The main app loop.
+    pub fn run () {
+
+        if App::is_initialized () {
+
+            unsafe {&mut *APP_POINTER.unwrap ()}._is_in_main_loop = true;
+
+            loop {
+
+                let should_exit = unsafe {&*APP_POINTER.unwrap ()}._should_exit;
+
+                if !should_exit {
+
+                    App::_on_pre_render ();
+                    App::_on_render ();
+                    App::_on_post_render ();
+                }
+
+                else {
+
+                    unsafe {&mut *APP_POINTER.unwrap ()}._is_in_main_loop = false;
+                    return;
+                }
+            }
+        }
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
     /// Releases all resources, and exits the application.
     pub fn exit () {
 
         // Check if app is initialized
         if App::is_initialized () {
 
-            info! ("Shutting down ion Core.");
+            // Check if in main loop
+            if unsafe {&*APP_POINTER.unwrap ()}._is_in_main_loop {
 
-            // Release the managers
-            App::_release_managers ();
+                info! ("Exiting main loop.");
+                unsafe {&mut *APP_POINTER.unwrap ()}._should_exit = true;
+            }
 
-            unsafe {
+            else {
 
-                drop (Box::from_raw (APP_POINTER.unwrap ()));
-                APP_POINTER = None;
-            };
+                info! ("Shutting down ion Core.");
 
-            // Release the logger, and shutdown the application
-            info! ("Terminating the application.");
-            Logger::release ();
+                // Release the managers
+                App::_release_managers ();
 
-            process::exit (0);
+                unsafe {
+
+                    drop (Box::from_raw (APP_POINTER.unwrap ()));
+                    APP_POINTER = None;
+                };
+
+                // Release the logger, and shutdown the application
+                info! ("Terminating the application.");
+                Logger::release ();
+
+                process::exit (0);
+            }
         }
     }
 
@@ -206,6 +251,27 @@ impl App {
         // Init the managers
         resource_mgr.borrow_mut ().init ();
         window_mgr.borrow_mut   ().init ();
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    // On pre render
+    fn _on_pre_render () {
+
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    // On render
+    fn _on_render () {
+
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    // On post render
+    fn _on_post_render () {
+        
     }
 
 /*-----------------------------------------------------------------------------------------------*/
