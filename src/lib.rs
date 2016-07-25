@@ -36,3 +36,4 @@ extern crate log;
 pub mod engine;
 pub mod resource;
 pub mod util;
+pub mod window;

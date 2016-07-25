@@ -15,18 +15,21 @@
 /*===============================================================================================*/
 
 /*===============================================================================================*/
-//! The plugin module.
-//!
-//! Contains the plugin loader.
+/*------WINDOW STATE ENUM------------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-// Modules
-mod plugin_config;
-mod plugin_loader;
-mod plugin_info;
-mod plugin_enum;
+/// Stores the current window state.
+#[derive (Copy, Clone)]
+pub enum WindowState {
 
-pub use self::plugin_config::PluginConfig;
-pub use self::plugin_loader::PluginLoader;
-pub use self::plugin_info::PluginInfo;
-pub use self::plugin_enum::PluginType;
+    /// The default window state.
+    Active,
+    /// Window is open, but not currently selected.
+    Inactive,
+    /// Window is minimized.
+    Minimized,
+    /// Window is maximized.
+    Maximized,
+    /// Window has been closed.
+    Closed
+}

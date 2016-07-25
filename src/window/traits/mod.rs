@@ -15,18 +15,13 @@
 /*===============================================================================================*/
 
 /*===============================================================================================*/
-//! The plugin module.
+//! The traits module.
 //!
-//! Contains the plugin loader.
+//! Stores any required traits for the window module.
 /*===============================================================================================*/
 
-// Modules
-mod plugin_config;
-mod plugin_loader;
-mod plugin_info;
-mod plugin_enum;
+mod window_backend;
+mod window_factory;
 
-pub use self::plugin_config::PluginConfig;
-pub use self::plugin_loader::PluginLoader;
-pub use self::plugin_info::PluginInfo;
-pub use self::plugin_enum::PluginType;
+pub use self::window_backend::WindowBackend;
+pub use self::window_factory::WindowFactory;

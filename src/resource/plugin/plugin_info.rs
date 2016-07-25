@@ -14,6 +14,7 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+use ::resource::plugin::PluginType;
 use ::util::Version;
 
 /*===============================================================================================*/
@@ -26,11 +27,13 @@ pub struct PluginInfo {
 
     // Public
     /// The plugin name.
-    plug_name: String,
+    pub plug_name: String,
     /// The plugin developer.
-    plug_developer: String,
+    pub plug_developer: String,
     /// The plugin description.
-    plug_description: String,
+    pub plug_description: String,
     /// The plugin version.
-    plug_version: Version,
+    pub plug_version: Version,
+    /// The plugin type.
+    pub plug_type: PluginType,
 }

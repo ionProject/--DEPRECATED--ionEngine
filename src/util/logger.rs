@@ -83,6 +83,13 @@ impl Logger {
                               log_to_console: log_to_console})
         })
     }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Releases the logger and all of its resources.
+    pub fn release () {
+        drop (log::shutdown_logger ().unwrap ());
+    }
 }
 
 /*===============================================================================================*/
@@ -129,12 +136,12 @@ impl log::Log for Logger {
         };
         
         if self.log_to_console {
-            print! ("{}", output);
+            print! ("{}\n", output);
         }
 
-        self.log_file.get_ref ().write (format! ("{} ({} : {}) - {}\n", record.level (),
-                                                                        record.location ().module_path (),
-                                                                        record.location ().line (),
-                                                                        record.args ()).as_bytes ()).unwrap ();
+        self.log_file.get_ref ().write (format! ("{} ({} : {}) - {}\n\n", record.level (),
+                                                                          record.location ().module_path (),
+                                                                          record.location ().line (),
+                                                                          record.args ()).as_bytes ()).unwrap ();
     }
 }

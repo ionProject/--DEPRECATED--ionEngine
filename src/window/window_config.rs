@@ -14,49 +14,51 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+use ::util::math::Vec2;
+
 /*===============================================================================================*/
-/*------VERSION STRUCT---------------------------------------------------------------------------*/
+/*------WINDOW CONFIG STRUCT---------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-/// A super simple struct that represents a version (major, minor, patch).
-#[derive (Debug, Copy, Clone, PartialEq, PartialOrd)]
-pub struct Version {
+/// Stores the config for the window manager.
+#[derive (Deserialize, Serialize)]
+pub struct WindowConfig {
 
     // Public
-    /// The major version
-    pub major: i32,
-    /// The minor version
-    pub minor: i32,
-    /// The patch version
-    pub patch: i32
+    /// The window title.
+    pub window_title: String,
+    /// The window size.
+    pub window_size: Vec2,
+    /// The window position.
+    pub window_pos: Vec2,
+    /// Is the window resizeble?
+    pub window_is_resizable: bool,
+    /// Is the window fullscreen?
+    pub window_is_fullscreen: bool,
 }
 
 /*===============================================================================================*/
-/*------VERSION PUBLIC METHODS-------------------------------------------------------------------*/
+/*------WINDOW CONFIG PUBLIC STATIC METHODS------------------------------------------------------*/
 /*===============================================================================================*/
 
-impl Version {
+impl WindowConfig {
 
-    /// Formats the version as a string
-    pub fn to_string (&self) -> String {
-        format! ("{}.{}.{}", self.major, self.minor, self.patch)
-    }
+    /// Returns a new Window Config instance.
+    pub fn new () -> WindowConfig {
 
-/*===============================================================================================*/
-/*------VERSION PUBLIC STATIC METHODS------------------------------------------------------------*/
-/*===============================================================================================*/
-
-    /// Returns a new version instance.
-    pub fn new () -> Version {
-        Version {major: 0, minor: 1, patch: 0}
+        WindowConfig {window_title: "Untitled Window".to_string (),
+                      window_size: Vec2 {x: 1024.0, y: 768.0},
+                      window_pos: Vec2::new (),
+                      window_is_resizable: false,
+                      window_is_fullscreen: false}
     }
 }
 
 /*-----------------------------------------------------------------------------------------------*/
 
-impl Default for Version {
+impl Default for WindowConfig {
 
-    fn default () -> Version {
-        Version::new ()
+    fn default () -> WindowConfig {
+        WindowConfig::new ()
     }
 }

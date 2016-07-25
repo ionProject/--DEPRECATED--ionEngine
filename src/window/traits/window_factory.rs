@@ -14,19 +14,15 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+use ::window::traits::WindowBackend;
+
 /*===============================================================================================*/
-//! The plugin module.
-//!
-//! Contains the plugin loader.
+/*------WINDOW FACTORY TRAIT---------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-// Modules
-mod plugin_config;
-mod plugin_loader;
-mod plugin_info;
-mod plugin_enum;
+/// Used for accessing the functionality with window plugins.
+pub trait WindowFactory {
 
-pub use self::plugin_config::PluginConfig;
-pub use self::plugin_loader::PluginLoader;
-pub use self::plugin_info::PluginInfo;
-pub use self::plugin_enum::PluginType;
+    /// Gets a new instance of the Window Backend.
+    fn get_window_backend (&self) -> Box<WindowBackend>;
+}

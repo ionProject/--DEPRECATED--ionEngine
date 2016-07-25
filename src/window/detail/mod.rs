@@ -14,19 +14,8 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-/*===============================================================================================*/
-//! The plugin module.
-//!
-//! Contains the plugin loader.
-/*===============================================================================================*/
+mod window_backend_default;
+mod window_factory_default;
 
-// Modules
-mod plugin_config;
-mod plugin_loader;
-mod plugin_info;
-mod plugin_enum;
-
-pub use self::plugin_config::PluginConfig;
-pub use self::plugin_loader::PluginLoader;
-pub use self::plugin_info::PluginInfo;
-pub use self::plugin_enum::PluginType;
+pub use self::window_backend_default::WindowBackendDefault;
+pub use self::window_factory_default::WindowFactoryDefault;

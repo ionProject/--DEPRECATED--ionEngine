@@ -27,7 +27,7 @@ use std::cmp::PartialEq;
 ///
 /// This struct represents a 3x3 matrix. It is normally used for 2D graphics transformations,
 /// such as translation, rotation, and scaling.
-#[derive (Copy, Clone, Default)]
+#[derive (Copy, Clone, Default, Serialize, Deserialize)]
 pub struct Mat3 {
 
     // Private

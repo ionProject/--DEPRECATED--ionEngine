@@ -27,7 +27,7 @@ use std::cmp::PartialEq;
 ///
 /// It is used mainly for 2D releated mathematics (e.g. texture and UV coordinates).
 /// 32-bit floats are used for the values.
-#[derive (Copy, Clone, Default)]
+#[derive (Copy, Clone, Default, Serialize, Deserialize)]
 pub struct Vec2 {
 
     // Public

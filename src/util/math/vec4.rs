@@ -28,7 +28,7 @@ use std::cmp::PartialEq;
 /// This struct represents 4D vectors and points.
 /// It is used for things such as mesh tangets, and shader parameters.
 /// 32-bit floats are used for the values.
-#[derive (Copy, Clone, Default)]
+#[derive (Copy, Clone, Default, Serialize, Deserialize)]
 pub struct Vec4 {
 
     // Public

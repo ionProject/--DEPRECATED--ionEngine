@@ -24,7 +24,7 @@ use ::util::math::Util;
 ///
 /// Used to represent RGBA colours.
 /// 32-bit floats are used for the values.
-#[derive (Copy, Clone, Default)]
+#[derive (Copy, Clone, Default, Serialize, Deserialize)]
 pub struct Colour {
 
     // Public

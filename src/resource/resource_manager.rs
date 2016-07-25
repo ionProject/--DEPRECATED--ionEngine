@@ -53,7 +53,16 @@ impl ResourceManager {
 
     /// Initializes the Resource Manager.
     pub fn init (&mut self) {
+
+        info! ("Initializing the Resource Manager.");
         self._plugin_loader.borrow_mut ().init (self);
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Creates a new config file.
+    pub fn new_config<T: Default + Serialize> (&self, config_name: &str) -> Result<(), ()> {
+        self._config_loader.borrow ().new_config::<T> (&self.cfg_dir, config_name)
     }
 
 /*-----------------------------------------------------------------------------------------------*/

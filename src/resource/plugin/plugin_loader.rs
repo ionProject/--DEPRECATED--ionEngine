@@ -16,9 +16,11 @@
 
 extern crate libloading;
 
+use ::engine::App;
 use ::resource::ResourceManager;
 use ::resource::plugin::PluginConfig;
-use ::resource::PluginInfo;
+use ::resource::{PluginInfo, PluginType};
+use ::window::traits::WindowFactory;
 
 use self::libloading::{Library, Symbol};
 
@@ -32,6 +34,7 @@ pub struct PluginLoader {
     // Private
     _plug_ext: String,
     _plug_config: PluginConfig,
+    _plug_list: Vec<Library>
 }
 
 /*===============================================================================================*/
@@ -41,56 +44,61 @@ pub struct PluginLoader {
 impl PluginLoader {
 
     /// Initializes the plugin loader.
-    pub fn init (&mut self, resource_manager: &ResourceManager) {
+    pub fn init (&mut self, resource_mgr: &ResourceManager) {
 
         // Load the config file
-        if let Ok (config) = resource_manager.load_config::<PluginConfig> ("plugins") {
+        if let Ok (config) = resource_mgr.load_config::<PluginConfig> ("plugins") {
             self._plug_config = config;
+        }
+
+        else {
+
+            match resource_mgr.new_config::<PluginConfig> ("plugins") {
+                Ok (_) | Err (_) => {}
+            }
         }
 
         info! ("Registering plugins.");
 
         // Register the plugins in the list
         for plugin in &self._plug_config.plugin_list {
-            self.register_plugin (&format! ("{}{}", resource_manager.plug_dir, plugin));
+
+            let lib = self.register_plugin (&format! ("{}{}{}", resource_mgr.plug_dir, plugin, self._plug_ext));
+
+            if let Some (s) = lib {
+                self._plug_list.push (s)
+            };
         }
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Registers a plugin with the plugin loader.
-    pub fn register_plugin (&self, plugin_path: &str) {
+    pub fn register_plugin (&self, plugin_path: &str) -> Option<Library> {
+
+        // Get the plugin type
+        let plug_type = match self.get_plugin_info (plugin_path) {
+
+            Ok (info) => info.plug_type,
+            Err (_) => return None
+        };
 
         // Open the library
         match Library::new (plugin_path) {
 
             Ok (lib) => {
 
-                // Get the register function
-                let register: Symbol<unsafe extern fn ()> = unsafe {
+                // From the plugin type, call the correct function
+                match plug_type {
 
-                    match lib.get (b"register\0") {
-
-                        Ok (f) => {
-                            
-                            info! ("Registered plugin: \"{}\"", plugin_path);
-                            f
-                        },
-
-                        Err (e) => {
-
-                            warn! ("Could not find function \"register\" in plugin \"{}\".\n{}", plugin_path, e);
-                            return;
-                        }
-                    }
-                };
-
-                // Call the register function
-                unsafe {register ();}
-            },
+                    PluginType::WindowBackend => return self._load_plugin_window_backend (plugin_path, lib),
+                }
+            }
 
             Err (e) => warn! ("Could not load plugin \"{}\".\n{}", plugin_path, e)
-        }
+        };
+
+        None
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -141,7 +149,8 @@ impl PluginLoader {
                        else {panic! ("Platform unsupported")};
 
         PluginLoader {_plug_ext: plug_ext.to_string (),
-                      _plug_config: PluginConfig::default ()}
+                      _plug_config: PluginConfig::default (),
+                      _plug_list: Vec::new ()}
     }
 }
 
@@ -151,5 +160,39 @@ impl Default for PluginLoader {
 
     fn default () -> PluginLoader {
         PluginLoader::new ()
+    }
+}
+
+/*===============================================================================================*/
+/*------PLUGIN LOADER PRIVATE METHODS------------------------------------------------------------*/
+/*===============================================================================================*/
+
+impl PluginLoader {
+
+    // Loads the window plugin.
+    fn _load_plugin_window_backend (&self, plugin_path: &str, lib: Library) -> Option<Library> {
+
+        // Get the get factory function
+        {
+            let get_factory: Symbol<unsafe extern fn () -> Box<WindowFactory>> = unsafe {
+
+                match lib.get (b"get_factory\0") {
+
+                    Ok (f) => f,
+                    Err (e) => {
+
+                        warn! ("Could not find function \"get_factory\" in plugin \"{}\".\n{}", plugin_path, e);
+                        return None;
+                    }
+                }
+            };
+
+            let w = App::get_window_manager ().unwrap ();
+            w.borrow_mut ().register_plugin (unsafe {get_factory ()});
+        }
+
+        // Call the register plugin and add library to list
+        info! ("Registered plugin \"{}\"", plugin_path);
+        Some (lib)
     }
 }

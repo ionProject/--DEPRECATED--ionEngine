@@ -21,7 +21,7 @@
 /// Quaternion implementation.
 ///
 /// Allows for representing rotations without gimbal lock.
-#[derive (Copy, Clone, Default)]
+#[derive (Copy, Clone, Default, Serialize, Deserialize)]
 pub struct Quat {
 
     // Public

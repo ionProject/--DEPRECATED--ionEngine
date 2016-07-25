@@ -14,49 +14,60 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+use ::window::{WindowConfig, WindowState};
+use ::window::traits::WindowBackend;
+
 /*===============================================================================================*/
-/*------VERSION STRUCT---------------------------------------------------------------------------*/
+/*------WINDOW BACKEND DEFAULT STRUCT------------------------------------------------------------*/
 /*===============================================================================================*/
 
-/// A super simple struct that represents a version (major, minor, patch).
-#[derive (Debug, Copy, Clone, PartialEq, PartialOrd)]
-pub struct Version {
+/// Used as the default window backend.
+///
+/// This struct is not a functioning backend. It is only used in situations where
+/// a window plugin is either not specified, or fails to load.
+pub struct WindowBackendDefault;
 
-    // Public
-    /// The major version
-    pub major: i32,
-    /// The minor version
-    pub minor: i32,
-    /// The patch version
-    pub patch: i32
+/*===============================================================================================*/
+/*------WINDOW BACKEND DEFAULT PUBLIC METHODS----------------------------------------------------*/
+/*===============================================================================================*/
+
+impl WindowBackend for WindowBackendDefault {
+
+    fn init (&mut self, _: &WindowConfig) {
+
+        warn! ("The default window backend is currently being used.\n\
+                While the application will continue running, it may not behave as expected.");
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    fn get_window_state (&self) -> WindowState {
+        WindowState::Active
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    fn on_pre_render  (&mut self) {}
+    fn on_render      (&mut self) {}
+    fn on_post_render (&mut self) {}
 }
 
 /*===============================================================================================*/
-/*------VERSION PUBLIC METHODS-------------------------------------------------------------------*/
+/*------WINDOW BACKEND DEFAULT PUBLIC STATIC METHODS---------------------------------------------*/
 /*===============================================================================================*/
 
-impl Version {
+impl WindowBackendDefault {
 
-    /// Formats the version as a string
-    pub fn to_string (&self) -> String {
-        format! ("{}.{}.{}", self.major, self.minor, self.patch)
-    }
-
-/*===============================================================================================*/
-/*------VERSION PUBLIC STATIC METHODS------------------------------------------------------------*/
-/*===============================================================================================*/
-
-    /// Returns a new version instance.
-    pub fn new () -> Version {
-        Version {major: 0, minor: 1, patch: 0}
+    pub fn new () -> WindowBackendDefault {
+        WindowBackendDefault
     }
 }
 
 /*-----------------------------------------------------------------------------------------------*/
 
-impl Default for Version {
+impl Default for WindowBackendDefault {
 
-    fn default () -> Version {
-        Version::new ()
+    fn default () -> WindowBackendDefault {
+        WindowBackendDefault::new ()
     }
 }

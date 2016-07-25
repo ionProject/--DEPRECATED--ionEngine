@@ -34,6 +34,25 @@ pub struct ConfigLoader;
 
 impl ConfigLoader {
 
+    /// Creates a new config file.
+    pub fn new_config<T: Default + Serialize> (&self, cfg_dir: &str, config_name: &str) -> Result<(), ()> {
+
+        let cfg_path = &format! ("{}{}.cfg", cfg_dir, config_name);
+        info! ("Creating new config file \"{}\".", cfg_path);
+
+        match Serializer::to_file::<T> (&T::default (), cfg_path) {
+
+            Ok (_) => Ok (()),
+            Err (e) => {
+
+                error! ("Could not create config file \"{}\".\n{}", cfg_path, e);
+                Err (())
+            }
+        }
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
     /// Loads the config file of a given name.
     pub fn load_config<T: Deserialize> (&self, cfg_dir: &str, config_name: &str) -> Result<T, ()> {
 

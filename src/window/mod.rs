@@ -15,18 +15,17 @@
 /*===============================================================================================*/
 
 /*===============================================================================================*/
-//! The plugin module.
+//! The window module.
 //!
-//! Contains the plugin loader.
+//! Contains the Window Manager, and any window related functionality.
 /*===============================================================================================*/
 
-// Modules
-mod plugin_config;
-mod plugin_loader;
-mod plugin_info;
-mod plugin_enum;
+pub mod traits;
+mod detail;
+mod window_config;
+mod window_manager;
+mod window_enum;
 
-pub use self::plugin_config::PluginConfig;
-pub use self::plugin_loader::PluginLoader;
-pub use self::plugin_info::PluginInfo;
-pub use self::plugin_enum::PluginType;
+pub use self::window_config::WindowConfig;
+pub use self::window_manager::WindowManager;
+pub use self::window_enum::WindowState;

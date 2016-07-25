@@ -15,18 +15,13 @@
 /*===============================================================================================*/
 
 /*===============================================================================================*/
-//! The plugin module.
-//!
-//! Contains the plugin loader.
+/*------PLUGIN TYPE ENUM-------------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-// Modules
-mod plugin_config;
-mod plugin_loader;
-mod plugin_info;
-mod plugin_enum;
+/// Defines the plugin type.
+#[derive (Copy, Clone, Debug)]
+pub enum PluginType {
 
-pub use self::plugin_config::PluginConfig;
-pub use self::plugin_loader::PluginLoader;
-pub use self::plugin_info::PluginInfo;
-pub use self::plugin_enum::PluginType;
+    /// Window Backend.
+    WindowBackend
+}

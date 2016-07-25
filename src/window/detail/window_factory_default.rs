@@ -14,49 +14,47 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+use ::window::detail::WindowBackendDefault;
+use ::window::traits::WindowBackend;
+use ::window::traits::WindowFactory;
+
 /*===============================================================================================*/
-/*------VERSION STRUCT---------------------------------------------------------------------------*/
+/*------WINDOW FACTORY STRUCT--------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-/// A super simple struct that represents a version (major, minor, patch).
-#[derive (Debug, Copy, Clone, PartialEq, PartialOrd)]
-pub struct Version {
+/// Used as the default window factory.
+///
+/// This struct is not a functioning factory. It is only used in situations where
+/// a window plugin is either not specified, or fails to load.
+pub struct WindowFactoryDefault;
 
-    // Public
-    /// The major version
-    pub major: i32,
-    /// The minor version
-    pub minor: i32,
-    /// The patch version
-    pub patch: i32
+/*===============================================================================================*/
+/*------WINDOW FACTORY PUBLIC METHODS------------------------------------------------------------*/
+/*===============================================================================================*/
+
+impl WindowFactory for WindowFactoryDefault {
+
+    fn get_window_backend (&self) -> Box<WindowBackend> {
+        Box::new (WindowBackendDefault::new ())
+    }
 }
 
 /*===============================================================================================*/
-/*------VERSION PUBLIC METHODS-------------------------------------------------------------------*/
+/*------WINDOW FACTORY PUBLIC STATIC METHODS-----------------------------------------------------*/
 /*===============================================================================================*/
 
-impl Version {
+impl WindowFactoryDefault {
 
-    /// Formats the version as a string
-    pub fn to_string (&self) -> String {
-        format! ("{}.{}.{}", self.major, self.minor, self.patch)
-    }
-
-/*===============================================================================================*/
-/*------VERSION PUBLIC STATIC METHODS------------------------------------------------------------*/
-/*===============================================================================================*/
-
-    /// Returns a new version instance.
-    pub fn new () -> Version {
-        Version {major: 0, minor: 1, patch: 0}
+    pub fn new () -> WindowFactoryDefault {
+        WindowFactoryDefault {}
     }
 }
 
 /*-----------------------------------------------------------------------------------------------*/
 
-impl Default for Version {
+impl Default for WindowFactoryDefault {
 
-    fn default () -> Version {
-        Version::new ()
+    fn default () -> WindowFactoryDefault {
+        WindowFactoryDefault::new ()
     }
 }
