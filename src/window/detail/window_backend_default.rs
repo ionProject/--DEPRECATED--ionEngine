@@ -25,11 +25,7 @@ use ::window::traits::WindowBackend;
 ///
 /// This struct is not a functioning backend. It is only used in situations where
 /// a window plugin is either not specified, or fails to load.
-pub struct WindowBackendDefault {
-
-    // Private
-    _window_title: String,
-}
+pub struct WindowBackendDefault;
 
 /*===============================================================================================*/
 /*------WINDOW BACKEND DEFAULT PUBLIC METHODS----------------------------------------------------*/
@@ -41,18 +37,6 @@ impl WindowBackend for WindowBackendDefault {
 
         warn! ("The default window backend is currently being used.\n\
                 While the application will continue running, it may not behave as expected.");
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    fn get_title (&mut self) -> String {
-        self._window_title.clone ()
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    fn set_title (&mut self, title: &str) {
-        self._window_title = title.to_string ();
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -75,7 +59,7 @@ impl WindowBackend for WindowBackendDefault {
 impl WindowBackendDefault {
 
     pub fn new () -> WindowBackendDefault {
-        WindowBackendDefault {_window_title: "Untitled Window".to_string ()}
+        WindowBackendDefault
     }
 }
 

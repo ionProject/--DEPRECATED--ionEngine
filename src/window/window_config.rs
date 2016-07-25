@@ -31,6 +31,10 @@ pub struct WindowConfig {
     pub window_size: Vec2,
     /// The window position.
     pub window_pos: Vec2,
+    /// Is the window resizeble?
+    pub window_is_resizable: bool,
+    /// Is the window fullscreen?
+    pub window_is_fullscreen: bool,
 }
 
 /*===============================================================================================*/
@@ -44,7 +48,9 @@ impl WindowConfig {
 
         WindowConfig {window_title: "Untitled Window".to_string (),
                       window_size: Vec2 {x: 1024.0, y: 768.0},
-                      window_pos: Vec2::new ()}
+                      window_pos: Vec2::new (),
+                      window_is_resizable: false,
+                      window_is_fullscreen: false}
     }
 }
 
