@@ -44,7 +44,7 @@ impl WindowManager {
         info! ("Initializing the Window Manager.");
 
         // Get a reference to the resource manager and load the window config
-        let resource_mgr  = App::get_resource_manager ().unwrap ();
+        let resource_mgr  = App::get_instance ().unwrap ().resource_mgr.clone ();
         let config_result = resource_mgr.borrow ().load_config::<WindowConfig> ("window");
 
         if let Ok (config) = config_result {
@@ -79,7 +79,7 @@ impl WindowManager {
 
         // Check the window state
         if let WindowState::Closed = self._window_backend.as_ref ().unwrap ().get_window_state () {
-            App::exit ();
+            App::get_instance_mut ().unwrap ().exit ();
         }
 
         self._window_backend.as_mut ().unwrap ().on_pre_render ();

@@ -55,10 +55,60 @@ pub struct App {
 }
 
 /*===============================================================================================*/
-/*------APP PUBLIC STATIC METHODS----------------------------------------------------------------*/
+/*------APP PUBLIC METHODS-----------------------------------------------------------------------*/
 /*===============================================================================================*/
 
 impl App {
+
+    /// The main app loop.
+    pub fn run (&mut self) {
+
+        self._is_in_main_loop = true;
+
+        loop {
+
+            let should_exit = self._should_exit;
+
+            if !should_exit {
+
+                self._on_pre_render ();
+                self._on_render ();
+                self._on_post_render ();
+            }
+
+            else {
+
+                self._is_in_main_loop = false;
+                return;
+            }
+        }
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Releases all resources, and exits the application.
+    pub fn exit (&mut self) {
+
+        // Check if in main loop
+        if self._is_in_main_loop {
+
+            info! ("Exiting main loop.");
+            self._should_exit = true;
+        }
+
+        else {
+
+            info! ("Shutting down ion Core.");
+
+            // Release the managers, and release self
+            self._release_managers ();
+            App::_terminate ();
+        }
+    }
+
+/*===============================================================================================*/
+/*------APP PUBLIC STATIC METHODS----------------------------------------------------------------*/
+/*===============================================================================================*/
 
     /// Initializes the app
     pub fn init (app_info: AppInfo) {
@@ -81,7 +131,7 @@ impl App {
             unsafe {APP_POINTER = Some (Box::into_raw (ab))};
 
             // Init the managers
-            App::_init_managers ();
+            App::get_instance ().unwrap ()._init_managers ();
         }
     }
 
@@ -105,18 +155,11 @@ impl App {
 
 /*-----------------------------------------------------------------------------------------------*/
 
-    /// Gets a copy of the AppInfo instance.
-    ///
-    /// # Examples
-    /// ```
-    /// # use ion_core::engine::{App, AppInfo};
-    /// # App::init (AppInfo::new ());
-    /// let app_info = App::get_app_info ().unwrap ();
-    pub fn get_app_info () -> Result<AppInfo, ()> {
+    /// Returns a reference to the app instance.
+    pub fn get_instance () -> Result<&'static App, ()> {
 
-        // Check if app is initialized
         if App::is_initialized () {
-            return Ok (unsafe {&*APP_POINTER.unwrap ()}.app_info.clone ());
+            return Ok (unsafe {&*APP_POINTER.unwrap ()});
         }
 
         Err (())
@@ -124,183 +167,75 @@ impl App {
 
 /*-----------------------------------------------------------------------------------------------*/
 
-    /// Sets the AppInfo instance.
-    pub fn set_app_info (app_info: AppInfo) {
+    /// Returns a mutable reference to the app instance.
+    pub fn get_instance_mut () -> Result<&'static mut App, ()> {
 
-        // Check if app is inistalized
         if App::is_initialized () {
-            unsafe {&mut *APP_POINTER.unwrap ()}.app_info = app_info;
-        }
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    /// Returns a pointer to the resource manager instance.
-    ///
-    /// # Examples
-    /// ```
-    /// # use ion_core::engine::{App, AppInfo};
-    /// # App::init (AppInfo::new ());
-    /// let resource_mgr = App::get_resource_manager ().unwrap ();
-    pub fn get_resource_manager () -> Result<Rc<RefCell<ResourceManager>>, ()> {
-
-        // Check if app is initialized
-        if App::is_initialized () {
-            return Ok (unsafe {&*APP_POINTER.unwrap ()}.resource_mgr.clone ());
+            return Ok (unsafe {&mut *APP_POINTER.unwrap ()});
         }
 
         Err (())
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    /// Returns a pointer to the window manager instance.
-    ///
-    /// # Examples
-    /// ```
-    /// # use ion_core::engine::{App, AppInfo};
-    /// # App::init (AppInfo::new ());
-    /// let window_mgr = App::get_window_manager ().unwrap ();
-    pub fn get_window_manager () -> Result<Rc<RefCell<WindowManager>>, ()> {
-
-        // Check if the app is is_initialized
-        if App::is_initialized () {
-            return Ok (unsafe {&*APP_POINTER.unwrap ()}.window_mgr.clone ());
-        }
-
-        Err (())
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    /// The main app loop.
-    pub fn run () {
-
-        if App::is_initialized () {
-
-            unsafe {&mut *APP_POINTER.unwrap ()}._is_in_main_loop = true;
-
-            loop {
-
-                let should_exit = unsafe {&*APP_POINTER.unwrap ()}._should_exit;
-
-                if !should_exit {
-
-                    App::_on_pre_render ();
-                    App::_on_render ();
-                    App::_on_post_render ();
-                }
-
-                else {
-
-                    unsafe {&mut *APP_POINTER.unwrap ()}._is_in_main_loop = false;
-                    return;
-                }
-            }
-        }
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    /// Releases all resources, and exits the application.
-    pub fn exit () {
-
-        // Check if app is initialized
-        if App::is_initialized () {
-
-            // Check if in main loop
-            if unsafe {&*APP_POINTER.unwrap ()}._is_in_main_loop {
-
-                info! ("Exiting main loop.");
-                unsafe {&mut *APP_POINTER.unwrap ()}._should_exit = true;
-            }
-
-            else {
-
-                info! ("Shutting down ion Core.");
-
-                // Release the managers
-                App::_release_managers ();
-
-                unsafe {
-
-                    drop (Box::from_raw (APP_POINTER.unwrap ()));
-                    APP_POINTER = None;
-                };
-
-                // Release the logger, and shutdown the application
-                info! ("Terminating the application.");
-                Logger::release ();
-
-                process::exit (0);
-            }
-        }
     }
 
 /*===============================================================================================*/
-/*------APP PRIVATE STATIC METHODS---------------------------------------------------------------*/
+/*------APP PRIVATE METHODS----------------------------------------------------------------------*/
 /*===============================================================================================*/
 
     // Initializes the various managers.
-    fn _init_managers () {
+    fn _init_managers (&self) {
 
-        // Get a reference to all managers.
-        let resource_mgr = App::get_resource_manager ().unwrap ();
-        let window_mgr   = App::get_window_manager   ().unwrap ();
-
-        // Init the managers
-        resource_mgr.borrow_mut ().init ();
-        window_mgr.borrow_mut   ().init ();
+        self.resource_mgr.borrow_mut ().init ();
+        self.window_mgr.borrow_mut   ().init ();
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     // TODO: Finish me
     // On pre render
-    fn _on_pre_render () {
-
-        // Get managers
-        let window_mgr = App::get_window_manager ().unwrap ();
-
-        // Call pre render
-        window_mgr.borrow_mut ().on_pre_render ();
+    fn _on_pre_render (&self) {
+        self.window_mgr.borrow_mut ().on_pre_render ();
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     // TODO: Finish me
     // On render
-    fn _on_render () {
-
-        // Get managers
-        let window_mgr = App::get_window_manager ().unwrap ();
-
-        // Call render
-        window_mgr.borrow_mut ().on_render ();
+    fn _on_render (&self) {
+        self.window_mgr.borrow_mut ().on_render ();
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     // TODO: Finish me
     // On post render
-    fn _on_post_render () {
-
-        // Get managers
-        let window_mgr = App::get_window_manager ().unwrap ();
-
-        // Call post render
-        window_mgr.borrow_mut ().on_post_render ();
+    fn _on_post_render (&self) {
+        self.window_mgr.borrow_mut ().on_post_render ();
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     // Releases the managers
-    fn _release_managers () {
+    fn _release_managers (&self) {
+        self.window_mgr.borrow_mut ().release ();
+    }
 
-        // Get a reference to all managers.
-        let window_mgr = App::get_window_manager ().unwrap ();
+/*===============================================================================================*/
+/*------APP PRIVATE STATIC METHODS---------------------------------------------------------------*/
+/*===============================================================================================*/
 
-        // Release the managers
-        window_mgr.borrow_mut ().release ();
+    // Release the app pointer, and terminate the application.
+    fn _terminate () {
+
+        unsafe {
+
+            drop (Box::from_raw (APP_POINTER.unwrap ()));
+            APP_POINTER = None;
+        };
+
+        // Release the logger, and shutdown the application
+        info! ("Terminating the application.");
+        Logger::release ();
+
+        process::exit (0);
     }
 }

@@ -187,8 +187,8 @@ impl PluginLoader {
                 }
             };
 
-            let w = App::get_window_manager ().unwrap ();
-            w.borrow_mut ().register_plugin (unsafe {get_factory ()});
+            let window_mgr = App::get_instance ().unwrap ().window_mgr.clone ();
+            window_mgr.borrow_mut ().register_plugin (unsafe {get_factory ()});
         }
 
         // Call the register plugin and add library to list
