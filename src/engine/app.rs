@@ -17,7 +17,7 @@
 use ::engine::AppInfo;
 use ::resource::ResourceManager;
 use ::window::WindowManager;
-use ::util::Logger;
+use ::util::{Version, Logger};
 
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -28,7 +28,7 @@ use std::process;
 /*------STATIC VARIABLES-------------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-static mut APP_POINTER: Option <*mut App> = None;
+pub static mut APP_POINTER: Option <*mut App> = None;
 
 /*===============================================================================================*/
 /*------APP STRUCT-------------------------------------------------------------------------------*/
@@ -106,33 +106,25 @@ impl App {
         }
     }
 
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Initializes the app
+    pub fn init (&self) {
+
+        Logger::init ("./ionCore.log", true).unwrap ();
+        info! ("Initializing ionCore | Version: {}", env! ("CARGO_PKG_VERSION"));
+
+        // Init the managers
+        self._init_managers ();
+    }
+
 /*===============================================================================================*/
 /*------APP PUBLIC STATIC METHODS----------------------------------------------------------------*/
 /*===============================================================================================*/
 
-    /// Initializes the app
-    pub fn init (app_info: AppInfo) {
-
-        // Check if not already initialized
-        if !App::is_initialized () {
-
-            Logger::init ("./ionCore.log", true).unwrap ();
-            info! ("Initializing ionCore | Version: {}", env! ("CARGO_PKG_VERSION"));
-
-            let ab = Box::new (App {
-
-                app_info: app_info,
-                resource_mgr: Rc::new (RefCell::new (ResourceManager::new ())),
-                window_mgr: Rc::new (RefCell::new (WindowManager::new ())),
-                _is_in_main_loop: false,
-                _should_exit: false,
-            });
-
-            unsafe {APP_POINTER = Some (Box::into_raw (ab))};
-
-            // Init the managers
-            App::get_instance ().unwrap ()._init_managers ();
-        }
+    /// Returns a new App Builder.
+    pub fn builder () -> AppBuilder {
+        AppBuilder::new ()
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -237,5 +229,116 @@ impl App {
         Logger::release ();
 
         process::exit (0);
+    }
+}
+
+/*===============================================================================================*/
+/*------APP BUILDER STRUCT-----------------------------------------------------------------------*/
+/*===============================================================================================*/
+
+/// Used for building a new, static app instance.
+pub struct AppBuilder {
+
+    // Private
+    _app_name: String,
+    _app_developer: String,
+    _app_publisher: String,
+    _app_version: Version,
+}
+
+/*===============================================================================================*/
+/*------APP BUILDER PUBLIC METHODS---------------------------------------------------------------*/
+/*===============================================================================================*/
+
+impl AppBuilder {
+
+    /// Sets the app name.
+    pub fn name (&mut self, name: &str) -> &mut Self {
+
+        self._app_name = name.to_string ();
+        self
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Sets the app developer.
+    pub fn developer (&mut self, developer: &str) -> &mut Self {
+
+        self._app_developer = developer.to_string ();
+        self
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Sets the app publisher
+    pub fn publisher (&mut self, publisher: &str) -> &mut Self {
+
+        self._app_publisher = publisher.to_string ();
+        self
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Sets the app version
+    pub fn version (&mut self, version: Version) -> &mut Self {
+
+        self._app_version = version;
+        self
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Builds the app.
+    pub fn build (&self) -> Result<&'static mut App, ()> {
+
+        // Check if initialized
+        if !App::is_initialized () {
+
+            let app_info = AppInfo {
+
+                app_name: self._app_name.clone (),
+                app_developer: self._app_developer.clone (),
+                app_publisher: self._app_publisher.clone (),
+                app_version: self._app_version
+            };
+
+            let ab = Box::new (App {
+
+                app_info: app_info,
+                resource_mgr: Rc::new (RefCell::new (ResourceManager::new ())),
+                window_mgr: Rc::new (RefCell::new (WindowManager::new ())),
+                _is_in_main_loop: false,
+                _should_exit: false,
+            });
+
+            unsafe {APP_POINTER = Some (Box::into_raw (ab))};
+        }
+
+        App::get_instance_mut ()
+    }
+
+/*===============================================================================================*/
+/*------APP BUILDER PUBLIC STATIC METHODS--------------------------------------------------------*/
+/*===============================================================================================*/
+
+    /// Returns a new app builder instance.
+    pub fn new () -> AppBuilder {
+
+        AppBuilder {
+
+            _app_name: "Unknown".to_string (),
+            _app_developer: "Unknown".to_string (),
+            _app_publisher: "Unknown".to_string (),
+            _app_version: Version::new ()
+        }
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+
+impl Default for AppBuilder {
+
+    fn default () -> AppBuilder {
+        AppBuilder::new ()
     }
 }
