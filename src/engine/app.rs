@@ -28,7 +28,7 @@ use std::process;
 /*------STATIC VARIABLES-------------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-pub static mut APP_POINTER: Option <*mut App> = None;
+static mut APP_POINTER: Option <*mut App> = None;
 
 /*===============================================================================================*/
 /*------APP STRUCT-------------------------------------------------------------------------------*/
@@ -59,6 +59,18 @@ pub struct App {
 /*===============================================================================================*/
 
 impl App {
+
+    /// Initializes the app
+    pub fn init (&self) {
+
+        Logger::init ("./ionCore.log", true).unwrap ();
+        info! ("Initializing ionCore | Version: {}", env! ("CARGO_PKG_VERSION"));
+
+        // Init the managers
+        self._init_managers ();
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
 
     /// The main app loop.
     pub fn run (&mut self) {
@@ -104,18 +116,6 @@ impl App {
             self._release_managers ();
             App::_terminate ();
         }
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    /// Initializes the app
-    pub fn init (&self) {
-
-        Logger::init ("./ionCore.log", true).unwrap ();
-        info! ("Initializing ionCore | Version: {}", env! ("CARGO_PKG_VERSION"));
-
-        // Init the managers
-        self._init_managers ();
     }
 
 /*===============================================================================================*/
