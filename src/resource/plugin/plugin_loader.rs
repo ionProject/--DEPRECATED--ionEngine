@@ -24,6 +24,8 @@ use ::window::traits::WindowFactory;
 
 use self::libloading::{Library, Symbol};
 
+use std::path::Path;
+
 /*===============================================================================================*/
 /*------PLUGIN LOADER STRUCT---------------------------------------------------------------------*/
 /*===============================================================================================*/
@@ -76,6 +78,13 @@ impl PluginLoader {
     /// Registers a plugin with the plugin loader.
     pub fn register_plugin (&self, plugin_path: &str) -> Option<Library> {
 
+        // Check if plugin exists
+        if !Path::new (plugin_path).exists () {
+
+            warn! ("Plugin \"{}\" does not exist.", plugin_path);
+            return None;
+        }
+
         // Get the plugin type
         let plug_type = match self.get_plugin_info (plugin_path) {
 
@@ -105,6 +114,13 @@ impl PluginLoader {
 
     /// Retrieves information on a plugin.
     pub fn get_plugin_info (&self, plugin_path: &str) -> Result<PluginInfo, ()> {
+
+        // Check if plugin exists
+        if !Path::new (plugin_path).exists () {
+
+            warn! ("Plugin \"{}\" does not exist.", plugin_path);
+            return Err (());
+        }
 
         // Open the library
         match Library::new (plugin_path) {
