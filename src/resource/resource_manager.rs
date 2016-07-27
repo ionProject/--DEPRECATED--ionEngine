@@ -59,7 +59,7 @@ impl ResourceManager {
         info! ("Initializing the Resource Manager.");
 
         // Ensure all paths exist
-        self._create_missing_directories ();
+        self._create_missing_directories (vec! (&self.cfg_dir, &self.res_dir, &self.bin_dir, &self.plug_dir));
         self._plugin_loader.borrow_mut ().init (self);
     }
 
@@ -133,45 +133,17 @@ impl Default for ResourceManager {
 impl ResourceManager {
 
     // Create the missing resource directories.
-    fn _create_missing_directories (&self) {
+    fn _create_missing_directories (&self, paths: Vec<&str>) {
 
-        // Config
-        if !Path::new (&self.cfg_dir).exists () {
+        for path in paths {
 
-            warn! ("Config directory not found.\nCreating one now.");
+            if !Path::new (path).exists () {
 
-            if let Err (e) = fs::create_dir (&self.cfg_dir) {
-                warn! ("Config directory could not be created.\n{}", e);
-            }
-        }
+                warn! ("Directory \"{}\" not found.\nCreating it now.", path);
 
-        // Resources
-        if !Path::new (&self.res_dir).exists () {
-
-            warn! ("Resource directory not found.\nCreating one now.");
-
-            if let Err (e) = fs::create_dir (&self.res_dir) {
-                warn! ("Resource directory could not be created.\n{}", e);
-            }
-        }
-
-        // Binary
-        if !Path::new (&self.bin_dir).exists () {
-
-            warn! ("Bin directory not found.\nCreating one now.");
-
-            if let Err (e) = fs::create_dir (&self.bin_dir) {
-                warn! ("Bin directory could not be created.\n{}", e);
-            }
-        }
-
-        // Plugin
-        if !Path::new (&self.plug_dir).exists () {
-
-            warn! ("Plugin directory not found.\nCreating one now.");
-
-            if let Err (e) = fs::create_dir (&self.plug_dir) {
-                warn! ("Plugin directory could not be created.\n{}", e);
+                if let Err (e) = fs::create_dir (path) {
+                    warn! ("Directory \"{}\" could not be created.\n{}", path, e);
+                }
             }
         } 
     }
