@@ -23,7 +23,7 @@
 
 // Modules
 mod app;
-mod app_info;
+mod project_config;
 
 pub use self::app::App;
-pub use self::app_info::AppInfo;
+pub use self::project_config::ProjectConfig;

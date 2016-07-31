@@ -17,48 +17,45 @@
 use ::util::Version;
 
 /*===============================================================================================*/
-/*------APP INFO STRUCT--------------------------------------------------------------------------*/
+/*------PROJECT CONFIG STRUCT--------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-/// Stores the application information.
-///
-/// This just includes basic information such as the name of the application,  
-/// the developer, the publisher, and the version.
-#[derive (Clone)]
-pub struct AppInfo {
+/// Used for the loading and saving of the project configuration.
+#[derive (Deserialize, Serialize)]
+pub struct ProjectConfig {
 
     // Public
-    /// The application name.
-    pub app_name: String,
-    /// The application author.
-    pub app_developer: String,
-    /// The application publisher.
-    pub app_publisher: String,
-    /// The application version.
-    pub app_version: Version,
+    /// The project name.
+    pub project_name: String,
+    /// The project developer.
+    pub project_developer: String,
+    /// The project version.
+    pub project_version: Version,
 }
 
 /*===============================================================================================*/
-/*------APP INFO PUBLIC STATIC METHODS-----------------------------------------------------------*/
+/*------PROJECT CONFIG PUBLIC STATIC METHODS-----------------------------------------------------*/
 /*===============================================================================================*/
 
-impl AppInfo {
+impl ProjectConfig {
 
-    /// Returns a new App Info instance.
-    pub fn new () -> AppInfo {
+    /// Returns a new instance of the Project Config.
+    pub fn new () -> ProjectConfig {
 
-        AppInfo {app_name: "Unknown".to_string (),
-                 app_developer: "Unknown".to_string (),
-                 app_publisher: "Unknown".to_string (),
-                 app_version: Version::new ()}
+        ProjectConfig {
+
+            project_name:      "Untitled".to_string (),
+            project_developer: "Unknown".to_string (),
+            project_version:   Version::new (),
+        }
     }
 }
 
 /*-----------------------------------------------------------------------------------------------*/
 
-impl Default for AppInfo {
+impl Default for ProjectConfig {
 
-    fn default () -> AppInfo {
-        AppInfo::new ()
+    fn default () -> ProjectConfig {
+        ProjectConfig::new ()
     }
 }

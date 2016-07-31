@@ -14,7 +14,6 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::engine::AppInfo;
 use ::resource::ResourceManager;
 use ::window::WindowManager;
 use ::util::{Version, Logger};
@@ -42,12 +41,16 @@ static mut APP_POINTER: Option <*mut App> = None;
 pub struct App {
 
     // Public
-    /// The application info.
-    pub app_info: AppInfo,
     /// The resource manager.
     pub resource_mgr: Rc<RefCell<ResourceManager>>,
     /// The window manager.
     pub window_mgr: Rc<RefCell<WindowManager>>,
+    /// The project name.
+    pub project_name: String,
+    /// The project developer,
+    pub project_developer: String,
+    /// The project version.
+    pub project_version: Version,
 
     // Private
     _is_in_main_loop: bool,
@@ -240,10 +243,9 @@ impl App {
 pub struct AppBuilder {
 
     // Private
-    _app_name: String,
-    _app_developer: String,
-    _app_publisher: String,
-    _app_version: Version,
+    _project_name: String,
+    _project_developer: String,
+    _project_version: Version,
 }
 
 /*===============================================================================================*/
@@ -253,36 +255,27 @@ pub struct AppBuilder {
 impl AppBuilder {
 
     /// Sets the app name.
-    pub fn name (&mut self, name: &str) -> &mut Self {
+    pub fn project_name (&mut self, name: &str) -> &mut Self {
 
-        self._app_name = name.to_string ();
+        self._project_name = name.to_string ();
         self
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Sets the app developer.
-    pub fn developer (&mut self, developer: &str) -> &mut Self {
+    pub fn project_developer (&mut self, developer: &str) -> &mut Self {
 
-        self._app_developer = developer.to_string ();
-        self
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    /// Sets the app publisher
-    pub fn publisher (&mut self, publisher: &str) -> &mut Self {
-
-        self._app_publisher = publisher.to_string ();
+        self._project_developer = developer.to_string ();
         self
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Sets the app version
-    pub fn version (&mut self, version: Version) -> &mut Self {
+    pub fn project_version (&mut self, version: Version) -> &mut Self {
 
-        self._app_version = version;
+        self._project_version = version;
         self
     }
 
@@ -294,21 +287,17 @@ impl AppBuilder {
         // Check if initialized
         if !App::is_initialized () {
 
-            let app_info = AppInfo {
-
-                app_name: self._app_name.clone (),
-                app_developer: self._app_developer.clone (),
-                app_publisher: self._app_publisher.clone (),
-                app_version: self._app_version
-            };
-
             let ab = Box::new (App {
 
-                app_info: app_info,
-                resource_mgr: Rc::new (RefCell::new (ResourceManager::new ())),
-                window_mgr: Rc::new (RefCell::new (WindowManager::new ())),
-                _is_in_main_loop: false,
-                _should_exit: false,
+                resource_mgr:      Rc::new (RefCell::new (ResourceManager::new ())),
+                window_mgr:        Rc::new (RefCell::new (WindowManager::new ())),
+
+                project_name:      self._project_name.clone (),
+                project_developer: self._project_developer.clone (),
+                project_version:   self._project_version,
+
+                _is_in_main_loop:  false,
+                _should_exit:      false,
             });
 
             unsafe {APP_POINTER = Some (Box::into_raw (ab))};
@@ -326,10 +315,9 @@ impl AppBuilder {
 
         AppBuilder {
 
-            _app_name: "Unknown".to_string (),
-            _app_developer: "Unknown".to_string (),
-            _app_publisher: "Unknown".to_string (),
-            _app_version: Version::new ()
+            _project_name:      "Untitled".to_string (),
+            _project_developer: "Unknown".to_string (),
+            _project_version:   Version::default (),
         }
     }
 }
