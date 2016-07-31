@@ -141,7 +141,7 @@ impl ResourceManager {
 
                 warn! ("Directory \"{}\" not found.\nCreating it now.", path);
 
-                if let Err (e) = fs::create_dir (path) {
+                if let Err (e) = fs::create_dir_all (path) {
                     warn! ("Directory \"{}\" could not be created.\n{}", path, e);
                 }
             }
