@@ -19,7 +19,7 @@
 /*===============================================================================================*/
 
 /// A super simple struct that represents a version (major, minor, patch).
-#[derive (Debug, Copy, Clone, PartialEq, PartialOrd)]
+#[derive (Debug, Copy, Clone, PartialEq, PartialOrd, Serialize, Deserialize)]
 pub struct Version {
 
     // Public
