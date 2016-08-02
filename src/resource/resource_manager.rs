@@ -16,14 +16,13 @@
 
 extern crate serde;
 
+use ::engine::App;
 use ::resource::config::ConfigLoader;
 use ::resource::plugin::PluginLoader;
 
 use self::serde::{Deserialize, Serialize};
 
 use std::cell::RefCell;
-use std::path::Path;
-use std::fs;
 use std::rc::Rc;
 
 /*===============================================================================================*/
@@ -33,16 +32,7 @@ use std::rc::Rc;
 /// Interface for resource loading and management.
 pub struct ResourceManager {
 
-    // Public
-    /// The config directory.
-    pub cfg_dir: String,
-    /// The resource direcotry.
-    pub res_dir: String,
-    /// The binary directory.
-    pub bin_dir: String,
-    /// The plugin directory.
-    pub plug_dir: String,
-
+    // Private
     _config_loader: Rc<RefCell<ConfigLoader>>,
     _plugin_loader: Rc<RefCell<PluginLoader>>,
 }
@@ -57,9 +47,6 @@ impl ResourceManager {
     pub fn init (&mut self) {
 
         info! ("Initializing the Resource Manager.");
-
-        // Ensure all paths exist
-        self._create_missing_directories (vec! (&self.cfg_dir, &self.res_dir, &self.bin_dir, &self.plug_dir));
         self._plugin_loader.borrow_mut ().init (self);
     }
 
@@ -67,21 +54,27 @@ impl ResourceManager {
 
     /// Creates a new config file.
     pub fn new_config<T: Default + Serialize> (&self, config_name: &str) -> Result<(), ()> {
-        self._config_loader.borrow ().new_config::<T> (&self.cfg_dir, config_name)
+
+        let cfg_dir = &App::get_instance ().unwrap ().cfg_dir;
+        self._config_loader.borrow ().new_config::<T> (cfg_dir, config_name)
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Loads a config file.
     pub fn load_config<T: Deserialize> (&self, config_name: &str) -> Result<T, ()> {
-        self._config_loader.borrow ().load_config::<T> (&self.cfg_dir, config_name)
+
+        let cfg_dir = &App::get_instance ().unwrap ().cfg_dir;
+        self._config_loader.borrow ().load_config::<T> (cfg_dir, config_name)
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Saves a config file.
     pub fn save_config<T: Serialize> (&self, config_name: &str, config_data: &T) -> Result<(), ()> {
-        self._config_loader.borrow ().save_config::<T> (&self.cfg_dir, config_name, config_data)
+
+        let cfg_dir = &App::get_instance ().unwrap ().cfg_dir;
+        self._config_loader.borrow ().save_config::<T> (cfg_dir, config_name, config_data)
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -107,10 +100,6 @@ impl ResourceManager {
 
         ResourceManager {
 
-            cfg_dir: "cfg/".to_string (),
-            res_dir: "res/".to_string (),
-            bin_dir: "bin/".to_string (),
-            plug_dir: "bin/plugins/".to_string (),
             _config_loader: Rc::new (RefCell::new (ConfigLoader {})),
             _plugin_loader: Rc::new (RefCell::new (PluginLoader::new ()))
         }
@@ -123,28 +112,5 @@ impl Default for ResourceManager {
 
     fn default () -> ResourceManager {
         ResourceManager::new ()
-    }
-}
-
-/*===============================================================================================*/
-/*------RESOURCE MANAGER PRIVATE METHODS---------------------------------------------------------*/
-/*===============================================================================================*/
-
-impl ResourceManager {
-
-    // Create the missing resource directories.
-    fn _create_missing_directories (&self, paths: Vec<&str>) {
-
-        for path in paths {
-
-            if !Path::new (path).exists () {
-
-                warn! ("Directory \"{}\" not found.\nCreating it now.", path);
-
-                if let Err (e) = fs::create_dir_all (path) {
-                    warn! ("Directory \"{}\" could not be created.\n{}", path, e);
-                }
-            }
-        } 
     }
 }

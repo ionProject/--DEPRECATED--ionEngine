@@ -19,8 +19,11 @@ use ::window::WindowManager;
 use ::util::{Version, Logger};
 
 use std::cell::RefCell;
+use std::env;
 use std::rc::Rc;
 use std::boxed::Box;
+use std::path::Path;
+use std::fs;
 use std::process;
 
 /*===============================================================================================*/
@@ -45,12 +48,22 @@ pub struct App {
     pub resource_mgr: Rc<RefCell<ResourceManager>>,
     /// The window manager.
     pub window_mgr: Rc<RefCell<WindowManager>>,
+
     /// The project name.
     pub project_name: String,
     /// The project developer,
     pub project_developer: String,
     /// The project version.
     pub project_version: Version,
+
+    /// The resource directory.
+    pub res_dir: String,
+    /// The binary directory.
+    pub bin_dir: String,
+    /// The plugin directory.
+    pub plg_dir: String,
+    /// The config directory.
+    pub cfg_dir: String,
 
     // Private
     _is_in_main_loop: bool,
@@ -66,7 +79,9 @@ impl App {
     /// Initializes the app
     pub fn init (&self) {
 
-        Logger::init ("./ionCore.log", true).unwrap ();
+        self._check_dirs_for_errors ();
+
+        Logger::init (&format! ("{}ionEngine.log", &self.cfg_dir), true).unwrap ();
         info! ("Initializing ionCore | Version: {}", env! ("CARGO_PKG_VERSION"));
 
         // Init the managers
@@ -185,6 +200,35 @@ impl App {
 
 /*-----------------------------------------------------------------------------------------------*/
 
+    // Checks diretories for errors
+    fn _check_dirs_for_errors (&self) {
+
+        // Resource directory
+        if !Path::new (&self.res_dir).exists () {
+            panic! ("Resource path \"{}\" does not exist.\nApplication cannot continue.", &self.res_dir);
+        }
+
+        // Bin directory
+        if !Path::new (&self.bin_dir).exists () {
+            panic! ("Binary path \"{}\" does not exist.\nApplication cannot continue.", &self.bin_dir);
+        }
+
+        // Plugin directory
+        if !Path::new (&self.plg_dir).exists () {
+            panic! ("Plugin path \"{}\" does not exist.\nApplication cannot continue.", &self.plg_dir);
+        }
+
+        // Config directory
+        if !Path::new (&self.cfg_dir).exists () {
+
+            if let Err (e) = fs::create_dir_all (&self.cfg_dir) {
+                panic! ("Config path \"{}\" could not be created.\n{}.\nApplication cannot continue.", &self.cfg_dir, e);
+            }
+        }
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
     // TODO: Finish me
     // On pre render
     fn _on_pre_render (&self) {
@@ -295,6 +339,11 @@ impl AppBuilder {
                 project_name:      self._project_name.clone (),
                 project_developer: self._project_developer.clone (),
                 project_version:   self._project_version,
+
+                res_dir: "res/".to_string (),
+                cfg_dir: format! ("{}/.{}/{}/", env::home_dir ().unwrap ().display (), &self._project_developer, &self._project_name),
+                bin_dir: "bin/".to_string (),
+                plg_dir: "bin/plugins/".to_string (),
 
                 _is_in_main_loop:  false,
                 _should_exit:      false,
