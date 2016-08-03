@@ -15,10 +15,16 @@
 /*===============================================================================================*/
 
 extern crate serde;
+extern crate tar;
 
+use ::engine::App;
 use ::util::serialization::{Deserializer, Serializer};
 
 use self::serde::{Serialize, Deserialize};
+use self::tar::Archive;
+
+use std::fs::File;
+use std::path::Path;
 
 /*===============================================================================================*/
 /*------CONFIG LOADER STRUCT---------------------------------------------------------------------*/
@@ -33,6 +39,55 @@ pub struct ConfigLoader;
 /*===============================================================================================*/
 
 impl ConfigLoader {
+    
+    /// Initializes the config loader
+    pub fn init (&self) {
+
+        info! ("Unpacking default config files.");
+
+        // Open the config file path
+        let cfg_dir = &App::get_instance ().unwrap ().cfg_dir;
+        let cfg_pkg = format! ("{}cfg.respkg", &App::get_instance ().unwrap ().res_dir);
+
+        // Open the file location
+        match File::open (&cfg_pkg) {
+
+            Ok (a) => {
+
+                let mut archive = Archive::new (a);
+                
+                match archive.entries () {
+
+                    Ok (entries) => {
+
+                        // Iterate through the entries
+                        for file in entries {
+
+                            // Get file name and calc final path.
+                            let mut f    = file.unwrap ();
+                            let f_name   = f.path ().unwrap ().into_owned ();
+                            let out_path = format! ("{}{}", cfg_dir, f_name.display ());
+
+                            // Check if the config file already exists.
+                            if Path::new (&out_path).exists () {
+                                continue;
+                            }
+
+                            // Unpack the file to the directory
+                            info! ("Unpacking \"{}\" to \"{}\".", f_name.display (), out_path);
+                            f.unpack (out_path).unwrap ();
+                        }
+                    },
+
+                    Err (e) => warn! ("Could not get resource entries in \"{}\".\n{}", &cfg_pkg, e)
+                }
+            },
+
+            Err (e) => warn! ("Could not open resource package \"{}\".\n{}", cfg_pkg, e)
+        }
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
 
     /// Creates a new config file.
     pub fn new_config<T: Default + Serialize> (&self, cfg_dir: &str, config_name: &str) -> Result<(), ()> {

@@ -47,6 +47,7 @@ impl ResourceManager {
     pub fn init (&mut self) {
 
         info! ("Initializing the Resource Manager.");
+        self._config_loader.borrow ().init ();
         self._plugin_loader.borrow_mut ().init (self);
     }
 
