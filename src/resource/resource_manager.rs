@@ -56,8 +56,8 @@ impl ResourceManager {
     /// Creates a new config file.
     pub fn new_config<T: Default + Serialize> (&self, config_name: &str) -> Result<(), ()> {
 
-        let cfg_dir = &App::get_instance ().unwrap ().cfg_dir;
-        self._config_loader.borrow ().new_config::<T> (cfg_dir, config_name)
+        let p_config_dir = &App::get_instance ().unwrap ().persistent_config_dir;
+        self._config_loader.borrow ().new_config::<T> (p_config_dir, config_name)
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -65,8 +65,8 @@ impl ResourceManager {
     /// Loads a config file.
     pub fn load_config<T: Deserialize> (&self, config_name: &str) -> Result<T, ()> {
 
-        let cfg_dir = &App::get_instance ().unwrap ().cfg_dir;
-        self._config_loader.borrow ().load_config::<T> (cfg_dir, config_name)
+        let p_config_dir = &App::get_instance ().unwrap ().persistent_config_dir;
+        self._config_loader.borrow ().load_config::<T> (p_config_dir, config_name)
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -74,8 +74,8 @@ impl ResourceManager {
     /// Saves a config file.
     pub fn save_config<T: Serialize> (&self, config_name: &str, config_data: &T) -> Result<(), ()> {
 
-        let cfg_dir = &App::get_instance ().unwrap ().cfg_dir;
-        self._config_loader.borrow ().save_config::<T> (cfg_dir, config_name, config_data)
+        let p_config_dir = &App::get_instance ().unwrap ().persistent_config_dir;
+        self._config_loader.borrow ().save_config::<T> (p_config_dir, config_name, config_data)
     }
 
 /*-----------------------------------------------------------------------------------------------*/

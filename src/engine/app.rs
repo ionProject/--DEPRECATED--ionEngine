@@ -57,13 +57,17 @@ pub struct App {
     pub project_version: Version,
 
     /// The resource directory.
-    pub res_dir: String,
+    pub resource_dir: String,
     /// The binary directory.
-    pub bin_dir: String,
+    pub binary_dir: String,
     /// The plugin directory.
-    pub plg_dir: String,
+    pub plugin_dir: String,
     /// The config directory.
-    pub cfg_dir: String,
+    pub config_dir: String,
+    /// The persistent data directory.
+    pub persistent_data_dir: String,
+    /// The persistent config directory.
+    pub persistent_config_dir: String,
 
     // Private
     _is_in_main_loop: bool,
@@ -81,7 +85,7 @@ impl App {
 
         self._check_dirs_for_errors ();
 
-        Logger::init (&format! ("{}ionEngine.log", &self.cfg_dir), true).unwrap ();
+        Logger::init (&format! ("{}ionEngine.log", &self.persistent_data_dir), true).unwrap ();
         info! ("Initializing ionCore | Version: {}", env! ("CARGO_PKG_VERSION"));
 
         // Init the managers
@@ -204,25 +208,38 @@ impl App {
     fn _check_dirs_for_errors (&self) {
 
         // Resource directory
-        if !Path::new (&self.res_dir).exists () {
-            panic! ("Resource path \"{}\" does not exist.\nApplication cannot continue.", &self.res_dir);
+        if !Path::new (&self.resource_dir).exists () {
+            panic! ("Resource path \"{}\" does not exist.\nApplication cannot continue.", &self.resource_dir);
         }
 
         // Bin directory
-        if !Path::new (&self.bin_dir).exists () {
-            panic! ("Binary path \"{}\" does not exist.\nApplication cannot continue.", &self.bin_dir);
+        if !Path::new (&self.binary_dir).exists () {
+            panic! ("Binary path \"{}\" does not exist.\nApplication cannot continue.", &self.binary_dir);
         }
 
         // Plugin directory
-        if !Path::new (&self.plg_dir).exists () {
-            panic! ("Plugin path \"{}\" does not exist.\nApplication cannot continue.", &self.plg_dir);
+        if !Path::new (&self.plugin_dir).exists () {
+            panic! ("Plugin path \"{}\" does not exist.\nApplication cannot continue.", &self.plugin_dir);
         }
 
         // Config directory
-        if !Path::new (&self.cfg_dir).exists () {
+        if !Path::new (&self.config_dir).exists () {
+            panic! ("Config path \"{}\" does not exist.\nApplication cannot continue.", &self.config_dir);
+        }
 
-            if let Err (e) = fs::create_dir_all (&self.cfg_dir) {
-                panic! ("Config path \"{}\" could not be created.\n{}.\nApplication cannot continue.", &self.cfg_dir, e);
+        // Persistent data directory
+        if !Path::new (&self.persistent_data_dir).exists () {
+
+            if let Err (e) = fs::create_dir_all (&self.persistent_data_dir) {
+                panic! ("Persistent data path \"{}\" could not be created.\n{}.\nApplication cannot continue.", &self.persistent_data_dir, e);
+            }
+        }
+
+        // Persistent config directory
+        if !Path::new (&self.persistent_config_dir).exists () {
+
+            if let Err (e) = fs::create_dir_all (&self.persistent_config_dir) {
+                panic! ("Persistent config path \"{}\" could not be created.\n{}.\nApplication cannot continue.", &self.persistent_config_dir, e);
             }
         }
     }
@@ -331,6 +348,9 @@ impl AppBuilder {
         // Check if initialized
         if !App::is_initialized () {
 
+            let p_data_dir = &format! ("{}/.{}/{}/", env::home_dir ().unwrap ().display (), &self._project_developer, &self._project_name);
+            println! ("{}", p_data_dir);
+
             let ab = Box::new (App {
 
                 resource_mgr:      Rc::new (RefCell::new (ResourceManager::new ())),
@@ -340,10 +360,12 @@ impl AppBuilder {
                 project_developer: self._project_developer.clone (),
                 project_version:   self._project_version,
 
-                res_dir: "res/".to_string (),
-                cfg_dir: format! ("{}/.{}/{}/", env::home_dir ().unwrap ().display (), &self._project_developer, &self._project_name),
-                bin_dir: "bin/".to_string (),
-                plg_dir: "bin/plugins/".to_string (),
+                resource_dir: "res/".to_string (),
+                binary_dir:   "bin/".to_string (),
+                plugin_dir:   "bin/plugins/".to_string (),
+                config_dir:   "config/".to_string (),
+                persistent_data_dir:   p_data_dir.to_string (),
+                persistent_config_dir: format! ("{}{}", p_data_dir, "config/"),
 
                 _is_in_main_loop:  false,
                 _should_exit:      false,

@@ -44,14 +44,14 @@ impl ConfigLoader {
     /// Initializes the config loader
     pub fn init (&self) {
 
-        info! ("Unpacking default config files.");
+        info! ("Copying default config files.");
 
-        // Open the config file path
-        let cfg_dir = &App::get_instance ().unwrap ().cfg_dir;
-        let cfg_pkg = format! ("{}cfg.respkg", &App::get_instance ().unwrap ().res_dir);
+        // Open the persistent config path
+        let p_config_dir = &App::get_instance ().unwrap ().persistent_config_dir;
+        let config_pkg   = format! ("{}cfg.respkg", &App::get_instance ().unwrap ().resource_dir);
 
         // Open the file location
-        match File::open (&cfg_pkg) {
+        match File::open (&config_pkg) {
 
             Ok (a) => {
 
@@ -65,7 +65,7 @@ impl ConfigLoader {
 
                             // Get the file and set ouput path
                             let mut file = archive.by_index (i).unwrap ();
-                            let out_path = format! ("{}{}", cfg_dir, file.name ());
+                            let out_path = format! ("{}{}", p_config_dir, file.name ());
 
                             // Check if the config file already exists.
                             if Path::new (&out_path).exists () {
@@ -81,11 +81,11 @@ impl ConfigLoader {
                         }
                     },
 
-                    Err (e) => warn! ("Could not open resource package \"{}\".\n{}", cfg_pkg, e)
+                    Err (e) => warn! ("Could not open resource package \"{}\".\n{}", config_pkg, e)
                 }
             },
 
-            Err (e) => warn! ("Could not open resource package \"{}\".\n{}", cfg_pkg, e)
+            Err (e) => warn! ("Could not open resource package \"{}\".\n{}", config_pkg, e)
         }
     }
 
