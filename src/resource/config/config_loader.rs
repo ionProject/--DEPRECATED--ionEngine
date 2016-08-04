@@ -15,15 +15,16 @@
 /*===============================================================================================*/
 
 extern crate serde;
-extern crate tar;
+extern crate zip;
 
 use ::engine::App;
 use ::util::serialization::{Deserializer, Serializer};
 
 use self::serde::{Serialize, Deserialize};
-use self::tar::Archive;
+use self::zip::ZipArchive;
 
 use std::fs::File;
+use std::io;
 use std::path::Path;
 
 /*===============================================================================================*/
@@ -54,19 +55,14 @@ impl ConfigLoader {
 
             Ok (a) => {
 
-                let mut archive = Archive::new (a);
-                
-                match archive.entries () {
+                match ZipArchive::new (a) {
 
-                    Ok (entries) => {
+                    Ok (mut archive) => {
 
-                        // Iterate through the entries
-                        for file in entries {
+                        for i in 0..archive.len () {
 
-                            // Get file name and calc final path.
-                            let mut f    = file.unwrap ();
-                            let f_name   = f.path ().unwrap ().into_owned ();
-                            let out_path = format! ("{}{}", cfg_dir, f_name.display ());
+                            let mut file = archive.by_index (i).unwrap ();
+                            let out_path = format! ("{}{}", cfg_dir, file.name ());
 
                             // Check if the config file already exists.
                             if Path::new (&out_path).exists () {
@@ -74,12 +70,14 @@ impl ConfigLoader {
                             }
 
                             // Unpack the file to the directory
-                            info! ("Unpacking \"{}\" to \"{}\".", f_name.display (), out_path);
-                            f.unpack (out_path).unwrap ();
+                            info! ("Unpacking \"{}\" to \"{}\".", file.name (), out_path);
+                            
+                            let mut out_file = File::create (&out_path).unwrap ();
+                            io::copy (&mut file, &mut out_file).unwrap ();
                         }
                     },
 
-                    Err (e) => warn! ("Could not get resource entries in \"{}\".\n{}", &cfg_pkg, e)
+                    Err (e) => warn! ("Could not open resource package \"{}\".\n{}", cfg_pkg, e)
                 }
             },
 
