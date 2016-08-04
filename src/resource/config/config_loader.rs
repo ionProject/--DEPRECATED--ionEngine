@@ -55,12 +55,15 @@ impl ConfigLoader {
 
             Ok (a) => {
 
+                // Open the zip archive
                 match ZipArchive::new (a) {
 
                     Ok (mut archive) => {
 
+                        // Iterate through the zip file entries
                         for i in 0..archive.len () {
 
+                            // Get the file and set ouput path
                             let mut file = archive.by_index (i).unwrap ();
                             let out_path = format! ("{}{}", cfg_dir, file.name ());
 
@@ -72,6 +75,7 @@ impl ConfigLoader {
                             // Unpack the file to the directory
                             info! ("Unpacking \"{}\" to \"{}\".", file.name (), out_path);
                             
+                            // Unpack the file to the output path
                             let mut out_file = File::create (&out_path).unwrap ();
                             io::copy (&mut file, &mut out_file).unwrap ();
                         }
