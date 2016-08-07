@@ -16,9 +16,9 @@
 
 extern crate serde;
 
-use ::engine::App;
 use ::resource::config::ConfigLoader;
 use ::resource::plugin::PluginLoader;
+use ::util::Directory;
 
 use self::serde::{Deserialize, Serialize};
 
@@ -56,7 +56,7 @@ impl ResourceManager {
     /// Creates a new config file.
     pub fn new_config<T: Default + Serialize> (&self, config_name: &str) -> Result<(), ()> {
 
-        let p_config_dir = &App::get_instance ().unwrap ().persistent_config_dir;
+        let p_config_dir = &Directory::get_persistent_config_directory ();
         self._config_loader.borrow ().new_config::<T> (p_config_dir, config_name)
     }
 
@@ -65,7 +65,7 @@ impl ResourceManager {
     /// Loads a config file.
     pub fn load_config<T: Deserialize> (&self, config_name: &str) -> Result<T, ()> {
 
-        let p_config_dir = &App::get_instance ().unwrap ().persistent_config_dir;
+        let p_config_dir = &Directory::get_persistent_config_directory ();
         self._config_loader.borrow ().load_config::<T> (p_config_dir, config_name)
     }
 
@@ -74,7 +74,7 @@ impl ResourceManager {
     /// Saves a config file.
     pub fn save_config<T: Serialize> (&self, config_name: &str, config_data: &T) -> Result<(), ()> {
 
-        let p_config_dir = &App::get_instance ().unwrap ().persistent_config_dir;
+        let p_config_dir = &Directory::get_persistent_config_directory ();
         self._config_loader.borrow ().save_config::<T> (p_config_dir, config_name, config_data)
     }
 

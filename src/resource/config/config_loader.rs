@@ -17,7 +17,7 @@
 extern crate serde;
 extern crate zip;
 
-use ::engine::App;
+use ::util::Directory;
 use ::util::serialization::{Deserializer, Serializer};
 
 use self::serde::{Serialize, Deserialize};
@@ -47,8 +47,8 @@ impl ConfigLoader {
         info! ("Copying default config files.");
 
         // Open the persistent config path
-        let p_config_dir = &App::get_instance ().unwrap ().persistent_config_dir;
-        let config_pkg   = format! ("{}cfg.respkg", &App::get_instance ().unwrap ().resource_dir);
+        let p_config_dir = Directory::get_persistent_config_directory ();
+        let config_pkg   = format! ("{}cfg.respkg", Directory::get_resource_directory ());
 
         // Open the file location
         match File::open (&config_pkg) {

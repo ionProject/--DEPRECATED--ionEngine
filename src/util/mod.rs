@@ -23,8 +23,10 @@
 // Modules
 pub mod math;
 pub mod serialization;
+mod directory;
 mod logger;
 mod version;
 
+pub use self::directory::Directory;
 pub use self::logger::Logger;
 pub use self::version::Version;

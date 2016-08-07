@@ -21,6 +21,7 @@ use ::resource::ResourceManager;
 use ::resource::plugin::PluginConfig;
 use ::resource::{PluginInfo, PluginType};
 use ::window::traits::WindowFactory;
+use ::util::Directory;
 
 use self::libloading::{Library, Symbol};
 
@@ -62,7 +63,7 @@ impl PluginLoader {
 
         info! ("Registering plugins.");
 
-        let plugin_dir = &App::get_instance ().unwrap ().plugin_dir;
+        let plugin_dir = Directory::get_plugin_directory ();
 
         // Register the plugins in the list
         for plugin in &self._plug_config.plugin_list {
