@@ -15,61 +15,39 @@
 /*===============================================================================================*/
 
 use ::engine::App;
-use ::window::{WindowConfig, WindowState};
-use ::window::detail::{WindowBackendDefault, WindowFactoryDefault};
-use ::window::traits::{WindowBackend, WindowFactory};
+use ::renderer::detail::WindowBackendDefault;
+use ::renderer::traits::WindowBackend;
+use ::renderer::window::{WindowConfig, WindowState};
 
 /*===============================================================================================*/
-/*------WINDOW MANAGER STRUCT--------------------------------------------------------------------*/
+/*------WINDOW STRUCT----------------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-/// Handles the creation and destruction of windows.
-pub struct WindowManager {
+/// Handles the creation and destruction of a single window.
+pub struct Window {
 
     // Private
-    _window_config: WindowConfig,
-    _window_factory: Option<Box<WindowFactory>>,
     _window_backend: Option<Box<WindowBackend>>,
 }
 
 /*===============================================================================================*/
-/*------WINDOW MANAGER PUBLIC METHODS------------------------------------------------------------*/
+/*------WINDOW PUBLIC METHODS--------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-impl WindowManager {
+impl Window {
+    
+    /// Initializes the window.
+    pub fn init (&mut self, config: &WindowConfig) {
 
-    /// Initializes the window manager
-    pub fn init (&mut self) {
-
-        info! ("Initializing the Window Manager.");
-
-        // Get a reference to the resource manager and load the window config
-        let resource_mgr  = App::get_instance ().unwrap ().resource_mgr.clone ();
-        let config_result = resource_mgr.borrow ().load_config::<WindowConfig> ("window");
-
-        if let Ok (config) = config_result {
-            self._window_config = config;
-        }
-
-        else {
-            
-            match resource_mgr.borrow ().new_config::<WindowConfig> ("window") {
-                Ok (_) | Err (_) => {}
-            }
-        }
-
-        // Initialize the window
-        info! ("Creating a new window.");
-        self._window_backend.as_mut ().unwrap ().init (&self._window_config);
+        info! ("Creating the window.");
+        self._window_backend.as_mut ().unwrap ().init (config);
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
-    /// Registers the window plugin.
-    pub fn register_plugin (&mut self, window_factory: Box<WindowFactory>) {
-
-        self._window_backend = Some (window_factory.get_window_backend ());
-        self._window_factory = Some (window_factory);
+    /// Sets the window backend.
+    pub fn set_backend (&mut self, backend: Box<WindowBackend>) {
+        self._window_backend = Some (backend);
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -77,7 +55,7 @@ impl WindowManager {
     /// Called on pre render.
     pub fn on_pre_render (&mut self) {
 
-        // Check the window state
+        // Check window state
         if let WindowState::Closed = self._window_backend.as_ref ().unwrap ().get_window_state () {
             App::get_instance_mut ().unwrap ().exit ();
         }
@@ -101,33 +79,31 @@ impl WindowManager {
 
 /*-----------------------------------------------------------------------------------------------*/
 
-    /// Releases the window manager.
+    /// Releases the window.
     pub fn release (&mut self) {
 
-        info! ("Releasing the Window Manager.");
-
+        info! ("Releasing window");
         self._window_backend = None;
-        self._window_factory = None;
     }
 
 /*===============================================================================================*/
-/*------WINDOW MANAGER PUBLIC STATIC METHODS-----------------------------------------------------*/
+/*------WINDOW PUBLIC STATIC METHODS-------------------------------------------------------------*/
 /*===============================================================================================*/
 
-    /// Returns a new instance of the Window Manager.
-    pub fn new () -> WindowManager {
+    /// Returns a new instance of the window.
+    pub fn new () -> Window {
 
-        WindowManager {_window_config:  WindowConfig::default (),
-                       _window_factory: Some (Box::new (WindowFactoryDefault::new ())),
-                       _window_backend: Some (Box::new (WindowBackendDefault::new ()))}
+        Window {
+            _window_backend: Some (Box::new (WindowBackendDefault))
+        }
     }
 }
 
 /*-----------------------------------------------------------------------------------------------*/
 
-impl Default for WindowManager {
+impl Default for Window {
 
-    fn default () -> WindowManager {
-        WindowManager::new ()
+    fn default () -> Window {
+        Window::new ()
     }
 }

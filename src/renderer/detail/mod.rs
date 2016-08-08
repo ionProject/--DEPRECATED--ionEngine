@@ -14,18 +14,8 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-/*===============================================================================================*/
-//! The window module.
-//!
-//! Contains the Window Manager, and any window related functionality.
-/*===============================================================================================*/
+mod window_backend_default;
+mod render_factory_default;
 
-pub mod traits;
-mod detail;
-mod window_config;
-mod window_manager;
-mod window_enum;
-
-pub use self::window_config::WindowConfig;
-pub use self::window_manager::WindowManager;
-pub use self::window_enum::WindowState;
+pub use self::window_backend_default::WindowBackendDefault;
+pub use self::render_factory_default::RenderFactoryDefault;

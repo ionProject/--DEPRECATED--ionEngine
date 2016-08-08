@@ -20,7 +20,7 @@ use ::engine::App;
 use ::resource::ResourceManager;
 use ::resource::plugin::PluginConfig;
 use ::resource::{PluginInfo, PluginType};
-use ::window::traits::WindowFactory;
+use ::renderer::traits::RenderFactory;
 use ::util::Directory;
 
 use self::libloading::{Library, Symbol};
@@ -103,7 +103,7 @@ impl PluginLoader {
                 // From the plugin type, call the correct function
                 match plug_type {
 
-                    PluginType::WindowBackend => return self._load_plugin_window_backend (plugin_path, lib),
+                    PluginType::RenderBackend => return self._load_plugin_render_backend (plugin_path, lib),
                 }
             }
 
@@ -188,12 +188,12 @@ impl Default for PluginLoader {
 
 impl PluginLoader {
 
-    // Loads the window plugin.
-    fn _load_plugin_window_backend (&self, plugin_path: &str, lib: Library) -> Option<Library> {
+    // Loads the renderer plugin.
+    fn _load_plugin_render_backend (&self, plugin_path: &str, lib: Library) -> Option<Library> {
 
         // Get the get factory function
         {
-            let get_factory: Symbol<unsafe extern fn () -> Box<WindowFactory>> = unsafe {
+            let get_factory: Symbol<unsafe extern fn () -> Box<RenderFactory>> = unsafe {
 
                 match lib.get (b"get_factory\0") {
 
@@ -206,8 +206,8 @@ impl PluginLoader {
                 }
             };
 
-            let window_mgr = App::get_instance ().unwrap ().window_mgr.clone ();
-            window_mgr.borrow_mut ().register_plugin (unsafe {get_factory ()});
+            let render_mgr = App::get_instance ().unwrap ().render_mgr.clone ();
+            render_mgr.borrow_mut ().register_plugin (unsafe {get_factory ()});
         }
 
         // Call the register plugin and add library to list

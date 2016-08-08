@@ -14,15 +14,26 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::window::traits::WindowBackend;
+use ::renderer::window::{WindowConfig, WindowState};
 
 /*===============================================================================================*/
-/*------WINDOW FACTORY TRAIT---------------------------------------------------------------------*/
+/*------WINDOW BACKEND TRAIT---------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-/// Used for accessing the functionality with window plugins.
-pub trait WindowFactory {
+/// Used for backend agnostic window creation.
+///
+/// Window backend plugins implement this trait. The backend is then accessed by the
+/// Window Manager via a `get_window` function.
+pub trait WindowBackend {
 
-    /// Gets a new instance of the Window Backend.
-    fn get_window_backend (&self) -> Box<WindowBackend>;
+    /// Initializes the window.
+    fn init (&mut self, config: &WindowConfig);
+    /// Gets the current window state.
+    fn get_window_state (&self) -> WindowState;
+    /// On pre render event.
+    fn on_pre_render (&mut self);
+    /// On render event.
+    fn on_render (&mut self);
+    /// On post render even.
+    fn on_post_render (&mut self);
 }

@@ -14,14 +14,15 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+use ::renderer::traits::WindowBackend;
+
 /*===============================================================================================*/
-//! The traits module.
-//!
-//! Stores any required traits for the window module.
+/*------RENDER FACTORY TRAIT---------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-mod window_backend;
-mod window_factory;
+/// Used for accessing the functionality with renderer plugins.
+pub trait RenderFactory {
 
-pub use self::window_backend::WindowBackend;
-pub use self::window_factory::WindowFactory;
+    /// Gets a new instance of the Window Backend.
+    fn get_window_backend (&self) -> Box<WindowBackend>;
+}

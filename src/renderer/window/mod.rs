@@ -14,8 +14,16 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-mod window_backend_default;
-mod window_factory_default;
+/*===============================================================================================*/
+//! The window module.
+//!
+//! Contains all window related functionality.
+/*===============================================================================================*/
 
-pub use self::window_backend_default::WindowBackendDefault;
-pub use self::window_factory_default::WindowFactoryDefault;
+mod window;
+mod window_config;
+mod window_enum;
+
+pub use self::window::Window;
+pub use self::window_config::WindowConfig;
+pub use self::window_enum::WindowState;

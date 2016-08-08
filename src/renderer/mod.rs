@@ -14,26 +14,17 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::window::{WindowConfig, WindowState};
-
 /*===============================================================================================*/
-/*------WINDOW BACKEND TRAIT---------------------------------------------------------------------*/
+//! The renderer module.
+//!
+//! Contains the Render Manager, and any rendering related functionality.
 /*===============================================================================================*/
 
-/// Used for backend agnostic window creation.
-///
-/// Window backend plugins implement this trait. The backend is then accessed by the
-/// Window Manager via a `get_window` function.
-pub trait WindowBackend {
+pub mod traits;
+pub mod window;
+mod detail;
+mod render_config;
+mod render_manager;
 
-    /// Initializes the window.
-    fn init (&mut self, config: &WindowConfig);
-    /// Gets the current window state.
-    fn get_window_state (&self) -> WindowState;
-    /// On pre render event.
-    fn on_pre_render (&mut self);
-    /// On render event.
-    fn on_render (&mut self);
-    /// On post render even.
-    fn on_post_render (&mut self);
-}
+pub use self::render_config::RenderConfig;
+pub use self::render_manager::RenderManager;

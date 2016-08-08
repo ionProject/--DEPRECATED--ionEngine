@@ -15,7 +15,7 @@
 /*===============================================================================================*/
 
 use ::resource::ResourceManager;
-use ::window::WindowManager;
+use ::renderer::RenderManager;
 use ::util::{Directory, Version, Logger};
 
 use std::cell::RefCell;
@@ -45,8 +45,8 @@ pub struct App {
     // Public
     /// The resource manager.
     pub resource_mgr: Rc<RefCell<ResourceManager>>,
-    /// The window manager.
-    pub window_mgr: Rc<RefCell<WindowManager>>,
+    /// The render manager.
+    pub render_mgr: Rc<RefCell<RenderManager>>,
 
     /// The project name.
     pub project_name: String,
@@ -185,7 +185,7 @@ impl App {
     fn _init_managers (&self) {
 
         self.resource_mgr.borrow_mut ().init ();
-        self.window_mgr.borrow_mut   ().init ();
+        self.render_mgr.borrow_mut   ().init ();
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -242,7 +242,7 @@ impl App {
     // TODO: Finish me
     // On pre render
     fn _on_pre_render (&self) {
-        self.window_mgr.borrow_mut ().on_pre_render ();
+        self.render_mgr.borrow_mut ().on_pre_render ();
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -250,7 +250,7 @@ impl App {
     // TODO: Finish me
     // On render
     fn _on_render (&self) {
-        self.window_mgr.borrow_mut ().on_render ();
+        self.render_mgr.borrow_mut ().on_render ();
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -258,14 +258,14 @@ impl App {
     // TODO: Finish me
     // On post render
     fn _on_post_render (&self) {
-        self.window_mgr.borrow_mut ().on_post_render ();
+        self.render_mgr.borrow_mut ().on_post_render ();
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     // Releases the managers
     fn _release_managers (&self) {
-        self.window_mgr.borrow_mut ().release ();
+        self.render_mgr.borrow_mut ().release ();
     }
 
 /*===============================================================================================*/
@@ -344,7 +344,7 @@ impl AppBuilder {
             let ab = Box::new (App {
 
                 resource_mgr:      Rc::new (RefCell::new (ResourceManager::new ())),
-                window_mgr:        Rc::new (RefCell::new (WindowManager::new ())),
+                render_mgr:        Rc::new (RefCell::new (RenderManager::new ())),
 
                 project_name:      self._project_name.clone (),
                 project_developer: self._project_developer.clone (),

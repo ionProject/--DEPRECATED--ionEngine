@@ -14,60 +14,47 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::window::{WindowConfig, WindowState};
-use ::window::traits::WindowBackend;
+use ::renderer::detail::WindowBackendDefault;
+use ::renderer::traits::WindowBackend;
+use ::renderer::traits::RenderFactory;
 
 /*===============================================================================================*/
-/*------WINDOW BACKEND DEFAULT STRUCT------------------------------------------------------------*/
+/*------RENDER FACTORY STRUCT--------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-/// Used as the default window backend.
+/// Used as the default render factory.
 ///
-/// This struct is not a functioning backend. It is only used in situations where
-/// a window plugin is either not specified, or fails to load.
-pub struct WindowBackendDefault;
+/// This struct is not a functioning factory. It is only used in situations where
+/// a render plugin is either not specified, or fails to load.
+pub struct RenderFactoryDefault;
 
 /*===============================================================================================*/
-/*------WINDOW BACKEND DEFAULT PUBLIC METHODS----------------------------------------------------*/
+/*------WINDOW FACTORY PUBLIC METHODS------------------------------------------------------------*/
 /*===============================================================================================*/
 
-impl WindowBackend for WindowBackendDefault {
+impl RenderFactory for RenderFactoryDefault {
 
-    fn init (&mut self, _: &WindowConfig) {
-
-        warn! ("The default window backend is currently being used.\n\
-                While the application will continue running, it may not behave as expected.");
+    fn get_window_backend (&self) -> Box<WindowBackend> {
+        Box::new (WindowBackendDefault::new ())
     }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    fn get_window_state (&self) -> WindowState {
-        WindowState::Active
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    fn on_pre_render  (&mut self) {}
-    fn on_render      (&mut self) {}
-    fn on_post_render (&mut self) {}
 }
 
 /*===============================================================================================*/
-/*------WINDOW BACKEND DEFAULT PUBLIC STATIC METHODS---------------------------------------------*/
+/*------WINDOW FACTORY PUBLIC STATIC METHODS-----------------------------------------------------*/
 /*===============================================================================================*/
 
-impl WindowBackendDefault {
+impl RenderFactoryDefault {
 
-    pub fn new () -> WindowBackendDefault {
-        WindowBackendDefault
+    pub fn new () -> RenderFactoryDefault {
+        RenderFactoryDefault {}
     }
 }
 
 /*-----------------------------------------------------------------------------------------------*/
 
-impl Default for WindowBackendDefault {
+impl Default for RenderFactoryDefault {
 
-    fn default () -> WindowBackendDefault {
-        WindowBackendDefault::new ()
+    fn default () -> RenderFactoryDefault {
+        RenderFactoryDefault::new ()
     }
 }

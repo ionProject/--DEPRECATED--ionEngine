@@ -15,13 +15,13 @@
 /*===============================================================================================*/
 
 /*===============================================================================================*/
-/*------PLUGIN TYPE ENUM-------------------------------------------------------------------------*/
+//! The traits module.
+//!
+//! Stores any required traits for the rendering module.
 /*===============================================================================================*/
 
-/// Defines the plugin type.
-#[derive (Copy, Clone, Debug)]
-pub enum PluginType {
+mod render_factory;
+mod window_backend;
 
-    /// Render Backend.
-    RenderBackend
-}
+pub use self::render_factory::RenderFactory;
+pub use self::window_backend::WindowBackend;

@@ -14,47 +14,38 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::window::detail::WindowBackendDefault;
-use ::window::traits::WindowBackend;
-use ::window::traits::WindowFactory;
+use ::renderer::window::WindowConfig;
 
 /*===============================================================================================*/
-/*------WINDOW FACTORY STRUCT--------------------------------------------------------------------*/
+/*------RENDER CONFIG STRUCT---------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-/// Used as the default window factory.
-///
-/// This struct is not a functioning factory. It is only used in situations where
-/// a window plugin is either not specified, or fails to load.
-pub struct WindowFactoryDefault;
+/// Stores the config for the render manager.
+#[derive (Deserialize, Serialize)]
+pub struct RenderConfig {
 
-/*===============================================================================================*/
-/*------WINDOW FACTORY PUBLIC METHODS------------------------------------------------------------*/
-/*===============================================================================================*/
-
-impl WindowFactory for WindowFactoryDefault {
-
-    fn get_window_backend (&self) -> Box<WindowBackend> {
-        Box::new (WindowBackendDefault::new ())
-    }
+    // Public
+    /// The window config.
+    pub window_config: WindowConfig,
 }
 
 /*===============================================================================================*/
-/*------WINDOW FACTORY PUBLIC STATIC METHODS-----------------------------------------------------*/
+/*------RENDER CONFIG PUBLIC STATIC METHODS------------------------------------------------------*/
 /*===============================================================================================*/
 
-impl WindowFactoryDefault {
+impl RenderConfig {
 
-    pub fn new () -> WindowFactoryDefault {
-        WindowFactoryDefault {}
+    /// Returns a new Render Config instance.
+    pub fn new () -> RenderConfig {
+        RenderConfig {window_config: WindowConfig::new ()}
     }
 }
 
 /*-----------------------------------------------------------------------------------------------*/
 
-impl Default for WindowFactoryDefault {
+impl Default for RenderConfig {
 
-    fn default () -> WindowFactoryDefault {
-        WindowFactoryDefault::new ()
+    fn default () -> RenderConfig {
+        RenderConfig::new ()
     }
 }
