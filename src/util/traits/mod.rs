@@ -15,19 +15,11 @@
 /*===============================================================================================*/
 
 /*===============================================================================================*/
-//! This is the utility module for ionCore.
+//! The traits module.
 //!
-//! It is designed to contain any and all utility functionality that may be required.
+//! Stores any utility style traits.
 /*===============================================================================================*/
 
-// Modules
-pub mod math;
-pub mod serialization;
-pub mod traits;
-mod directory;
-mod logger;
-mod version;
+mod as_any;
 
-pub use self::directory::Directory;
-pub use self::logger::Logger;
-pub use self::version::Version;
+pub use self::as_any::AsAny;

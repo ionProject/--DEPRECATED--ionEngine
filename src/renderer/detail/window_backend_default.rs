@@ -16,6 +16,9 @@
 
 use ::renderer::window::{WindowConfig, WindowState};
 use ::renderer::traits::WindowBackend;
+use ::util::traits::AsAny;
+
+use std::any::Any;
 
 /*===============================================================================================*/
 /*------WINDOW BACKEND DEFAULT STRUCT------------------------------------------------------------*/
@@ -50,6 +53,15 @@ impl WindowBackend for WindowBackendDefault {
     fn on_pre_render  (&mut self) {}
     fn on_render      (&mut self) {}
     fn on_post_render (&mut self) {}
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+
+impl AsAny for WindowBackendDefault {
+
+    fn as_any (&self) -> &Any {
+        self
+    }
 }
 
 /*===============================================================================================*/

@@ -15,6 +15,7 @@
 /*===============================================================================================*/
 
 use ::renderer::window::{WindowConfig, WindowState};
+use ::util::traits::AsAny;
 
 /*===============================================================================================*/
 /*------WINDOW BACKEND TRAIT---------------------------------------------------------------------*/
@@ -24,7 +25,7 @@ use ::renderer::window::{WindowConfig, WindowState};
 ///
 /// Window backend plugins implement this trait. The backend is then accessed by the
 /// Window Manager via a `get_window` function.
-pub trait WindowBackend {
+pub trait WindowBackend: AsAny {
 
     /// Initializes the window.
     fn init (&mut self, config: &WindowConfig);

@@ -14,20 +14,18 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+use std::any::Any;
+
 /*===============================================================================================*/
-//! This is the utility module for ionCore.
-//!
-//! It is designed to contain any and all utility functionality that may be required.
+/*------RENDER FACTORY TRAIT---------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-// Modules
-pub mod math;
-pub mod serialization;
-pub mod traits;
-mod directory;
-mod logger;
-mod version;
+/// This trait is implemented by any struct which needs to be able to be cast to a contrete type.
+///
+/// This is useful in situations where trait objects are being stored,
+/// and require downcasting back to it's original type.
+pub trait AsAny {
 
-pub use self::directory::Directory;
-pub use self::logger::Logger;
-pub use self::version::Version;
+    /// Returns an instance of `&Any`.
+    fn as_any (&self) -> &Any;
+}
