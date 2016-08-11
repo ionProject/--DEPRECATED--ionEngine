@@ -19,6 +19,8 @@ use ::renderer::traits::WindowBackend;
 use ::util::traits::AsAny;
 
 use std::any::Any;
+use std::os::raw::c_void;
+use std::ptr::null_mut;
 
 /*===============================================================================================*/
 /*------WINDOW BACKEND DEFAULT STRUCT------------------------------------------------------------*/
@@ -53,6 +55,18 @@ impl WindowBackend for WindowBackendDefault {
     fn on_pre_render  (&mut self) {}
     fn on_render      (&mut self) {}
     fn on_post_render (&mut self) {}
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    unsafe fn get_platform_display (&self) -> Result<*mut c_void, ()> {
+        Ok (null_mut ())
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    unsafe fn get_platform_window (&self) -> Result<*mut c_void, ()> {
+        Ok (null_mut ())
+    }
 }
 
 /*-----------------------------------------------------------------------------------------------*/

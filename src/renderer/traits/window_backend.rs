@@ -17,6 +17,8 @@
 use ::renderer::window::{WindowConfig, WindowState};
 use ::util::traits::AsAny;
 
+use std::os::raw::c_void;
+
 /*===============================================================================================*/
 /*------WINDOW BACKEND TRAIT---------------------------------------------------------------------*/
 /*===============================================================================================*/
@@ -37,4 +39,9 @@ pub trait WindowBackend: AsAny {
     fn on_render (&mut self);
     /// On post render even.
     fn on_post_render (&mut self);
+
+    /// Get a raw pointer to the platform display.
+    unsafe fn get_platform_display (&self) -> Result<*mut c_void, ()>;
+    /// Get a raw pointer to the platform window.
+    unsafe fn get_platform_window  (&self) -> Result<*mut c_void, ()>;
 }
