@@ -1,9 +1,11 @@
-![header] (images/header.png)
-======  
-[![Build Status](https://travis-ci.org/ionProject/ion_core.svg?branch=master)](https://travis-ci.org/ionProject/ion_core)
+![header](resources/images/header.png)
 
-> Note: This project is a work in progress and is subject to API changes, breakages, and general instability.  
-> At this point it is not recommended for any projects which require a stable codebase.
+## Build Status
+| Linux / OSX       | Windows      |
+| ----------------- | ------------ |
+| [![tr_bs]][tr_lk] | Coming Soon! |
 
-## Goals
-**TODO:** Add project goals here.
+<!-- BUILD STATUS REFERENCE LINKS -->
+[tr_lk]: https://travis-ci.org/ionProject/ion_core
+[tr_bs]: https://travis-ci.org/ionProject/ion_core.svg?branch=master
+

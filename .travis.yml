@@ -9,3 +9,8 @@ os:
 matrix:
 # allow_failures:
 #   - rust: nightly
+script: |
+  cd ion_core
+  cargo build --verbose
+  cargo test --verbose
+
