@@ -6,6 +6,6 @@
 | [![tr_bs]][tr_lk] | Coming Soon! |
 
 <!-- BUILD STATUS REFERENCE LINKS -->
-[tr_lk]: https://travis-ci.org/ionProject/ion_core
-[tr_bs]: https://travis-ci.org/ionProject/ion_core.svg?branch=master
+[tr_lk]: https://travis-ci.org/ionProject/ionEngine
+[tr_bs]: https://travis-ci.org/ionProject/ionEngine.svg?branch=master
 
