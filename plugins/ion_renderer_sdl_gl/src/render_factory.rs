@@ -14,27 +14,27 @@
 // limitations under the License.
 /*===============================================================================================*/
 
+extern crate ion_core;
+
+use ::window::WindowBackendSDL2;
+
+use self::ion_core::renderer::traits::{WindowBackend, RenderFactory};
+
 /*===============================================================================================*/
-//! This crate is the core of ionEngine.
-//!
-//! It provides an easy to use framework for creating 2D / 3D games and multimedia applications.
+/*------RENDER FACTORY STRUCT--------------------------------------------------------------------*/
 /*===============================================================================================*/
 
-// Crate attributes
-#![deny (missing_copy_implementations)]
-#![deny (missing_docs)]
+/// The render factory.
+#[derive (Copy, Clone)]
+pub struct RenderFactorySDLGL;
 
-#![feature (custom_derive)]
-#![feature (plugin)]
+/*===============================================================================================*/
+/*------RENDER FACTORY STRUCT PUBLIC METHODS-----------------------------------------------------*/
+/*===============================================================================================*/
 
-#![plugin (serde_macros)]
+impl RenderFactory for RenderFactorySDLGL {
 
-#[macro_use]
-extern crate log;
-
-// Modules
-pub mod engine;
-pub mod resource;
-pub mod util;
-//pub mod window;
-pub mod renderer;
+    fn get_window_backend (&self) -> Box<WindowBackend> {
+        Box::new (WindowBackendSDL2::new ())
+    }
+}

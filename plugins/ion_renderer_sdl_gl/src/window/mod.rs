@@ -15,26 +15,9 @@
 /*===============================================================================================*/
 
 /*===============================================================================================*/
-//! This crate is the core of ionEngine.
-//!
-//! It provides an easy to use framework for creating 2D / 3D games and multimedia applications.
+//! Contains all window related structs and functions.
 /*===============================================================================================*/
 
-// Crate attributes
-#![deny (missing_copy_implementations)]
-#![deny (missing_docs)]
+mod window_backend_sdl2;
 
-#![feature (custom_derive)]
-#![feature (plugin)]
-
-#![plugin (serde_macros)]
-
-#[macro_use]
-extern crate log;
-
-// Modules
-pub mod engine;
-pub mod resource;
-pub mod util;
-//pub mod window;
-pub mod renderer;
+pub use self::window_backend_sdl2::WindowBackendSDL2;

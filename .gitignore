@@ -12,3 +12,8 @@
 /ion_core/target-install/
 /ion_core/.vscode/
 
+# Ion_Renderer_SDL_GL
+/plugins/ion_renderer_sdl_gl/target/
+/plugins/ion_renderer_sdl_gl/target-install/
+/plugins/ion_renderer_sdl_gl/.vscode/
+

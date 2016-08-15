@@ -9,8 +9,15 @@ os:
 matrix:
 # allow_failures:
 #   - rust: nightly
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq libsdl2-dev
 script: |
   cd ion_core
+  cargo build --verbose
+  cargo test --verbose
+
+  cd ../plugins/ion_renderer_sdl_gl
   cargo build --verbose
   cargo test --verbose
 
