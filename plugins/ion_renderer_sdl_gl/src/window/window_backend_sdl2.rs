@@ -36,7 +36,7 @@ pub struct WindowBackendSDL2 {
     _window_state:    WindowState,
     _sdl2_context:    Option<sdl2::Sdl>,
     _sdl2_video:      Option<sdl2::VideoSubsystem>,
-    _sdl2_renderer:   Option<sdl2::render::Renderer<'static >>,
+    _sdl2_window:     Option<sdl2::video::Window>,
     _sdl2_event_pump: Option<sdl2::EventPump>
 }
 
@@ -68,6 +68,7 @@ impl WindowBackend for WindowBackendSDL2 {
                 config.window_size.x as u32,
                 config.window_size.y as u32)
                 .resizable ()
+                .opengl    ()
                 .build     ()
                 .unwrap    ()
             }
@@ -77,8 +78,9 @@ impl WindowBackend for WindowBackendSDL2 {
                 sdl2_video.window (&config.window_title,
                 config.window_size.x as u32,
                 config.window_size.y as u32)
-                .build     ()
-                .unwrap    ()
+                .opengl ()
+                .build  ()
+                .unwrap ()
             }
         };
 
@@ -87,12 +89,11 @@ impl WindowBackend for WindowBackendSDL2 {
         }
 
         let sdl2_event_pump = sdl2_context.event_pump ().unwrap ();
-        let sdl2_renderer   = sdl2_window.renderer ().build ().unwrap ();
 
         self._sdl2_context    = Some (sdl2_context);
         self._sdl2_video      = Some (sdl2_video);
         self._sdl2_event_pump = Some (sdl2_event_pump);
-        self._sdl2_renderer   = Some (sdl2_renderer);
+        self._sdl2_window     = Some (sdl2_window);
         self._window_state    = WindowState::Active;
     }
 
@@ -112,9 +113,6 @@ impl WindowBackend for WindowBackendSDL2 {
                 self._window_state = WindowState::Closed
             }
         }
-
-        self._sdl2_renderer.as_mut ().unwrap ().clear   ();
-        self._sdl2_renderer.as_mut ().unwrap ().present ();
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -150,7 +148,7 @@ impl WindowBackendSDL2 {
             _sdl2_context:    None,
             _sdl2_video:      None,
             _sdl2_event_pump: None,
-            _sdl2_renderer:   None
+            _sdl2_window:     None,
         }
     }
 }
