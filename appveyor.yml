@@ -1,0 +1,27 @@
+install:
+  - ps: |
+    Start-FileDownload 'https://static.rust-lang.org/dist/rust-nightly-x86_64-pc-windows-gnu.exe'
+    rust-nightly-x86_64-pc-windows-gnu.exe /VERYSILENT /NORESTART /DIR="C:\Program Files\Rust"
+    SET PATH=%PATH%;C:\Program Files\Rust\bin
+    rustc -V
+    cargo -V
+
+  - ps: |
+      $SDL_VERSION = "2.0.4"
+      $SDL_PREFIX = "C:\sdl_root\SDL2-$SDL_VERSION"
+      if (!(Test-Path -Path $SDL_PREFIX)) {
+        Start-FileDownload https://libsdl.org/release/SDL2-devel-$SDL_VERSION-VC.zip
+        7z x SDL2-devel-$SDL_VERSION-VC.zip -oC:\sdl_root\
+      }
+      $env:SDL2_INCLUDE = "$SDL_PREFIX\include"
+      $env:SDL2_LIB = "$SDL_PREFIX\lib"
+
+build: false
+
+test_script:
+  - cd ion_core
+  - cargo build --verbose
+  - cargo test --verbose
+  - cd ../plugins/ion_renderer_sdl_gl
+  - cargo build --verbose
+  - cargo test --verbose
