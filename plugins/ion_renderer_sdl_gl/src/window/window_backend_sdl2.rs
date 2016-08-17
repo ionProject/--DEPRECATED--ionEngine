@@ -32,12 +32,17 @@ use std::os::raw::c_void;
 /// Allows for the creation and handling of a SDL2 window.
 pub struct WindowBackendSDL2 {
 
-    // Private
-    _window_state:    WindowState,
-    _sdl2_context:    Option<sdl2::Sdl>,
-    _sdl2_video:      Option<sdl2::VideoSubsystem>,
-    _sdl2_window:     Option<sdl2::video::Window>,
-    _sdl2_event_pump: Option<sdl2::EventPump>
+    // Public
+    /// Stores the current window state.
+    pub window_state:    WindowState,
+    /// Stores the sdl2 context.
+    pub sdl2_context:    Option<sdl2::Sdl>,
+    /// Stores the video subsystem.
+    pub sdl2_video:      Option<sdl2::VideoSubsystem>,
+    /// Stores the sdl2 window.
+    pub sdl2_window:     Option<sdl2::video::Window>,
+    /// Stores the sdl2 event pump.
+    pub sdl2_event_pump: Option<sdl2::EventPump>
 }
 
 /*===============================================================================================*/
@@ -79,27 +84,27 @@ impl WindowBackend for WindowBackendSDL2 {
         let sdl2_event_pump = sdl2_context.event_pump   ().unwrap ();
 
         // Set window backend variables
-        self._sdl2_context    = Some (sdl2_context);
-        self._sdl2_video      = Some (sdl2_video);
-        self._sdl2_event_pump = Some (sdl2_event_pump);
-        self._sdl2_window     = Some (sdl2_window);
-        self._window_state    = WindowState::Active;
+        self.sdl2_context    = Some (sdl2_context);
+        self.sdl2_video      = Some (sdl2_video);
+        self.sdl2_event_pump = Some (sdl2_event_pump);
+        self.sdl2_window     = Some (sdl2_window);
+        self.window_state    = WindowState::Active;
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     fn get_window_state (&self) -> WindowState {
-        self._window_state
+        self.window_state
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     fn on_pre_render (&mut self) {
 
-        for event in self._sdl2_event_pump.as_mut ().unwrap ().poll_iter () {
+        for event in self.sdl2_event_pump.as_mut ().unwrap ().poll_iter () {
 
             if let Event::Quit {..} = event {
-                self._window_state = WindowState::Closed
+                self.window_state = WindowState::Closed
             }
         }
     }
@@ -133,11 +138,11 @@ impl WindowBackendSDL2 {
 
         WindowBackendSDL2 {
 
-            _window_state:    WindowState::Closed,
-            _sdl2_context:    None,
-            _sdl2_video:      None,
-            _sdl2_event_pump: None,
-            _sdl2_window:     None,
+            window_state:    WindowState::Closed,
+            sdl2_context:    None,
+            sdl2_video:      None,
+            sdl2_event_pump: None,
+            sdl2_window:     None,
         }
     }
 }
