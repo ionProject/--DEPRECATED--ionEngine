@@ -12,6 +12,12 @@
 /ion_core/target-install/
 /ion_core/.vscode/
 
+# Sandbox
+/ion_sandbox/Cargo.lock
+/ion_sandbox/target/
+/ion_sandbox/target-install/
+/ion_sandbox/.vscode/
+
 # Ion_Renderer_SDL_GL
 /plugins/ion_renderer_sdl_gl/target/
 /plugins/ion_renderer_sdl_gl/target-install/
