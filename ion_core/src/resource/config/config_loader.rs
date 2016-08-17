@@ -48,7 +48,7 @@ impl ConfigLoader {
 
         // Open the persistent config path
         let p_config_dir = Directory::get_persistent_config_directory ();
-        let config_pkg   = format! ("{}cfg.respkg", Directory::get_resource_directory ());
+        let config_pkg   = format! ("{}config.respkg", Directory::get_config_directory ());
 
         // Open the file location
         match File::open (&config_pkg) {
