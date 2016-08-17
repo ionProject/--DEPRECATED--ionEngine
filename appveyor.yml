@@ -1,26 +1,28 @@
+environment:
+  matrix:
+    - TARGET: x86_64-pc-windows-msvc
+      SDL_TARGET: lib\x64
+      SDL_COPY_PATTERN: SDL2*.lib
 install:
-  - ps: Start-FileDownload 'https://static.rust-lang.org/dist/rust-nightly-x86_64-pc-windows-msvc.exe'
-  - rust-nightly-x86_64-pc-windows-msvc.exe /VERYSILENT /NORESTART /DIR="C:\Program Files\Rust"
-  - SET PATH=%PATH%;C:\Program Files\Rust\bin
+  - ps: Start-FileDownload "https://static.rust-lang.org/dist/rust-nightly-${env:TARGET}.exe"
+  - rust-nightly-%TARGET%.exe /VERYSILENT /NORESTART /DIR="C:\Program Files (x86)\Rust"
+  - SET PATH=%PATH%;C:\Program Files (x86)\Rust\bin
+  - SET PATH=%PATH%;C:\MinGW\bin
+  - ps: Start-FileDownload "https://www.libsdl.org/release/SDL2-devel-2.0.4-mingw.tar.gz"
+  - ps: 7z x SDL2-devel-2.0.4-mingw.tar.gz
+  - ps: 7z x SDL2-devel-2.0.4-mingw.tar
+  - ps: Copy-Item "SDL2-2.0.4\${env:SDL_TARGET}\${env:SDL_COPY_PATTERN}" "C:\Program Files (x86)\Rust\lib\rustlib\${env:TARGET}\lib\"
   - rustc -V
   - cargo -V
-
-  - ps: |
-      $SDL_VERSION = "2.0.4"
-      $SDL_PREFIX = "C:\sdl_root\SDL2-$SDL_VERSION"
-      if (!(Test-Path -Path $SDL_PREFIX)) {
-        Start-FileDownload https://libsdl.org/release/SDL2-devel-$SDL_VERSION-VC.zip
-        7z x SDL2-devel-$SDL_VERSION-VC.zip -oC:\sdl_root\
-      }
-      $env:SDL2_INCLUDE = "$SDL_PREFIX\include"
-      $env:SDL2_LIB = "$SDL_PREFIX\lib"
-
 build: false
-
 test_script:
   - cd ion_core
   - cargo build --verbose
   - cargo test --verbose
+  - 
   - cd ../plugins/ion_renderer_sdl_gl
+  - ps: New_Item target -type directory
+  - ps: new_Item target\debug -type directory
+  - ps: Copy_Item SDL2-2.0.4\i686-w64-mingw32\bin\SDL2.dll target\debug
   - cargo build --verbose
   - cargo test --verbose
