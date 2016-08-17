@@ -57,39 +57,28 @@ impl WindowBackend for WindowBackendSDL2 {
 
     fn init (&mut self, config: &WindowConfig) {
 
+        // Initialize sdl and video subsystem
         let sdl2_context = sdl2::init ().unwrap ();
         let sdl2_video   = sdl2_context.video ().unwrap ();
 
-        let mut sdl2_window = {
+        // Create new sdl2 window builder
+        let mut sdl2_window_builder = sdl2_video.window (&config.window_title,
+            config.window_size.x as u32,
+            config.window_size.y as u32);
 
-            if config.window_is_resizable {
+        // Enable OpenGL and set window position
+        sdl2_window_builder.opengl ()
+            .position (config.window_pos.x as i32, config.window_pos.y as i32);
 
-                sdl2_video.window (&config.window_title,
-                config.window_size.x as u32,
-                config.window_size.y as u32)
-                .resizable ()
-                .opengl    ()
-                .build     ()
-                .unwrap    ()
-            }
+        // Set fullscreen and resizable state
+        if config.window_is_fullscreen {sdl2_window_builder.fullscreen ();}
+        if config.window_is_resizable  {sdl2_window_builder.resizable  ();}
 
-            else {
+        // Create the sdl2 window and event pump
+        let sdl2_window     = sdl2_window_builder.build ().unwrap ();
+        let sdl2_event_pump = sdl2_context.event_pump   ().unwrap ();
 
-                sdl2_video.window (&config.window_title,
-                config.window_size.x as u32,
-                config.window_size.y as u32)
-                .opengl ()
-                .build  ()
-                .unwrap ()
-            }
-        };
-
-        if config.window_is_fullscreen {
-            sdl2_window.set_fullscreen (sdl2::video::FullscreenType::True).unwrap ();
-        }
-
-        let sdl2_event_pump = sdl2_context.event_pump ().unwrap ();
-
+        // Set window backend variables
         self._sdl2_context    = Some (sdl2_context);
         self._sdl2_video      = Some (sdl2_video);
         self._sdl2_event_pump = Some (sdl2_event_pump);
