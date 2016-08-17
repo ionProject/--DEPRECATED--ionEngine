@@ -1,6 +1,6 @@
 environment:
   matrix:
-    - TARGET: x86_64-pc-windows-gnu
+    - TARGET: i686-pc-windows-gnu
       SDL_TARGET: i686-w64-mingw32\lib
       SDL_COPY_PATTERN: libSDL2*
 install:
