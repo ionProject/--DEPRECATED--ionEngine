@@ -158,10 +158,10 @@ impl Mat4 {
     /// let mat = Mat4::translate (&pos);
     pub fn translate (position: &Vec3) -> Mat4 {
 
-        Mat4 {_value: [Vec4 {x: 1.0, y: 0.0, z: 0.0, w: position.x},
-                       Vec4 {x: 0.0, y: 1.0, z: 0.0, w: position.y},
-                       Vec4 {x: 0.0, y: 0.0, z: 1.0, w: position.z},
-                       Vec4 {x: 0.0, y: 0.0, z: 0.0, w: 1.0}]}
+        Mat4 {_value: [Vec4 {x: 1.0,        y: 0.0,        z: 0.0,        w: 0.0},
+                       Vec4 {x: 0.0,        y: 1.0,        z: 0.0,        w: 0.0},
+                       Vec4 {x: 0.0,        y: 0.0,        z: 1.0,        w: 0.0},
+                       Vec4 {x: position.x, y: position.y, z: position.z, w: 1.0}]}
     }
 
 /*-----------------------------------------------------------------------------------------------*/
