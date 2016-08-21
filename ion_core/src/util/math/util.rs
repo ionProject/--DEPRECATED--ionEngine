@@ -65,6 +65,12 @@ impl Util {
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Calculates the cotangent of a value.
+    ///
+    /// # Examples
+    /// ```
+    /// # use ion_core::util::math::Util;
+    /// println! ("{}", Util::cot (45.0));
+    /// ```
     pub fn cot (value: f32) -> f32 {
         1.0 / value.tan ()
     }
