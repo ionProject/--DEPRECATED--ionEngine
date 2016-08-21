@@ -145,9 +145,9 @@ impl Vec3 {
     /// Retuns the cross product of two vectors.
     pub fn cross (lhs: &Vec3, rhs: &Vec3) -> Vec3 {
 
-        Vec3 {x: lhs.y * rhs.z - rhs.y * lhs.z,
-              y: lhs.z * rhs.x - rhs.x * lhs.x,
-              z: lhs.x * rhs.y - rhs.x * lhs.y}
+        Vec3 {x: (lhs.y * rhs.z) - (lhs.z * rhs.y),
+              y: (lhs.z * rhs.x) - (lhs.x * rhs.z),
+              z: (lhs.x * rhs.y) - (lhs.y * rhs.x)}
     }
 
 /*-----------------------------------------------------------------------------------------------*/
