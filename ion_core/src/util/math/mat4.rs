@@ -249,15 +249,14 @@ impl Mat4 {
 /*-----------------------------------------------------------------------------------------------*/
 
     /// Returns a perspective transformation matrix
-    pub fn perspective (fov: f32, aspect: f32, z_near: f32, z_far: f32) -> Mat4 {
+    pub fn perspective (fov: f32, aspect: f32, near: f32, far: f32) -> Mat4 {
 
-        let z_range      = z_near - z_far;
-        let tan_half_fov = Util::deg2rad (fov / 2.0).tan ();
+        let f = Util::cot (fov / 2.0);
 
-        Mat4 {_value: [Vec4 {x: 1.0 / (tan_half_fov * aspect), y: 0.0,                z: 0.0,                         w: 0.0},
-                       Vec4 {x: 0.0,                           y: 1.0 / tan_half_fov, z: 0.0,                         w: 0.0},
-                       Vec4 {x: 0.0,                           y: 0.0,                z: (-z_near - z_far) / z_range, w: 2.0 * z_far * z_near / z_range},
-                       Vec4 {x: 0.0,                           y: 0.0,                z: 1.0,                         w: 0.0}]}
+        Mat4 {_value: [Vec4 {x: f / aspect, y: 0.0, z: 0.0,                               w: 0.0},
+                       Vec4 {x: 0.0,        y: f,   z: 0.0,                               w: 0.0},
+                       Vec4 {x: 0.0,        y: 0.0, z: (far + near) / (near - far),       w: -1.0},
+                       Vec4 {x: 0.0,        y: 0.0, z: (2.0 * far * near) / (near - far), w: 0.0}]}
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -265,14 +264,14 @@ impl Mat4 {
     /// Returns a view matrix
     pub fn view (eye: &Vec3, target: &Vec3, up: &Vec3) -> Mat4 {
 
-        let z_axis = Vec3::normalize (&(*eye - *target));
-        let x_axis = Vec3::normalize (&Vec3::cross (up, &z_axis));
-        let y_axis = Vec3::cross     (&z_axis, &x_axis);
+        let f = Vec3::normalize (&(*target - *eye));
+        let s = Vec3::normalize (&Vec3::cross (&f, &up));
+        let u = Vec3::cross (&s, &f);
 
-        Mat4 {_value: [Vec4 {x: x_axis.x,                   y: y_axis.x,                   z: z_axis.x,                   w: 0.0},
-                       Vec4 {x: x_axis.y,                   y: y_axis.y,                   z: z_axis.y,                   w: 0.0},
-                       Vec4 {x: x_axis.z,                   y: y_axis.z,                   z: z_axis.z,                   w: 0.0},
-                       Vec4 {x: -Vec3::dot (&x_axis, eye), y: -Vec3::dot (&y_axis, eye), z: -Vec3::dot (&z_axis, eye), w: 1.0}]}
+        Mat4 {_value: [Vec4 {x: s.x,                   y: u.x,                   z: -f.x,                 w: 0.0},
+                       Vec4 {x: s.y,                   y: u.y,                   z: -f.y,                 w: 0.0},
+                       Vec4 {x: s.z,                   y: u.z,                   z: -f.z,                 w: 0.0},
+                       Vec4 {x: -Vec3::dot (&eye, &s), y: -Vec3::dot (&eye, &u), z: Vec3::dot (&eye, &f), w: 1.0}]}
     }
 }
 
@@ -395,19 +394,19 @@ impl Mul for Mat4 {
     // Multiplication operator (matrix)
     fn mul (self, rhs: Mat4) -> Mat4 {
 
-        let mut return_matrix = Mat4::new ();
+        let mut m = Mat4::new ();
 
         for row in 0..4 {
 
             for col in 0..4 {
 
                 for inner in 0..4 {
-                    return_matrix[row][col] += self[row][inner] * rhs[inner][col];
+                    m[row][col] += rhs[row][inner] * self[inner][col];
                 }
             }
         }
 
-        return_matrix
+        m
     }
 }
 
