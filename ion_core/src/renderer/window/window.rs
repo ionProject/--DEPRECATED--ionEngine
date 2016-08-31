@@ -52,29 +52,16 @@ impl Window {
 
 /*-----------------------------------------------------------------------------------------------*/
 
-    /// Called on pre render.
-    pub fn on_pre_render (&mut self) {
+    /// Processes window events.
+    pub fn process_events (&mut self) {
 
-        // Check window state
-        if let WindowState::Closed = self._window_backend.as_ref ().unwrap ().get_window_state () {
+        let mut backend = self._window_backend.as_mut ().unwrap ();
+
+        if let WindowState::Closed = backend.get_window_state () {
             App::get_instance_mut ().unwrap ().exit ();
         }
 
-        self._window_backend.as_mut ().unwrap ().on_pre_render ();
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    /// Called on render.
-    pub fn on_render (&mut self) {
-        self._window_backend.as_mut ().unwrap ().on_render ();
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    /// Called on post render.
-    pub fn on_post_render (&mut self) {
-        self._window_backend.as_mut ().unwrap ().on_post_render ();
+        backend.process_events ();
     }
 
 /*-----------------------------------------------------------------------------------------------*/

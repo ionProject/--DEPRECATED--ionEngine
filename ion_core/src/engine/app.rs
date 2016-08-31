@@ -90,10 +90,7 @@ impl App {
             let should_exit = self._should_exit;
 
             if !should_exit {
-
-                self._on_pre_render ();
-                self._on_render ();
-                self._on_post_render ();
+                self.render_mgr.borrow_mut ().process_window_events ();
             }
 
             else {
@@ -235,30 +232,6 @@ impl App {
                 panic! ("Persistent config path \"{}\" could not be created.\n{}.\nApplication cannot continue.", &pcd_dir, e);
             }
         }
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    // TODO: Finish me
-    // On pre render
-    fn _on_pre_render (&self) {
-        self.render_mgr.borrow_mut ().on_pre_render ();
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    // TODO: Finish me
-    // On render
-    fn _on_render (&self) {
-        self.render_mgr.borrow_mut ().on_render ();
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    // TODO: Finish me
-    // On post render
-    fn _on_post_render (&self) {
-        self.render_mgr.borrow_mut ().on_post_render ();
     }
 
 /*-----------------------------------------------------------------------------------------------*/

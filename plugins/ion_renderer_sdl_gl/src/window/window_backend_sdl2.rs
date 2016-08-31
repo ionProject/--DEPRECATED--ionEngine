@@ -42,7 +42,10 @@ pub struct WindowBackendSDL2 {
     /// Stores the sdl2 window.
     pub sdl2_window:     Option<sdl2::video::Window>,
     /// Stores the sdl2 event pump.
-    pub sdl2_event_pump: Option<sdl2::EventPump>
+    pub sdl2_event_pump: Option<sdl2::EventPump>,
+
+    // Private
+    _close_callback: Option<Box<Fn ()>>,
 }
 
 /*===============================================================================================*/
@@ -93,13 +96,19 @@ impl WindowBackend for WindowBackendSDL2 {
 
 /*-----------------------------------------------------------------------------------------------*/
 
+    fn set_close_callback (&mut self, callback: Box<Fn ()>) {
+        self._close_callback = Some (callback);
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
     fn get_window_state (&self) -> WindowState {
         self.window_state
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
-    fn on_pre_render (&mut self) {
+    fn process_events (&mut self) {
 
         for event in self.sdl2_event_pump.as_mut ().unwrap ().poll_iter () {
 
@@ -108,11 +117,6 @@ impl WindowBackend for WindowBackendSDL2 {
             }
         }
     }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    fn on_render      (&mut self) {}
-    fn on_post_render (&mut self) {}
 
 /*-----------------------------------------------------------------------------------------------*/
 
@@ -143,6 +147,7 @@ impl WindowBackendSDL2 {
             sdl2_video:      None,
             sdl2_event_pump: None,
             sdl2_window:     None,
+            _close_callback: None,
         }
     }
 }

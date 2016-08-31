@@ -80,23 +80,9 @@ impl RenderManager {
 
 /*-----------------------------------------------------------------------------------------------*/
 
-    /// Called on pre render.
-    pub fn on_pre_render (&mut self) {
-        self.window.borrow_mut ().on_pre_render ();
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    /// Called on render.
-    pub fn on_render (&mut self) {
-        self.window.borrow_mut ().on_render ();
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    /// Called in post render.
-    pub fn on_post_render (&mut self) {
-        self.window.borrow_mut ().on_post_render ();
+    /// Processes the window events.
+    pub fn process_window_events (&mut self) {
+        self.window.borrow_mut ().process_events ();
     }
 
 /*-----------------------------------------------------------------------------------------------*/

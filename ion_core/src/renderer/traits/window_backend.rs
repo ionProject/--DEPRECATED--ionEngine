@@ -31,14 +31,12 @@ pub trait WindowBackend: AsAny {
 
     /// Initializes the window.
     fn init (&mut self, config: &WindowConfig);
+    /// Sets the on close callback.
+    fn set_close_callback (&mut self, callback: Box<Fn ()>);
     /// Gets the current window state.
     fn get_window_state (&self) -> WindowState;
-    /// On pre render event.
-    fn on_pre_render (&mut self);
-    /// On render event.
-    fn on_render (&mut self);
-    /// On post render even.
-    fn on_post_render (&mut self);
+    /// Processes window events.
+    fn process_events (&mut self);
 
     /// Get a raw pointer to the platform display.
     unsafe fn get_platform_display (&self) -> Result<*mut c_void, ()>;

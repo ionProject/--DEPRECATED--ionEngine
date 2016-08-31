@@ -136,7 +136,7 @@ impl log::Log for Logger {
         };
         
         if self.log_to_console {
-            print! ("{}\n", output);
+            println! ("{}", output);
         }
 
         self.log_file.get_ref ().write (format! ("{} ({} : {}) - {}\n\n", record.level (),
