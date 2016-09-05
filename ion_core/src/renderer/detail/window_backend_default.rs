@@ -14,9 +14,10 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::renderer::window::{WindowConfig, WindowState};
+use ::renderer::window::WindowConfig;
 use ::renderer::traits::WindowBackend;
 use ::util::traits::AsAny;
+use util::math::Vec2;
 
 use std::any::Any;
 use std::os::raw::c_void;
@@ -46,13 +47,10 @@ impl WindowBackend for WindowBackendDefault {
 
 /*-----------------------------------------------------------------------------------------------*/
 
-    fn set_close_callback (&mut self, _: Box<Fn ()>) {}
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    fn get_window_state (&self) -> WindowState {
-        WindowState::Active
-    }
+    fn set_create_callback (&mut self, _: Box<Fn ()>)     {}
+    fn set_move_callback   (&mut self, _: Box<Fn (Vec2)>) {}
+    fn set_resize_callback (&mut self, _: Box<Fn (Vec2)>) {}
+    fn set_close_callback  (&mut self, _: Box<Fn ()>)     {}
 
 /*-----------------------------------------------------------------------------------------------*/
 

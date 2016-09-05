@@ -22,8 +22,6 @@
 
 mod window;
 mod window_config;
-mod window_enum;
 
 pub use self::window::Window;
 pub use self::window_config::WindowConfig;
-pub use self::window_enum::WindowState;

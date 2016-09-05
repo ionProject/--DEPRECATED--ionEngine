@@ -14,8 +14,9 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::renderer::window::{WindowConfig, WindowState};
+use ::renderer::window::WindowConfig;
 use ::util::traits::AsAny;
+use ::util::math::Vec2;
 
 use std::os::raw::c_void;
 
@@ -31,10 +32,14 @@ pub trait WindowBackend: AsAny {
 
     /// Initializes the window.
     fn init (&mut self, config: &WindowConfig);
-    /// Sets the on close callback.
+    /// Sets the creation callback.
+    fn set_create_callback (&mut self, callback: Box<Fn ()>);
+    /// Sets the move callback.
+    fn set_move_callback (&mut self, callback: Box<Fn (Vec2)>);
+    /// Sets the resize callback.
+    fn set_resize_callback (&mut self, callback: Box<Fn (Vec2)>);
+    /// Sets the close callback.
     fn set_close_callback (&mut self, callback: Box<Fn ()>);
-    /// Gets the current window state.
-    fn get_window_state (&self) -> WindowState;
     /// Processes window events.
     fn process_events (&mut self);
 

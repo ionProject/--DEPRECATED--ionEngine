@@ -18,9 +18,10 @@ extern crate ion_core;
 extern crate sdl2;
 
 use self::ion_core::renderer::traits::WindowBackend;
-use self::ion_core::renderer::window::{WindowConfig, WindowState};
+use self::ion_core::renderer::window::WindowConfig;
 use self::ion_core::util::traits::AsAny;
-use self::sdl2::event::Event;
+use self::ion_core::util::math::Vec2;
+use self::sdl2::event::{Event, WindowEventId};
 
 use std::any::Any;
 use std::os::raw::c_void;
@@ -33,8 +34,6 @@ use std::os::raw::c_void;
 pub struct WindowBackendSDL2 {
 
     // Public
-    /// Stores the current window state.
-    pub window_state:    WindowState,
     /// Stores the sdl2 context.
     pub sdl2_context:    Option<sdl2::Sdl>,
     /// Stores the video subsystem.
@@ -45,7 +44,10 @@ pub struct WindowBackendSDL2 {
     pub sdl2_event_pump: Option<sdl2::EventPump>,
 
     // Private
-    _close_callback: Option<Box<Fn ()>>,
+    _create_callback: Option<Box<Fn ()>>,
+    _move_callback:   Option<Box<Fn (Vec2)>>,
+    _resize_callback: Option<Box<Fn (Vec2)>>,
+    _close_callback:  Option<Box<Fn ()>>,
 }
 
 /*===============================================================================================*/
@@ -91,7 +93,27 @@ impl WindowBackend for WindowBackendSDL2 {
         self.sdl2_video      = Some (sdl2_video);
         self.sdl2_event_pump = Some (sdl2_event_pump);
         self.sdl2_window     = Some (sdl2_window);
-        self.window_state    = WindowState::Active;
+
+        // Call the window creation callback
+        self._create_callback.as_ref ().unwrap () ();
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    fn set_create_callback (&mut self, callback: Box<Fn ()>) {
+        self._create_callback = Some (callback);
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    fn set_move_callback (&mut self, callback: Box<Fn (Vec2)>) {
+        self._move_callback = Some (callback);
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    fn set_resize_callback (&mut self, callback: Box<Fn (Vec2)>) {
+        self._resize_callback = Some (callback);
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -102,18 +124,34 @@ impl WindowBackend for WindowBackendSDL2 {
 
 /*-----------------------------------------------------------------------------------------------*/
 
-    fn get_window_state (&self) -> WindowState {
-        self.window_state
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
+    #[allow (unused_variables)]
     fn process_events (&mut self) {
 
+        // Loop through all events
         for event in self.sdl2_event_pump.as_mut ().unwrap ().poll_iter () {
 
-            if let Event::Quit {..} = event {
-                self.window_state = WindowState::Closed
+            if let Event::Window {timestamp, window_id, win_event_id, data1, data2} = event {
+
+                match win_event_id {
+
+                    // Window moved event
+                    WindowEventId::Moved => {
+                        self._move_callback.as_ref ().unwrap () (Vec2 {x: data1 as f32, y: data2 as f32})
+                    }
+
+                    // Window resize event
+                    WindowEventId::Resized => {
+                        self._resize_callback.as_ref ().unwrap () (Vec2 {x: data1 as f32, y: data2 as f32})
+                    }
+
+                    // Window closed event
+                    WindowEventId::Close => {
+                        self._close_callback.as_ref ().unwrap () ()
+                    }
+
+                    // Default
+                    _ => {}
+                }
             }
         }
     }
@@ -142,12 +180,14 @@ impl WindowBackendSDL2 {
 
         WindowBackendSDL2 {
 
-            window_state:    WindowState::Closed,
-            sdl2_context:    None,
-            sdl2_video:      None,
-            sdl2_event_pump: None,
-            sdl2_window:     None,
-            _close_callback: None,
+            sdl2_context:     None,
+            sdl2_video:       None,
+            sdl2_event_pump:  None,
+            sdl2_window:      None,
+            _create_callback: None,
+            _move_callback:   None,
+            _resize_callback: None,
+            _close_callback:  None,
         }
     }
 }

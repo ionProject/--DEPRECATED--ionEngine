@@ -17,7 +17,8 @@
 use ::engine::App;
 use ::renderer::detail::WindowBackendDefault;
 use ::renderer::traits::WindowBackend;
-use ::renderer::window::{WindowConfig, WindowState};
+use ::renderer::window::WindowConfig;
+use ::util::math::Vec2;
 
 /*===============================================================================================*/
 /*------WINDOW STRUCT----------------------------------------------------------------------------*/
@@ -40,6 +41,7 @@ impl Window {
     pub fn init (&mut self, config: &WindowConfig) {
 
         info! ("Creating the window.");
+        self._register_callbacks ();
         self._window_backend.as_mut ().unwrap ().init (config);
     }
 
@@ -54,14 +56,7 @@ impl Window {
 
     /// Processes window events.
     pub fn process_events (&mut self) {
-
-        let mut backend = self._window_backend.as_mut ().unwrap ();
-
-        if let WindowState::Closed = backend.get_window_state () {
-            App::get_instance_mut ().unwrap ().exit ();
-        }
-
-        backend.process_events ();
+        self._window_backend.as_mut ().unwrap ().process_events ();
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -92,5 +87,50 @@ impl Default for Window {
 
     fn default () -> Window {
         Window::new ()
+    }
+}
+
+/*===============================================================================================*/
+/*------WINDOW PRIVATE METHODS-------------------------------------------------------------------*/
+/*===============================================================================================*/
+
+impl Window {
+
+    // Registers callbacks.
+    fn _register_callbacks (&mut self) {
+
+        let window_backend = self._window_backend.as_mut ().unwrap ();
+
+        window_backend.set_create_callback (Box::new (Window::_callback_window_create));
+        window_backend.set_move_callback   (Box::new (Window::_callback_window_move));
+        window_backend.set_resize_callback (Box::new (Window::_callback_window_resized));
+        window_backend.set_close_callback  (Box::new (Window::_callback_window_closed));
+    }
+
+/*===============================================================================================*/
+/*------WINDOW PRIVATE STATIC METHODS------------------------------------------------------------*/
+/*===============================================================================================*/
+
+    // Called on window creation.
+    fn _callback_window_create () {
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    // Called on window move.
+    fn _callback_window_move (_pos: Vec2) {
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    // Called on window resize.
+    fn _callback_window_resized (_size: Vec2) {
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    // Called on window closed.
+    fn _callback_window_closed () {
+        App::get_instance_mut ().unwrap ().exit ();
     }
 }
