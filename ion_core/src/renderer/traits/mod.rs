@@ -20,6 +20,7 @@
 //! Stores any required traits for the rendering module.
 /*===============================================================================================*/
 
+pub mod _detail;
 mod render_factory;
 mod window_backend;
 

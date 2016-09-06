@@ -31,20 +31,58 @@ use std::os::raw::c_void;
 pub trait WindowBackend: AsAny {
 
     /// Initializes the window.
-    fn init (&mut self, config: &WindowConfig);
+    fn init (&mut self, _config: &WindowConfig) {
+
+        warn! ("The default window backend is currently being used.\n\
+                While the application will continue running, it may not behave as expected.");
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
     /// Sets the creation callback.
-    fn set_create_callback (&mut self, callback: Box<Fn ()>);
+    fn set_create_callback (&mut self, _callback: Box<Fn ()>) {
+
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
     /// Sets the move callback.
-    fn set_move_callback (&mut self, callback: Box<Fn (Vec2)>);
+    fn set_move_callback (&mut self, _callback: Box<Fn (Vec2)>) {
+
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
     /// Sets the resize callback.
-    fn set_resize_callback (&mut self, callback: Box<Fn (Vec2)>);
+    fn set_resize_callback (&mut self, _callback: Box<Fn (Vec2)>) {
+
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
     /// Sets the close callback.
-    fn set_close_callback (&mut self, callback: Box<Fn ()>);
+    fn set_close_callback (&mut self, _callback: Box<Fn ()>) {
+
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
     /// Processes window events.
-    fn process_events (&mut self);
+    fn process_events (&mut self) {
+
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
 
     /// Get a raw pointer to the platform display.
-    unsafe fn get_platform_display (&self) -> Result<*mut c_void, ()>;
+    unsafe fn get_platform_display (&self) -> Result<*mut c_void, ()> {
+        Err (())
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
     /// Get a raw pointer to the platform window.
-    unsafe fn get_platform_window  (&self) -> Result<*mut c_void, ()>;
+    unsafe fn get_platform_window  (&self) -> Result<*mut c_void, ()> {
+        Err (())
+    }
 }

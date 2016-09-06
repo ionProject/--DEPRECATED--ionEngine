@@ -15,8 +15,8 @@
 /*===============================================================================================*/
 
 use ::engine::App;
-use ::renderer::detail::WindowBackendDefault;
 use ::renderer::traits::WindowBackend;
+use ::renderer::traits::_detail::WindowBackendDefault;
 use ::renderer::window::WindowConfig;
 use ::util::math::Vec2;
 
@@ -113,18 +113,21 @@ impl Window {
 
     // Called on window creation.
     fn _callback_window_create () {
+
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     // Called on window move.
     fn _callback_window_move (_pos: Vec2) {
+
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     // Called on window resize.
     fn _callback_window_resized (_size: Vec2) {
+
     }
 
 /*-----------------------------------------------------------------------------------------------*/

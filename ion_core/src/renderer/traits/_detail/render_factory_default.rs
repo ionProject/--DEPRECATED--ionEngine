@@ -14,8 +14,6 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::renderer::detail::WindowBackendDefault;
-use ::renderer::traits::WindowBackend;
 use ::renderer::traits::RenderFactory;
 
 /*===============================================================================================*/
@@ -26,6 +24,7 @@ use ::renderer::traits::RenderFactory;
 ///
 /// This struct is not a functioning factory. It is only used in situations where
 /// a render plugin is either not specified, or fails to load.
+#[derive (Copy, Clone)]
 pub struct RenderFactoryDefault;
 
 /*===============================================================================================*/
@@ -34,27 +33,4 @@ pub struct RenderFactoryDefault;
 
 impl RenderFactory for RenderFactoryDefault {
 
-    fn get_window_backend (&self) -> Box<WindowBackend> {
-        Box::new (WindowBackendDefault::new ())
-    }
-}
-
-/*===============================================================================================*/
-/*------WINDOW FACTORY PUBLIC STATIC METHODS-----------------------------------------------------*/
-/*===============================================================================================*/
-
-impl RenderFactoryDefault {
-
-    pub fn new () -> RenderFactoryDefault {
-        RenderFactoryDefault {}
-    }
-}
-
-/*-----------------------------------------------------------------------------------------------*/
-
-impl Default for RenderFactoryDefault {
-
-    fn default () -> RenderFactoryDefault {
-        RenderFactoryDefault::new ()
-    }
 }

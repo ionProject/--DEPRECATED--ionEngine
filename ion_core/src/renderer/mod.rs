@@ -22,7 +22,6 @@
 
 pub mod traits;
 pub mod window;
-mod detail;
 mod render_config;
 mod render_manager;
 

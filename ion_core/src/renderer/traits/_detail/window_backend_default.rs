@@ -14,14 +14,10 @@
 // limitations under the License.
 /*===============================================================================================*/
 
-use ::renderer::window::WindowConfig;
 use ::renderer::traits::WindowBackend;
 use ::util::traits::AsAny;
-use util::math::Vec2;
 
 use std::any::Any;
-use std::os::raw::c_void;
-use std::ptr::null_mut;
 
 /*===============================================================================================*/
 /*------WINDOW BACKEND DEFAULT STRUCT------------------------------------------------------------*/
@@ -31,6 +27,7 @@ use std::ptr::null_mut;
 ///
 /// This struct is not a functioning backend. It is only used in situations where
 /// a window plugin is either not specified, or fails to load.
+#[derive (Copy, Clone)]
 pub struct WindowBackendDefault;
 
 /*===============================================================================================*/
@@ -39,34 +36,6 @@ pub struct WindowBackendDefault;
 
 impl WindowBackend for WindowBackendDefault {
 
-    fn init (&mut self, _: &WindowConfig) {
-
-        warn! ("The default window backend is currently being used.\n\
-                While the application will continue running, it may not behave as expected.");
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    fn set_create_callback (&mut self, _: Box<Fn ()>)     {}
-    fn set_move_callback   (&mut self, _: Box<Fn (Vec2)>) {}
-    fn set_resize_callback (&mut self, _: Box<Fn (Vec2)>) {}
-    fn set_close_callback  (&mut self, _: Box<Fn ()>)     {}
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    fn process_events (&mut self) {}
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    unsafe fn get_platform_display (&self) -> Result<*mut c_void, ()> {
-        Ok (null_mut ())
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    unsafe fn get_platform_window (&self) -> Result<*mut c_void, ()> {
-        Ok (null_mut ())
-    }
 }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -75,25 +44,5 @@ impl AsAny for WindowBackendDefault {
 
     fn as_any (&self) -> &Any {
         self
-    }
-}
-
-/*===============================================================================================*/
-/*------WINDOW BACKEND DEFAULT PUBLIC STATIC METHODS---------------------------------------------*/
-/*===============================================================================================*/
-
-impl WindowBackendDefault {
-
-    pub fn new () -> WindowBackendDefault {
-        WindowBackendDefault
-    }
-}
-
-/*-----------------------------------------------------------------------------------------------*/
-
-impl Default for WindowBackendDefault {
-
-    fn default () -> WindowBackendDefault {
-        WindowBackendDefault::new ()
     }
 }

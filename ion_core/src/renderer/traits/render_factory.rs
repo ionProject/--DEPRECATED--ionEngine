@@ -15,6 +15,7 @@
 /*===============================================================================================*/
 
 use ::renderer::traits::WindowBackend;
+use ::renderer::traits::_detail::WindowBackendDefault;
 
 /*===============================================================================================*/
 /*------RENDER FACTORY TRAIT---------------------------------------------------------------------*/
@@ -24,5 +25,7 @@ use ::renderer::traits::WindowBackend;
 pub trait RenderFactory {
 
     /// Gets a new instance of the Window Backend.
-    fn get_window_backend (&self) -> Box<WindowBackend>;
+    fn get_window_backend (&self) -> Box<WindowBackend> {
+        Box::new (WindowBackendDefault)
+    }
 }

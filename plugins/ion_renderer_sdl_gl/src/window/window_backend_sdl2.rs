@@ -24,7 +24,6 @@ use self::ion_core::util::math::Vec2;
 use self::sdl2::event::{Event, WindowEventId};
 
 use std::any::Any;
-use std::os::raw::c_void;
 
 /*===============================================================================================*/
 /*------WINDOW BACKEND SDL2 STRUCT---------------------------------------------------------------*/
@@ -44,10 +43,10 @@ pub struct WindowBackendSDL2 {
     pub sdl2_event_pump: Option<sdl2::EventPump>,
 
     // Private
-    _create_callback: Option<Box<Fn ()>>,
-    _move_callback:   Option<Box<Fn (Vec2)>>,
-    _resize_callback: Option<Box<Fn (Vec2)>>,
-    _close_callback:  Option<Box<Fn ()>>,
+    _create_callback: Box<Fn ()>,
+    _move_callback:   Box<Fn (Vec2)>,
+    _resize_callback: Box<Fn (Vec2)>,
+    _close_callback:  Box<Fn ()>,
 }
 
 /*===============================================================================================*/
@@ -95,31 +94,31 @@ impl WindowBackend for WindowBackendSDL2 {
         self.sdl2_window     = Some (sdl2_window);
 
         // Call the window creation callback
-        self._create_callback.as_ref ().unwrap () ();
+        (self._create_callback) ();
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     fn set_create_callback (&mut self, callback: Box<Fn ()>) {
-        self._create_callback = Some (callback);
+        self._create_callback = callback;
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     fn set_move_callback (&mut self, callback: Box<Fn (Vec2)>) {
-        self._move_callback = Some (callback);
+        self._move_callback = callback;
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     fn set_resize_callback (&mut self, callback: Box<Fn (Vec2)>) {
-        self._resize_callback = Some (callback);
+        self._resize_callback = callback;
     }
 
 /*-----------------------------------------------------------------------------------------------*/
 
     fn set_close_callback (&mut self, callback: Box<Fn ()>) {
-        self._close_callback = Some (callback);
+        self._close_callback = callback;
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -136,17 +135,17 @@ impl WindowBackend for WindowBackendSDL2 {
 
                     // Window moved event
                     WindowEventId::Moved => {
-                        self._move_callback.as_ref ().unwrap () (Vec2 {x: data1 as f32, y: data2 as f32})
+                        (self._move_callback) (Vec2 {x: data1 as f32, y: data2 as f32})
                     }
 
                     // Window resize event
                     WindowEventId::Resized => {
-                        self._resize_callback.as_ref ().unwrap () (Vec2 {x: data1 as f32, y: data2 as f32})
+                        (self._resize_callback) (Vec2 {x: data1 as f32, y: data2 as f32})
                     }
 
                     // Window closed event
                     WindowEventId::Close => {
-                        self._close_callback.as_ref ().unwrap () ()
+                        (self._close_callback) ()
                     }
 
                     // Default
@@ -154,18 +153,6 @@ impl WindowBackend for WindowBackendSDL2 {
                 }
             }
         }
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    unsafe fn get_platform_display (&self) -> Result<*mut c_void, ()> {
-        unimplemented! ()
-    }
-
-/*-----------------------------------------------------------------------------------------------*/
-
-    unsafe fn get_platform_window (&self) -> Result<*mut c_void, ()> {
-        unimplemented! ()
     }
 }
 
@@ -184,10 +171,10 @@ impl WindowBackendSDL2 {
             sdl2_video:       None,
             sdl2_event_pump:  None,
             sdl2_window:      None,
-            _create_callback: None,
-            _move_callback:   None,
-            _resize_callback: None,
-            _close_callback:  None,
+            _create_callback: Box::new (||  {}),
+            _move_callback:   Box::new (|_| {}),
+            _resize_callback: Box::new (|_| {}),
+            _close_callback:  Box::new (||  {}),
         }
     }
 }

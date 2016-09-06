@@ -16,8 +16,8 @@
 
 use ::engine::App;
 use ::renderer::RenderConfig;
-use ::renderer::detail::RenderFactoryDefault;
 use ::renderer::traits::RenderFactory;
+use ::renderer::traits::_detail::RenderFactoryDefault;
 use ::renderer::window::Window;
 
 use std::cell::RefCell;
@@ -106,7 +106,7 @@ impl RenderManager {
         RenderManager {
 
             window: Rc::new (RefCell::new (Window::new ())),
-            _render_factory: Some (Box::new (RenderFactoryDefault::new ())),
+            _render_factory: Some (Box::new (RenderFactoryDefault)),
         }
     }
 }
