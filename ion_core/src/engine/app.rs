@@ -57,7 +57,6 @@ pub struct App {
 
     // Private
     _is_in_main_loop: bool,
-    _should_exit: bool,
 }
 
 /*===============================================================================================*/
@@ -87,15 +86,11 @@ impl App {
 
         loop {
 
-            let should_exit = self._should_exit;
-
-            if !should_exit {
+            if self._is_in_main_loop {
                 self.render_mgr.borrow_mut ().process_window_events ();
             }
 
             else {
-
-                self._is_in_main_loop = false;
                 return;
             }
         }
@@ -110,7 +105,7 @@ impl App {
         if self._is_in_main_loop {
 
             info! ("Exiting main loop.");
-            self._should_exit = true;
+            self._is_in_main_loop = false;
         }
 
         else {
@@ -187,7 +182,7 @@ impl App {
 
 /*-----------------------------------------------------------------------------------------------*/
 
-    // Checks diretories for errors
+    // Checks directories for errors
     fn _check_dirs_for_errors (&self) {
 
         let res_dir = Directory::get_resource_directory ();
@@ -324,7 +319,6 @@ impl AppBuilder {
                 project_version:   self._project_version,
 
                 _is_in_main_loop:  false,
-                _should_exit:      false,
             });
 
             unsafe {APP_POINTER = Some (Box::into_raw (ab))};
