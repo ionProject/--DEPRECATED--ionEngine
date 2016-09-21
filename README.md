@@ -3,7 +3,7 @@
 ## Build Status
 | Linux / OSX       | Windows           |
 | ----------------- | ----------------- |
-| [![tr_bs]][tr_lk] | [![av_bs]][av_lk] |
+| [![tr_bs]][tr_lk] | Under Maintenance |
 
 <!-- BUILD STATUS REFERENCE LINKS -->
 [tr_lk]: https://travis-ci.org/ionProject/ionEngine

@@ -7,25 +7,6 @@
 # Executables
 *.exe
 
-# IDE files
-*.iml
-
-# IonCore
-/ion_core/target/
-/ion_core/target-install/
-/ion_core/.vscode/
-/ion_core/.idea/
-
-# Sandbox
-/ion_sandbox/Cargo.lock
-/ion_sandbox/target/
-/ion_sandbox/target-install/
-/ion_sandbox/.vscode/
-/ion_sandbox/.idea/
-
-# Ion_Renderer_SDL_GL
-/plugins/ion_renderer_sdl_gl/target/
-/plugins/ion_renderer_sdl_gl/target-install/
-/plugins/ion_renderer_sdl_gl/.vscode/
-/plugins/ion_renderer_sdl_gl/.idea/
+# ion_math
+/ion_math/target/
 

@@ -1,9 +1,0 @@
-[package]
-name        = "ion_sandbox"
-version     = "0.1.0"
-authors     = ["Kyle Finlay <kyle.finlay01@gmail.com>"]
-description = "Testing sandbox for ionEngine"
-license     = "Apache-2.0"
-
-[dependencies]
-ion_core = {path = "../ion_core"}

@@ -1,0 +1,6 @@
+[package]
+name = "ion_math"
+version = "0.1.0"
+authors = ["Kyle Finlay <kyle.finlay01@gmail.com>"]
+
+[dependencies]

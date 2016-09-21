@@ -1,28 +1,28 @@
+
+# Set the language to Rust
 language: rust
-sudo: required
-rust:
-# - stable
-# - beta
-  - nightly
+
+# Enable testing on Linux and Mac
 os:
-  - linux
-  - osx
+	- linux
+	- osx
+
+# Enable all version channels
+rust:
+ 	- stable
+ 	- beta
+	- nightly
+
+# Allow failures on Rust nightly
 matrix:
-# allow_failures:
-#   - rust: nightly
-before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo add-apt-repository ppa:team-xbmc/ppa -y; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update -qq; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install libsdl2-dev; fi
+ 	allow_failures:
+		- rust: nightly
 
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install sdl2; fi
+# The build script
 script: |
-  cd ion_core
-  cargo build --verbose
-  cargo test --verbose
 
-  cd ../plugins/ion_renderer_sdl_gl
-  cargo build --verbose
-  cargo test --verbose
+	# Build 'ion_math'
+  	cd $TRAVIS_BUILD_DIR/ion_math
+  	cargo build --verbose
+  	cargo test --verbose
 
