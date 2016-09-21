@@ -4,25 +4,25 @@ language: rust
 
 # Enable testing on Linux and Mac
 os:
-	- linux
-	- osx
+    - linux
+    - osx
 
 # Enable all version channels
 rust:
- 	- stable
- 	- beta
-	- nightly
+    - stable
+    - beta
+    - nightly
 
 # Allow failures on Rust nightly
 matrix:
- 	allow_failures:
-		- rust: nightly
+    allow_failures:
+        - rust: nightly
 
 # The build script
 script: |
 
-	# Build 'ion_math'
-  	cd $TRAVIS_BUILD_DIR/ion_math
-  	cargo build --verbose
-  	cargo test --verbose
+    # Build 'ion_math'
+    cd $TRAVIS_BUILD_DIR/ion_math
+    cargo build --verbose
+    cargo test --verbose
 
