@@ -1,6 +1,12 @@
 [package]
-name = "ion_math"
-version = "0.1.0"
-authors = ["Kyle Finlay <kyle.finlay01@gmail.com>"]
+name        = "ion_math"
+version     = "0.1.0"
+authors     = ["Kyle Finlay <kyle.finlay01@gmail.com>"]
+description = "A simple and fast mathematics library."
+license     = "Apache-2.0"
+
+[lib]
+path       = "src/lib.rs"
+crate-type = ["rlib"]
 
 [dependencies]
