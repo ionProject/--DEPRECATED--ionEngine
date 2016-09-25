@@ -20,7 +20,7 @@ extern crate num_traits;
 // Module imports
 use self::num_traits::{Float, Num, NumCast};
 
-use std::ops::Sub;
+use std::ops::{Add, Sub, Mul, Div, Index, IndexMut};
 
 /*===============================================================================================*/
 /*------VEC2 STRUCT------------------------------------------------------------------------------*/
@@ -31,7 +31,7 @@ use std::ops::Sub;
 /// It is used mainly for 2D related mathematics such as texture coordinates,
 /// UV coordinates, etc. <br>
 /// It can accept any number as a value.
-#[derive (Debug)]
+#[derive (Copy, Clone, Debug, PartialEq)]
 pub struct Vec2<V> where V: Copy + Num + NumCast {
 
     // Public
@@ -47,13 +47,41 @@ pub type Vec2i = Vec2<i32>;
 pub type Vec2u = Vec2<u32>;
 
 /*===============================================================================================*/
-/*------VEC2<V> TRAIT IMPLEMENTATIONS------------------------------------------------------------*/
+/*------VEC2 TRAIT IMPLEMENTATIONS---------------------------------------------------------------*/
 /*===============================================================================================*/
 
 impl<V> Default for Vec2<V> where V: Copy + Num + NumCast {
 
     fn default () -> Vec2<V> {
         Vec2::<V>::zero ()
+    }
+}
+
+/*===============================================================================================*/
+/*------VEC2 OPERATORS---------------------------------------------------------------------------*/
+/*===============================================================================================*/
+
+impl<V> Add for Vec2<V> where V: Copy + Num + NumCast {
+
+    type Output = Vec2<V>;
+
+    fn add (self, rhs: Vec2<V>) -> Vec2<V> {
+
+        Vec2::new (self.x + rhs.x,
+                   self.y + rhs.y)
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+
+impl<V> Add<V> for Vec2<V> where V: Copy + Num + NumCast {
+
+    type Output = Vec2<V>;
+
+    fn add (self, rhs: V) -> Vec2<V> {
+
+        Vec2::new (self.x + rhs,
+                   self.y + rhs)
     }
 }
 
@@ -64,20 +92,6 @@ impl<V> Sub for Vec2<V> where V: Copy + Num + NumCast {
     type Output = Vec2<V>;
 
     fn sub (self, rhs: Vec2<V>) -> Vec2<V> {
-
-        Vec2::new (self.x - rhs.x,
-                   self.y - rhs.y)
-    }
-}
-
-/*-----------------------------------------------------------------------------------------------*/
-
-impl<'a, 'b, V> Sub<&'b Vec2<V>> for &'a Vec2<V>
-    where V: Copy + Num + NumCast {
-
-    type Output = Vec2<V>;
-
-    fn sub (self, rhs: &'b Vec2<V>) -> Vec2<V> {
 
         Vec2::new (self.x - rhs.x,
                    self.y - rhs.y)
@@ -97,8 +111,92 @@ impl<V> Sub<V> for Vec2<V> where V: Copy + Num + NumCast {
     }
 }
 
+/*-----------------------------------------------------------------------------------------------*/
+
+impl<V> Mul for Vec2<V> where V: Copy + Num + NumCast {
+
+    type Output = Vec2<V>;
+
+    fn mul (self, rhs: Vec2<V>) -> Vec2<V> {
+
+        Vec2::new (self.x * rhs.x,
+                   self.y * rhs.y)
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+
+impl<V> Mul<V> for Vec2<V> where V: Copy + Num + NumCast {
+
+    type Output = Vec2<V>;
+
+    fn mul (self, rhs: V) -> Vec2<V> {
+
+        Vec2::new (self.x * rhs,
+                   self.y * rhs)
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+
+impl<V> Div for Vec2<V> where V: Copy + Num + NumCast {
+
+    type Output = Vec2<V>;
+
+    fn div (self, rhs: Vec2<V>) -> Vec2<V> {
+
+        Vec2::new (self.x / rhs.x,
+                   self.y / rhs.y)
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+
+impl<V> Div<V> for Vec2<V> where V: Copy + Num + NumCast {
+
+    type Output = Vec2<V>;
+
+    fn div (self, rhs: V) -> Vec2<V> {
+
+        Vec2::new (self.x / rhs,
+                   self.y / rhs)
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+
+impl<V> Index<u8> for Vec2<V> where V: Copy + Num + NumCast {
+
+    type Output = V;
+
+    fn index (&self, index: u8) -> &V {
+
+        match index {
+
+            0 => &self.x,
+            1 => &self.y,
+            _ => unreachable! ("Index out of range for Vec2")
+        }
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+
+impl<V> IndexMut<u8> for Vec2<V> where V: Copy + Num + NumCast {
+
+    fn index_mut (&mut self, index: u8) -> &mut V {
+
+        match index {
+
+            0 => &mut self.x,
+            1 => &mut self.y,
+            _ => unreachable! ("Index out of range for Vec2")
+        }
+    }
+}
+
 /*===============================================================================================*/
-/*------VEC2<V> PUBLIC METHODS-------------------------------------------------------------------*/
+/*------VEC2 PUBLIC METHODS----------------------------------------------------------------------*/
 /*===============================================================================================*/
 
 impl<V> Vec2<V> where V: Copy + Num + NumCast {
@@ -210,9 +308,7 @@ impl<V> Vec2<V> where V: Copy + Num + NumCast {
     }
 }
 
-/*===============================================================================================*/
-/*------VEC2<Float> PUBLIC METHODS---------------------------------------------------------------*/
-/*===============================================================================================*/
+/*-----------------------------------------------------------------------------------------------*/
 
 impl<V> Vec2<V> where V: Float {
 
@@ -225,11 +321,10 @@ impl<V> Vec2<V> where V: Float {
     /// let vec02 = Vec2::new (4.0, 9.0);
     ///
     /// let distance = vec01.distance (&vec02);
-    /// println! ("Distance: {}", distance);
     /// ```
     pub fn distance (&self, rhs: &Vec2<V>) -> V {
 
-        (self - rhs).length ()
+        (*self - *rhs).length ()
     }
 
 /*-----------------------------------------------------------------------------------------------*/
@@ -246,5 +341,28 @@ impl<V> Vec2<V> where V: Float {
 
         (self.x * self.x +
          self.y * self.y).sqrt ()
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Returns a normalized vector.
+    ///
+    /// # Examples
+    /// ```
+    /// # use ion_math::vector::Vec2;
+    /// let vec = Vec2::new (3, 9);
+    /// let vec_normalized = vec.normalize ();
+    /// ```
+    pub fn normalize (&self) -> Vec2<V> {
+
+        let length = self.length ();
+
+        if length != V::zero () {
+
+            return Vec2::<V>::new (self.x / length,
+                                   self.y / length);
+        }
+
+        Vec2::<V>::zero ()
     }
 }
