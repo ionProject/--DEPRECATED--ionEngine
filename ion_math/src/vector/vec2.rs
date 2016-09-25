@@ -77,10 +77,23 @@ impl<'a, 'b, V> Sub<&'b Vec2<V>> for &'a Vec2<V>
 
     type Output = Vec2<V>;
 
-    fn sub (self, rhs: &Vec2<V>) -> Vec2<V> {
+    fn sub (self, rhs: &'b Vec2<V>) -> Vec2<V> {
 
         Vec2::new (self.x - rhs.x,
                    self.y - rhs.y)
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+
+impl<V> Sub<V> for Vec2<V> where V: Copy + Num + NumCast {
+
+    type Output = Vec2<V>;
+
+    fn sub (self, rhs: V) -> Vec2<V> {
+
+        Vec2::new (self.x - rhs,
+                   self.y - rhs)
     }
 }
 
