@@ -15,23 +15,5 @@
 /*===============================================================================================*/
 
 /*===============================================================================================*/
-//! ionMath is a simple and fast mathematics library.
-//!
-//! It is a core part of the ion Project, and provides many functions that are useful for <br>
-//! computer graphics and video game development.
-//!
-//! This includes:                 <br>
-//! - Vectors                      <br>
-//! - Matrices                     <br>
-//! - Quaternions                  <br>
-//! - Angles (degrees and radians) <br>
-//! - Colours and colour conversion
+//! TODO: Add module documentation.
 /*===============================================================================================*/
-
-// Create attributes
-#![deny (missing_docs)]
-
-// Modules
-pub mod angle;
-pub mod matrix;
-pub mod vector;

@@ -10,3 +10,4 @@ path       = "src/lib.rs"
 crate-type = ["rlib"]
 
 [dependencies]
+num-traits   = "*"

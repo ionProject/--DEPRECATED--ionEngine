@@ -7,11 +7,15 @@
 # Executables
 *.exe
 
+# Intellij Idea project files
+*.iml
+
 # Project Root
 target/
 Cargo.lock
 
 # ion_math
+ion_math/.idea/
 ion_math/target/
 ion_math/Cargo.lock
 
