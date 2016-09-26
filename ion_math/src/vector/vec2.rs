@@ -20,7 +20,11 @@ extern crate num_traits;
 // Module imports
 use self::num_traits::{Float, Num, NumCast};
 
-use std::ops::{Add, Sub, Mul, Div, Index, IndexMut};
+use std::ops::{Add,   AddAssign,
+               Sub,   SubAssign,
+               Mul,   MulAssign,
+               Div,   DivAssign,
+               Index, IndexMut};
 
 /*===============================================================================================*/
 /*------VEC2 STRUCT------------------------------------------------------------------------------*/
@@ -31,7 +35,7 @@ use std::ops::{Add, Sub, Mul, Div, Index, IndexMut};
 /// It is used mainly for 2D related mathematics such as texture coordinates,
 /// UV coordinates, etc. <br>
 /// It can accept any number as a value.
-#[derive (Copy, Clone, Debug, PartialEq)]
+#[derive (Copy, Clone, Debug, Default, PartialEq)]
 pub struct Vec2<V> where V: Copy + Num + NumCast {
 
     // Public
@@ -45,17 +49,6 @@ pub struct Vec2<V> where V: Copy + Num + NumCast {
 pub type Vec2f = Vec2<f32>;
 pub type Vec2i = Vec2<i32>;
 pub type Vec2u = Vec2<u32>;
-
-/*===============================================================================================*/
-/*------VEC2 TRAIT IMPLEMENTATIONS---------------------------------------------------------------*/
-/*===============================================================================================*/
-
-impl<V> Default for Vec2<V> where V: Copy + Num + NumCast {
-
-    fn default () -> Vec2<V> {
-        Vec2::<V>::zero ()
-    }
-}
 
 /*===============================================================================================*/
 /*------VEC2 OPERATORS---------------------------------------------------------------------------*/
@@ -87,6 +80,28 @@ impl<V> Add<V> for Vec2<V> where V: Copy + Num + NumCast {
 
 /*-----------------------------------------------------------------------------------------------*/
 
+impl<V> AddAssign for Vec2<V> where V: Copy + Num + NumCast {
+
+    fn add_assign (&mut self, rhs: Vec2<V>) {
+
+        self.x = self.x + rhs.x;
+        self.y = self.x + rhs.y;
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+
+impl<V> AddAssign<V> for Vec2<V> where V: Copy + Num + NumCast {
+
+    fn add_assign (&mut self, rhs: V) {
+
+        self.x = self.x + rhs;
+        self.y = self.x + rhs;
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+
 impl<V> Sub for Vec2<V> where V: Copy + Num + NumCast {
 
     type Output = Vec2<V>;
@@ -108,6 +123,28 @@ impl<V> Sub<V> for Vec2<V> where V: Copy + Num + NumCast {
 
         Vec2::new (self.x - rhs,
                    self.y - rhs)
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+
+impl<V> SubAssign for Vec2<V> where V: Copy + Num + NumCast {
+
+    fn sub_assign (&mut self, rhs: Vec2<V>) {
+
+        self.x = self.x - rhs.x;
+        self.y = self.x - rhs.y;
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+
+impl<V> SubAssign<V> for Vec2<V> where V: Copy + Num + NumCast {
+
+    fn sub_assign (&mut self, rhs: V) {
+
+        self.x = self.x - rhs;
+        self.y = self.x - rhs;
     }
 }
 
@@ -139,6 +176,28 @@ impl<V> Mul<V> for Vec2<V> where V: Copy + Num + NumCast {
 
 /*-----------------------------------------------------------------------------------------------*/
 
+impl<V> MulAssign for Vec2<V> where V: Copy + Num + NumCast {
+
+    fn mul_assign (&mut self, rhs: Vec2<V>) {
+
+        self.x = self.x * rhs.x;
+        self.y = self.x * rhs.y;
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+
+impl<V> MulAssign<V> for Vec2<V> where V: Copy + Num + NumCast {
+
+    fn mul_assign (&mut self, rhs: V) {
+
+        self.x = self.x * rhs;
+        self.y = self.x * rhs;
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+
 impl<V> Div for Vec2<V> where V: Copy + Num + NumCast {
 
     type Output = Vec2<V>;
@@ -160,6 +219,28 @@ impl<V> Div<V> for Vec2<V> where V: Copy + Num + NumCast {
 
         Vec2::new (self.x / rhs,
                    self.y / rhs)
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+
+impl<V> DivAssign for Vec2<V> where V: Copy + Num + NumCast {
+
+    fn div_assign (&mut self, rhs: Vec2<V>) {
+
+        self.x = self.x / rhs.x;
+        self.y = self.x / rhs.y;
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+
+impl<V> DivAssign<V> for Vec2<V> where V: Copy + Num + NumCast {
+
+    fn div_assign (&mut self, rhs: V) {
+
+        self.x = self.x / rhs;
+        self.y = self.x / rhs;
     }
 }
 
@@ -350,7 +431,7 @@ impl<V> Vec2<V> where V: Float {
     /// # Examples
     /// ```
     /// # use ion_math::vector::Vec2;
-    /// let vec = Vec2::new (3, 9);
+    /// let vec = Vec2::new (3.0, 9.0);
     /// let vec_normalized = vec.normalize ();
     /// ```
     pub fn normalize (&self) -> Vec2<V> {
