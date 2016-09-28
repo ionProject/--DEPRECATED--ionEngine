@@ -46,8 +46,11 @@ pub struct Vec2<V> where V: Copy + Num + NumCast {
 }
 
 // Predefined Vec2 types
+/// `Vec2<f32>`
 pub type Vec2f = Vec2<f32>;
+/// `Vec2<i32>`
 pub type Vec2i = Vec2<i32>;
+/// `Vec2<u32>`
 pub type Vec2u = Vec2<u32>;
 
 /*===============================================================================================*/
@@ -85,7 +88,7 @@ impl<V> AddAssign for Vec2<V> where V: Copy + Num + NumCast {
     fn add_assign (&mut self, rhs: Vec2<V>) {
 
         self.x = self.x + rhs.x;
-        self.y = self.x + rhs.y;
+        self.y = self.y + rhs.y;
     }
 }
 
@@ -96,7 +99,7 @@ impl<V> AddAssign<V> for Vec2<V> where V: Copy + Num + NumCast {
     fn add_assign (&mut self, rhs: V) {
 
         self.x = self.x + rhs;
-        self.y = self.x + rhs;
+        self.y = self.y + rhs;
     }
 }
 
@@ -133,7 +136,7 @@ impl<V> SubAssign for Vec2<V> where V: Copy + Num + NumCast {
     fn sub_assign (&mut self, rhs: Vec2<V>) {
 
         self.x = self.x - rhs.x;
-        self.y = self.x - rhs.y;
+        self.y = self.y - rhs.y;
     }
 }
 
@@ -144,7 +147,7 @@ impl<V> SubAssign<V> for Vec2<V> where V: Copy + Num + NumCast {
     fn sub_assign (&mut self, rhs: V) {
 
         self.x = self.x - rhs;
-        self.y = self.x - rhs;
+        self.y = self.y - rhs;
     }
 }
 
@@ -181,7 +184,7 @@ impl<V> MulAssign for Vec2<V> where V: Copy + Num + NumCast {
     fn mul_assign (&mut self, rhs: Vec2<V>) {
 
         self.x = self.x * rhs.x;
-        self.y = self.x * rhs.y;
+        self.y = self.y * rhs.y;
     }
 }
 
@@ -192,7 +195,7 @@ impl<V> MulAssign<V> for Vec2<V> where V: Copy + Num + NumCast {
     fn mul_assign (&mut self, rhs: V) {
 
         self.x = self.x * rhs;
-        self.y = self.x * rhs;
+        self.y = self.y * rhs;
     }
 }
 
@@ -229,7 +232,7 @@ impl<V> DivAssign for Vec2<V> where V: Copy + Num + NumCast {
     fn div_assign (&mut self, rhs: Vec2<V>) {
 
         self.x = self.x / rhs.x;
-        self.y = self.x / rhs.y;
+        self.y = self.y / rhs.y;
     }
 }
 
@@ -240,7 +243,7 @@ impl<V> DivAssign<V> for Vec2<V> where V: Copy + Num + NumCast {
     fn div_assign (&mut self, rhs: V) {
 
         self.x = self.x / rhs;
-        self.y = self.x / rhs;
+        self.y = self.y / rhs;
     }
 }
 
