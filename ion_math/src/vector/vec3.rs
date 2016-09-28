@@ -61,12 +61,14 @@ pub type Vec3u = Vec3<u32>;
 /*------VEC2 TRAIT IMPLEMENTATIONS---------------------------------------------------------------*/
 /*===============================================================================================*/
 
-impl<V> From<Vec2<V>> for Vec3<V> where V: Copy + Num + NumCast {
+impl<V, U> From<Vec2<U>> for Vec3<V>
+    where V: Copy + Num + NumCast,
+          U: Copy + Num + NumCast {
 
-    fn from (value: Vec2<V>) -> Vec3<V> {
+    fn from (value: Vec2<U>) -> Vec3<V> {
 
-        Vec3::new (value.x,
-                   value.y,
+        Vec3::new (V::from (value.x).unwrap (),
+                   V::from (value.y).unwrap (),
                    V::zero ())
     }
 }
