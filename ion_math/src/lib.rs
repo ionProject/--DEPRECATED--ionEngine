@@ -28,7 +28,8 @@
 //! - Colours and colour conversion
 /*===============================================================================================*/
 
-// Create attributes
+// Crate attributes
+#![deny (missing_debug_implementations)]
 #![deny (missing_docs)]
 
 // Modules
