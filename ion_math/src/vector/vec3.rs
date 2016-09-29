@@ -203,7 +203,7 @@ impl<V> Mul<V> for Vec3<V> where V: Copy + Num + NumCast {
 
         Vec3::new (self.x * rhs,
                    self.y * rhs,
-                   self.z - rhs)
+                   self.z * rhs)
     }
 }
 
