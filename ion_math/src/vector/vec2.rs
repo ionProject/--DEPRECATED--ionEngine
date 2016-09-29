@@ -303,6 +303,22 @@ impl<V> IndexMut<u8> for Vec2<V> where V: Copy + Num + NumCast {
 
 impl<V> Vec2<V> where V: Copy + Num + NumCast {
 
+    /// Converts self into an instance of `Vec2<C>`.
+    ///
+    /// # Examples
+    /// ```
+    /// # use ion_math::vector::Vec2;
+    /// let vec01: Vec2<f32> = Vec2::new (4.3, 9.8);
+    /// let vec02: Vec2<i32> = vec01.into ();
+    /// ```
+    pub fn into<C> (self) -> Vec2<C> where C: Copy + Num + NumCast {
+
+        Vec2::new (C::from (self.x).unwrap (),
+                   C::from (self.y).unwrap ())
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
     /// Returns the dot product of two vectors.
     ///
     /// # Examples
@@ -332,6 +348,22 @@ impl<V> Vec2<V> where V: Copy + Num + NumCast {
 
         Vec2 {x: x,
               y: y}
+    }
+
+/*-----------------------------------------------------------------------------------------------*/
+
+    /// Returns a new instance of `Vec2<V>` from an instance of `Vec2<C>`.
+    ///
+    /// # Examples
+    /// ```
+    /// # use ion_math::vector::Vec2;
+    /// let vec01: Vec2<f32> = Vec2::new  (3.2, 9.8);
+    /// let vec02: Vec2<i32> = Vec2::from (vec01);
+    /// ```
+    pub fn from<C> (value: Vec2<C>) -> Vec2<V> where C: Copy + Num + NumCast {
+
+        Vec2::new (V::from (value.x).unwrap (),
+                   V::from (value.y).unwrap ())
     }
 
 /*-----------------------------------------------------------------------------------------------*/
